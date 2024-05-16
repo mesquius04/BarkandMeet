@@ -1,0 +1,235 @@
+import 'package:flutter/material.dart';
+import 'user_data.dart';
+
+class RegisterScreen extends StatefulWidget {
+  @override
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _usernameController = TextEditingController();
+  bool _termsAccepted = false;
+  String _errorMessage = '';
+
+  void _register() {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+    String username = _usernameController.text;
+
+    if (username.isEmpty) {
+      setState(() {
+        _errorMessage = 'Please enter a username.';
+      });
+      return;
+    }
+
+    if (!validateTerms()) {
+      setState(() {
+        _errorMessage = 'Please accept the terms of service and privacy policy.';
+      });
+      return;
+    }
+
+    if (password.length < 6 || !RegExp(r'\d').hasMatch(password)) {
+      setState(() {
+        _errorMessage = 'Password must be at least 6 characters long and contain at least one number.';
+      });
+      return;
+    }
+
+    UserData.addUser(username, email, password);
+
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SignUpScreen(username)),
+    );
+  }
+
+  bool validateTerms() {
+    return _termsAccepted;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Register'),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 48), 
+              Text(
+                'Register',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontFamily: 'Comfortaa',
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.start,
+              ),
+              SizedBox(height: 24), 
+              if (_errorMessage.isNotEmpty)
+                Text(
+                  _errorMessage,
+                  style: TextStyle(color: Colors.red),
+                ),
+              TextField(
+                controller: _usernameController,
+                decoration: InputDecoration(
+                  labelText: 'Username',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                ),
+                obscureText: true,
+              ),
+              SizedBox(height: 16),
+              Row(
+                children: [
+                  Checkbox(
+                    value: _termsAccepted,
+                    onChanged: (value) {
+                      setState(() {
+                        _termsAccepted = value!;
+                      });
+                    },
+                  ),
+                  Expanded(
+                    child: Text(
+                      'By signing up, you agree to Photo’s Terms of Service and\nPrivacy Policy.',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                  ),
+                  onPressed: _register,
+                  child: Text('Sign Up'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SignUpScreen extends StatelessWidget {
+  final String username;
+
+  SignUpScreen(this.username);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Sign Up'),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 48), 
+              Text(
+                'Sign Up',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontFamily: 'Comfortaa',
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.start,
+              ),
+              SizedBox(height: 24), 
+              Text(
+                'Please enter your username:',
+                style: TextStyle(fontSize: 16),
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'Username',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              Row(
+                children: [
+                  Checkbox(
+                    value: false, 
+                    onChanged: (value) {
+                      
+                    },
+                  ),
+                  Expanded(
+                    child: Text(
+                      'By signing up, you agree to Photo’s Terms of Service and\nPrivacy Policy.',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                  ),
+                  onPressed: () {
+                    
+                  },
+                  child: Text('Sign Up'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: RegisterScreen(),
+  ));
+}
