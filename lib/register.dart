@@ -9,6 +9,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController(); 
   final _usernameController = TextEditingController();
   bool _termsAccepted = false;
   String _errorMessage = '';
@@ -16,6 +17,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _register() {
     String email = _emailController.text;
     String password = _passwordController.text;
+    String confirmPassword = _confirmPasswordController.text; 
     String username = _usernameController.text;
 
     if (username.isEmpty) {
@@ -32,6 +34,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
+    if (password != confirmPassword) { // verificar contra
+      setState(() {
+        _errorMessage = 'Passwords do not match.';
+      });
+      return;
+    }
+
     if (password.length < 6 || !RegExp(r'\d').hasMatch(password)) {
       setState(() {
         _errorMessage = 'Password must be at least 6 characters long and contain at least one number.';
@@ -40,8 +49,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
 
     UserData.addUser(username, email, password);
-
-    
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SignUpScreen(username)),
@@ -100,6 +107,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: _passwordController,
                 decoration: InputDecoration(
                   labelText: 'Password',
+                  border: OutlineInputBorder(),
+                ),
+                obscureText: true,
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: _confirmPasswordController, // confirmar contra
+                decoration: InputDecoration(
+                  labelText: 'Confirm Password',
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,

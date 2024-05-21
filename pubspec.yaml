@@ -30,6 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  chewie: 
+  video_player:
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -54,6 +57,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/Fondo1.png
+    - assets/video_entrada.mp4
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

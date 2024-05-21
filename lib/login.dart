@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:chewie/chewie.dart';
+import 'package:video_player/video_player.dart';
 import 'user_data.dart';
 import 'home.dart';
 
@@ -11,6 +13,30 @@ class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   String _errorMessage = '';
+  late VideoPlayerController _videoController;
+  late ChewieController _chewieController;
+
+  @override
+  void initState() {
+    super.initState();
+    _videoController = VideoPlayerController.asset('assets/video_entrada.mp4');
+    _chewieController = ChewieController(
+      videoPlayerController: _videoController,
+      autoPlay: true,
+      looping: true,
+      allowFullScreen: false,
+      allowMuting: true,
+      showControls: false,
+      autoInitialize: true,
+    );
+  }
+
+  @override
+  void dispose() {
+    _videoController.dispose();
+    _chewieController.dispose();
+    super.dispose();
+  }
 
   void _login() {
     String username = _usernameController.text;
@@ -35,6 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: Stack(
         children: [
+          Chewie(controller: _chewieController),
           Align(
             alignment: Alignment.topLeft,
             child: IconButton(
@@ -50,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 48), 
+                SizedBox(height: 48),
                 Text(
                   'Log In',
                   style: TextStyle(
@@ -60,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   textAlign: TextAlign.start,
                 ),
-                SizedBox(height: 24), 
+                SizedBox(height: 24),
                 if (_errorMessage.isNotEmpty)
                   Text(
                     _errorMessage,
