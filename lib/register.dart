@@ -1,3 +1,4 @@
+import 'package:bark_and_meet/confirmation.dart';
 import 'package:flutter/material.dart';
 import 'user_data.dart';
 
@@ -9,7 +10,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController(); 
+  final _confirmPasswordController = TextEditingController();
   final _usernameController = TextEditingController();
   bool _termsAccepted = false;
   String _errorMessage = '';
@@ -17,7 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _register() {
     String email = _emailController.text;
     String password = _passwordController.text;
-    String confirmPassword = _confirmPasswordController.text; 
+    String confirmPassword = _confirmPasswordController.text;
     String username = _usernameController.text;
 
     if (username.isEmpty) {
@@ -29,12 +30,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (!validateTerms()) {
       setState(() {
-        _errorMessage = 'Please accept the terms of service and privacy policy.';
+        _errorMessage =
+            'Please accept the terms of service and privacy policy.';
       });
       return;
     }
 
-    if (password != confirmPassword) { // verificar contra
+    if (password != confirmPassword) {
+      // verificar contra
       setState(() {
         _errorMessage = 'Passwords do not match.';
       });
@@ -43,7 +46,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (password.length < 6 || !RegExp(r'\d').hasMatch(password)) {
       setState(() {
-        _errorMessage = 'Password must be at least 6 characters long and contain at least one number.';
+        _errorMessage =
+            'Password must be at least 6 characters long and contain at least one number.';
       });
       return;
     }
@@ -71,7 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 48), 
+              SizedBox(height: 48),
               Text(
                 'Register',
                 style: TextStyle(
@@ -81,7 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 textAlign: TextAlign.start,
               ),
-              SizedBox(height: 24), 
+              SizedBox(height: 24),
               if (_errorMessage.isNotEmpty)
                 Text(
                   _errorMessage,
@@ -180,7 +184,7 @@ class SignUpScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 48), 
+              SizedBox(height: 48),
               Text(
                 'Sign Up',
                 style: TextStyle(
@@ -190,7 +194,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 textAlign: TextAlign.start,
               ),
-              SizedBox(height: 24), 
+              SizedBox(height: 24),
               Text(
                 'Please enter your username:',
                 style: TextStyle(fontSize: 16),
@@ -205,10 +209,8 @@ class SignUpScreen extends StatelessWidget {
               Row(
                 children: [
                   Checkbox(
-                    value: false, 
-                    onChanged: (value) {
-                      
-                    },
+                    value: false,
+                    onChanged: (value) {},
                   ),
                   Expanded(
                     child: Text(
@@ -231,7 +233,11 @@ class SignUpScreen extends StatelessWidget {
                     padding: EdgeInsets.symmetric(vertical: 16.0),
                   ),
                   onPressed: () {
-                    
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProfileCreatedScreen()),
+                    );
                   },
                   child: Text('Sign Up'),
                 ),
