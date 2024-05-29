@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'confirmation.dart';
+import 'user_data.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,54 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ProfileCreatedScreen(),
-    );
-  }
-}
-
-class ProfileCreatedScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Perfil'),
-      ),
-      body: Column(
-        children: [
-          Spacer(),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Center(
-              child: Text(
-                'Perfil creat correctament ja pots accedir al teu compte',
-                style: TextStyle(fontSize: 24),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          Spacer(),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black, // Color del botón
-              ),
-              onPressed: () {
-                // Navegar a la pantalla del perfil del usuario
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserProfileScreen()),
-                );
-              },
-              child: Text(
-                'continuar',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-        ],
-      ),
+      home: UserProfileScreen(),
     );
   }
 }
@@ -73,8 +28,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   List<String> dogs = [];
 
   void _addDog() {
+    // Aquí va la funció per afegir un gos i anar al seu perfil
     setState(() {
-      dogs.add('Nuevo Perro');
+      dogs.add('Nou gos');
     });
   }
 
@@ -82,7 +38,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Perfil del Usuario'),
+        title: Text('Perfil'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -101,7 +57,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Nombre de Usuario', style: TextStyle(fontSize: 18)),
+                    Text(AutofillHints.username,
+                        style: TextStyle(fontSize: 18)),
                     Text('usuario@gmail.com',
                         style: TextStyle(color: Colors.grey)),
                     Text('Localización', style: TextStyle(color: Colors.grey)),
@@ -123,11 +80,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             Expanded(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, // Aumentamos el número de columnas
+                  crossAxisCount: 3,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
-                  childAspectRatio:
-                      1, // Mantener la relación de aspecto cuadrada
+                  childAspectRatio: 1,
                 ),
                 itemCount: dogs.length + 1,
                 itemBuilder: (context, index) {
@@ -136,16 +92,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       onTap: _addDog,
                       child: Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(5)),
                         child: Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.add, color: Colors.grey),
-                              SizedBox(height: 5),
-                              Text('afegir un nou gos',
+                              SizedBox(height: 4),
+                              Text('Afegir un nou gos',
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(color: Colors.grey)),
                             ],
                           ),
