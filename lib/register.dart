@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'user_data.dart';
+import 'NewAccountScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -9,7 +10,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController(); 
+  final _confirmPasswordController = TextEditingController();
   final _usernameController = TextEditingController();
   bool _termsAccepted = false;
   String _errorMessage = '';
@@ -17,12 +18,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _register() {
     String email = _emailController.text;
     String password = _passwordController.text;
-    String confirmPassword = _confirmPasswordController.text; 
+    String confirmPassword = _confirmPasswordController.text;
     String username = _usernameController.text;
 
     if (username.isEmpty) {
       setState(() {
-        _errorMessage = 'Please enter a username.';
+        _errorMessage = 'Introdueix un username.';
       });
       return;
     }
@@ -34,7 +35,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
-    if (password != confirmPassword) { // verificar contra
+    if (password != confirmPassword) {
       setState(() {
         _errorMessage = 'Passwords do not match.';
       });
@@ -51,7 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     UserData.addUser(username, email, password);
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SignUpScreen(username)),
+      MaterialPageRoute(builder: (context) => NewAccountScreen()), 
     );
   }
 
@@ -63,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: Text(''),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -71,9 +72,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 48), 
+              SizedBox(height: 48),
               Text(
-                'Register',
+                'Registrar-se',
                 style: TextStyle(
                   fontSize: 32,
                   fontFamily: 'Comfortaa',
@@ -81,7 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 textAlign: TextAlign.start,
               ),
-              SizedBox(height: 24), 
+              SizedBox(height: 24),
               if (_errorMessage.isNotEmpty)
                 Text(
                   _errorMessage,
@@ -106,16 +107,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               TextField(
                 controller: _passwordController,
                 decoration: InputDecoration(
-                  labelText: 'Password',
+                  labelText: 'Constrasenya',
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
               ),
               SizedBox(height: 16),
               TextField(
-                controller: _confirmPasswordController, // confirmar contra
+                controller: _confirmPasswordController,
                 decoration: InputDecoration(
-                  labelText: 'Confirm Password',
+                  labelText: 'Confirmar contrasenya',
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
@@ -152,88 +153,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     padding: EdgeInsets.symmetric(vertical: 16.0),
                   ),
                   onPressed: _register,
-                  child: Text('Sign Up'),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SignUpScreen extends StatelessWidget {
-  final String username;
-
-  SignUpScreen(this.username);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Sign Up'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 48), 
-              Text(
-                'Sign Up',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontFamily: 'Comfortaa',
-                  color: Colors.black,
-                ),
-                textAlign: TextAlign.start,
-              ),
-              SizedBox(height: 24), 
-              Text(
-                'Please enter your username:',
-                style: TextStyle(fontSize: 16),
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  Checkbox(
-                    value: false, 
-                    onChanged: (value) {
-                      
-                    },
-                  ),
-                  Expanded(
-                    child: Text(
-                      'By signing up, you agree to Photo’s Terms of Service and\nPrivacy Policy.',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                  ),
-                  onPressed: () {
-                    
-                  },
-                  child: Text('Sign Up'),
+                  child: Text('Continuar'),
                 ),
               ),
             ],

@@ -1,17 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'login.dart';
 import 'register.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late VideoPlayerController _videoController;
+
+  @override
+  void initState() {
+    super.initState();
+    _videoController = VideoPlayerController.asset('assets/video_entrada.mp4')
+      ..initialize().then((_) {
+        setState(() {
+          _videoController.play();
+          _videoController.setLooping(true);
+        });
+      });
+  }
+
+  @override
+  void dispose() {
+    _videoController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        fit: StackFit.expand,
         children: [
-          Image.asset(
-            'assets/Fondo1.png',
-            fit: BoxFit.cover,
+          SizedBox.expand(
+            child: FittedBox(
+              fit: BoxFit.cover,
+              child: SizedBox(
+                width: _videoController.value.size.width,
+                height: _videoController.value.size.height,
+                child: VideoPlayer(_videoController),
+              ),
+            ),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -26,11 +57,11 @@ class HomeScreen extends StatelessWidget {
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.black,
                         side: BorderSide(color: Colors.black),
-                        minimumSize: Size(150, 50), 
+                        minimumSize: Size(150, 50),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0), 
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20), 
+                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -38,17 +69,17 @@ class HomeScreen extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => LoginScreen()),
                         );
                       },
-                      child: Text('Log In'),
+                      child: Text('Iniciar Sessió'),
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         foregroundColor: Colors.white,
-                        minimumSize: Size(150, 50), 
+                        minimumSize: Size(150, 50),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0), 
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20), 
+                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -56,7 +87,7 @@ class HomeScreen extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => RegisterScreen()),
                         );
                       },
-                      child: Text('Register'),
+                      child: Text('Registrar-se'),
                     ),
                   ],
                 ),

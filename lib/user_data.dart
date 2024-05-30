@@ -1,24 +1,32 @@
 class UserData {
-  static List<User> users = [];
+  static final Map<String, Map<String, dynamic>> _users = {};
 
   static void addUser(String username, String email, String password) {
-    users.add(User(username, email, password));
+    _users[username] = {
+      'email': email,
+      'password': password,
+      'firstLogin': true,
+      // otros datos del perfil si es necesario
+    };
   }
 
   static bool validateUser(String username, String password) {
-    for (var user in users) {
-      if (user.username == username && user.password == password) {
-        return true;
-      }
+    if (_users.containsKey(username) && _users[username]!['password'] == password) {
+      return true;
     }
     return false;
   }
-}
 
-class User {
-  final String username;
-  final String email;
-  final String password;
+  static bool isFirstLogin(String username) {
+    if (_users.containsKey(username)) {
+      return _users[username]!['firstLogin'] as bool;
+    }
+    return false;
+  }
 
-  User(this.username, this.email, this.password);
+  static void setFirstLogin(String username, bool value) {
+    if (_users.containsKey(username)) {
+      _users[username]!['firstLogin'] = value;
+    }
+  }
 }
