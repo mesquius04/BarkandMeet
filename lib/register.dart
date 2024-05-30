@@ -1,3 +1,4 @@
+import 'package:bark_and_meet/confirmation.dart';
 import 'package:flutter/material.dart';
 import 'user_data.dart';
 import 'NewAccountScreen.dart';
@@ -30,12 +31,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (!validateTerms()) {
       setState(() {
-        _errorMessage = 'Please accept the terms of service and privacy policy.';
+        _errorMessage =
+            'Please accept the terms of service and privacy policy.';
       });
       return;
     }
 
-    if (password != confirmPassword) {
+    if (password != confirmPassword) { // verificar contra
       setState(() {
         _errorMessage = 'Passwords do not match.';
       });
@@ -44,7 +46,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (password.length < 6 || !RegExp(r'\d').hasMatch(password)) {
       setState(() {
-        _errorMessage = 'Password must be at least 6 characters long and contain at least one number.';
+        _errorMessage =
+            'Password must be at least 6 characters long and contain at least one number.';
       });
       return;
     }
@@ -153,7 +156,88 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     padding: EdgeInsets.symmetric(vertical: 16.0),
                   ),
                   onPressed: _register,
-                  child: Text('Continuar'),
+                  child: Text('Sign Up'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SignUpScreen extends StatelessWidget {
+  final String username;
+
+  SignUpScreen(this.username);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Sign Up'),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 48), 
+              Text(
+                'Sign Up',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontFamily: 'Comfortaa',
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.start,
+              ),
+              SizedBox(height: 24), 
+              Text(
+                'Please enter your username:',
+                style: TextStyle(fontSize: 16),
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'Username',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              Row(
+                children: [
+                  Checkbox(
+                    value: false, 
+                    onChanged: (value) {
+                      
+                    },
+                  ),
+                  Expanded(
+                    child: Text(
+                      'By signing up, you agree to Photo’s Terms of Service and\nPrivacy Policy.',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                  ),
+                  onPressed: () {
+                    
+                  },
+                  child: Text('Sign Up'),
                 ),
               ),
             ],
