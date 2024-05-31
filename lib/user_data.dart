@@ -1,6 +1,23 @@
+import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+
 class UserData {
   static final Map<String, Map<String, dynamic>> _users = {};
+  static final UserData _singleton = UserData._internal();
 
+  factory UserData() {
+    return _singleton;
+  }
+
+  UserData._internal();
+
+  File? profilePhoto;
+  String name = '';
+  String surname = '';
+  String email = '';
+  String location = '';
+  String additionalInfo = '';
   static void addUser(String username, String email, String password) {
     _users[username] = {
       'email': email,
@@ -11,7 +28,8 @@ class UserData {
   }
 
   static bool validateUser(String username, String password) {
-    if (_users.containsKey(username) && _users[username]!['password'] == password) {
+    if (_users.containsKey(username) &&
+        _users[username]!['password'] == password) {
       return true;
     }
     return false;

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'user_profile.dart';
 import 'user_data.dart';
-import 'home.dart';
-import 'newAccountScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -9,26 +10,28 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _usernameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  String _errorMessage = '';
 
   void _login() {
-    String username = _usernameController.text;
-    String password = _passwordController.text;
+    if (_formKey.currentState!.validate()) {
+      // Supongamos que el inicio de sesión es exitoso y recuperamos los datos del usuario de UserData
+      UserData userData = UserData();
 
-    if (UserData.validateUser(username, password)) {
-      bool isFirstLogin = UserData.isFirstLogin(username); // Verificar si es el primer inicio de sesión
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => isFirstLogin ? NewAccountScreen() : HomeScreen()),
+        MaterialPageRoute(
+          builder: (context) => UserProfileScreen(
+            profilePhoto: userData.profilePhoto,
+            name: userData.name,
+            surname: userData.surname,
+            email: userData.email,
+            location: userData.location,
+            additionalInfo: userData.additionalInfo,
+          ),
+        ),
       );
-    } else {
-      setState(() {
-        _errorMessage = 'Incorrect username or password';
-        _usernameController.clear();
-        _passwordController.clear();
-      });
     }
   }
 
@@ -36,72 +39,51 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: IconButton(
-                icon: Icon(Icons.arrow_back, color: Colors.grey),
-                onPressed: () {
-                  Navigator.pop(context);
+        padding: EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Iniciar Sesión',
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 24),
+              TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(labelText: 'Correo Electrónico'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, introduce tu correo electrónico';
+                  }
+                  return null;
                 },
               ),
-            ),
-            SizedBox(height: 48),
-            Text(
-              'Iniciar sessió',
-              style: TextStyle(
-                fontSize: 32,
-                fontFamily: 'Comfortaa',
-                color: Colors.black,
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _passwordController,
+                decoration: InputDecoration(labelText: 'Contraseña'),
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, introduce tu contraseña';
+                  }
+                  return null;
+                },
               ),
-              textAlign: TextAlign.start,
-            ),
-            SizedBox(height: 24),
-            if (_errorMessage.isNotEmpty)
-              Text(
-                _errorMessage,
-                style: TextStyle(color: Colors.red),
-              ),
-            TextField(
-              controller: _usernameController,
-              decoration: InputDecoration(
-                labelText: 'Nom usuari',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Contasenya',
-                border: OutlineInputBorder(),
-              ),
-              obscureText: true,
-            ),
-            SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 25.0),
+              SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _login,
+                  child: Text('Iniciar Sesión'),
                 ),
-                onPressed: _login,
-                child: Text('Següent'),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
-

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'user_data.dart';
+import 'confirmation.dart'; // Cambiado el nombre del archivo importado
 
 class NewAccountScreen extends StatefulWidget {
   @override
@@ -35,17 +37,25 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
 
   void _saveProfile() {
     if (_formKey.currentState!.validate()) {
+      // Guardar los datos del usuario en UserData
+      UserData().profilePhoto = _profilePhoto;
+      UserData().name = _nameController.text;
+      UserData().surname = _surnameController.text;
+      UserData().email =
+          'usuario@gmail.com'; // Asumiendo un correo fijo para el ejemplo
+      UserData().location = _locationController.text;
+      UserData().additionalInfo = _additionalInfoController.text;
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => UserProfileScreen(
-            profilePhoto: _profilePhoto,
-            name: _nameController.text,
-            surname: _surnameController.text,
-            email:
-                'usuario@gmail.com', // Asumiendo un correo fijo para el ejemplo
-            location: _locationController.text,
-            additionalInfo: _additionalInfoController.text,
+          builder: (context) => ProfileCreatedScreen(
+            profilePhoto: UserData().profilePhoto,
+            name: UserData().name,
+            surname: UserData().surname,
+            email: UserData().email,
+            location: UserData().location,
+            additionalInfo: UserData().additionalInfo,
           ),
         ),
       );
@@ -262,7 +272,7 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Si us plau, selecciona la teva localització';
+                          return 'Si us plau, introdueix la teva localització';
                         }
                         return null;
                       },
@@ -272,7 +282,7 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(left: 8.0),
                       child: Text(
-                        'Informació addicional',
+                        'Informació Addicional',
                         style: TextStyle(
                           fontSize: 16,
                           fontFamily: 'Comfortaa',
@@ -292,29 +302,14 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                           color: Colors.black54,
                         ),
                       ),
-                      maxLines: 4,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Si us plau, introdueix informació addicional';
-                        }
-                        return null;
-                      },
+                      maxLines: 3,
                     ),
                     SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 20),
-                        ),
                         onPressed: _saveProfile,
-                        child: Text('Crear Perfil'),
+                        child: Text('Guardar Perfil'),
                       ),
                     ),
                   ],
@@ -323,124 +318,6 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class UserProfileScreen extends StatefulWidget {
-  final File? profilePhoto;
-  final String name;
-  final String surname;
-  final String email;
-  final String location;
-  final String additionalInfo;
-
-  UserProfileScreen({
-    required this.profilePhoto,
-    required this.name,
-    required this.surname,
-    required this.email,
-    required this.location,
-    required this.additionalInfo,
-  });
-
-  @override
-  _UserProfileScreenState createState() => _UserProfileScreenState();
-}
-
-class _UserProfileScreenState extends State<UserProfileScreen> {
-  List<File?> dogs = [];
-
-  void _addDog() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        dogs.add(File(pickedFile.path));
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Perfil'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: widget.profilePhoto != null
-                      ? FileImage(widget.profilePhoto!)
-                      : null,
-                  child: widget.profilePhoto == null
-                      ? Icon(Icons.account_circle, size: 50)
-                      : null,
-                ),
-                SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(widget.name, style: TextStyle(fontSize: 18)),
-                    Text(widget.surname, style: TextStyle(fontSize: 18)),
-                    Text(widget.email, style: TextStyle(color: Colors.grey)),
-                    Text(widget.location, style: TextStyle(color: Colors.grey)),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Descripció',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text(
-              widget.additionalInfo,
-              style: TextStyle(fontSize: 14),
-            ),
-            SizedBox(height: 20),
-            Text('Els meus gossos', style: TextStyle(fontSize: 18)),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: _addDog,
-              child: Text('Afegir un nou gos'),
-            ),
-            SizedBox(height: 10),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                ),
-                itemCount: dogs.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: dogs[index] != null
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.file(dogs[index]!, fit: BoxFit.cover),
-                          )
-                        : Center(child: Text('No image')),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

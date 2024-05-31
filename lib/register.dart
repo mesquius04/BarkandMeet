@@ -37,7 +37,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
-    if (password != confirmPassword) { // verificar contra
+    if (password != confirmPassword) {
+      // verificar contra
       setState(() {
         _errorMessage = 'Passwords do not match.';
       });
@@ -55,7 +56,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     UserData.addUser(username, email, password);
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => NewAccountScreen()), 
+      MaterialPageRoute(builder: (context) => NewAccountScreen()),
     );
   }
 
@@ -184,7 +185,7 @@ class SignUpScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 48), 
+              SizedBox(height: 48),
               Text(
                 'Sign Up',
                 style: TextStyle(
@@ -194,7 +195,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 textAlign: TextAlign.start,
               ),
-              SizedBox(height: 24), 
+              SizedBox(height: 24),
               Text(
                 'Please enter your username:',
                 style: TextStyle(fontSize: 16),
@@ -209,10 +210,8 @@ class SignUpScreen extends StatelessWidget {
               Row(
                 children: [
                   Checkbox(
-                    value: false, 
-                    onChanged: (value) {
-                      
-                    },
+                    value: false,
+                    onChanged: (value) {},
                   ),
                   Expanded(
                     child: Text(
@@ -234,9 +233,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                     padding: EdgeInsets.symmetric(vertical: 16.0),
                   ),
-                  onPressed: () {
-                    
-                  },
+                  onPressed: () {},
                   child: Text('Sign Up'),
                 ),
               ),

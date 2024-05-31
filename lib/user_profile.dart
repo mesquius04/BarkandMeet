@@ -1,37 +1,40 @@
 import 'package:flutter/material.dart';
-import 'confirmation.dart';
-import 'user_data.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: UserProfileScreen(),
-    );
-  }
-}
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class UserProfileScreen extends StatefulWidget {
+  final File? profilePhoto;
+  final String name;
+  final String surname;
+  final String email;
+  final String location;
+  final String additionalInfo;
+
+  UserProfileScreen({
+    required this.profilePhoto,
+    required this.name,
+    required this.surname,
+    required this.email,
+    required this.location,
+    required this.additionalInfo,
+  });
+
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  List<String> dogs = [];
+  List<File?> dogs = [];
 
-  void _addDog() {
-    // Aquí va la funció per afegir un gos i anar al seu perfil
-    setState(() {
-      dogs.add('Nou gos');
-    });
+  void _addDog() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        dogs.add(File(pickedFile.path));
+      });
+    }
   }
 
   @override
@@ -47,78 +50,66 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           children: [
             Row(
               children: [
-                IconButton(
-                  icon: Icon(Icons.account_circle, size: 50),
-                  onPressed: () {
-                    // Lógica para importar imagen desde el dispositivo
-                  },
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: widget.profilePhoto != null
+                      ? FileImage(widget.profilePhoto!)
+                      : null,
+                  child: widget.profilePhoto == null
+                      ? Icon(Icons.account_circle, size: 50)
+                      : null,
                 ),
                 SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(AutofillHints.username,
-                        style: TextStyle(fontSize: 18)),
-                    Text('usuario@gmail.com',
-                        style: TextStyle(color: Colors.grey)),
-                    Text('Localización', style: TextStyle(color: Colors.grey)),
+                    Text(widget.name, style: TextStyle(fontSize: 18)),
+                    Text(widget.surname, style: TextStyle(fontSize: 18)),
+                    Text(widget.email, style: TextStyle(color: Colors.grey)),
+                    Text(widget.location, style: TextStyle(color: Colors.grey)),
                   ],
                 ),
               ],
             ),
             SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Descripción',
-                border: OutlineInputBorder(),
-              ),
-              maxLines: 3,
+            Text(
+              'Descripció',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
+            Text(
+              widget.additionalInfo,
+              style: TextStyle(fontSize: 14),
             ),
             SizedBox(height: 20),
             Text('Els meus gossos', style: TextStyle(fontSize: 18)),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _addDog,
+              child: Text('Afegir un nou gos'),
+            ),
             SizedBox(height: 10),
             Expanded(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
-                  childAspectRatio: 1,
+                  crossAxisSpacing: 10,
                 ),
-                itemCount: dogs.length + 1,
+                itemCount: dogs.length,
                 itemBuilder: (context, index) {
-                  if (index == dogs.length) {
-                    return GestureDetector(
-                      onTap: _addDog,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.add, color: Colors.grey),
-                              SizedBox(height: 4),
-                              Text('Afegir un nou gos',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.grey)),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  } else {
-                    return Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Center(
-                        child: Text(dogs[index]),
-                      ),
-                    );
-                  }
+                  return Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: dogs[index] != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.file(dogs[index]!, fit: BoxFit.cover),
+                          )
+                        : Center(child: Text('No image')),
+                  );
                 },
               ),
             ),
