@@ -1,4 +1,5 @@
 import 'package:bark_and_meet/Mainpage.dart';
+import 'package:bark_and_meet/recuperarContrasenya.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -83,6 +84,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(''),
+      ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -112,8 +116,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
               ),
 
-              // Text Field de contrasenya
+
               SizedBox(height: 16),
+
+              // Text Field de contrasenya
               TextFormField(
                 controller: _passwordController,
                 decoration: InputDecoration(
@@ -128,6 +134,29 @@ class _LoginScreenState extends State<LoginScreen> {
                   return null;
                 },
               ),
+
+              SizedBox(height: 5),
+
+              // Recuperar contrasenya
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                          return RecuperarContrasenyaScreen();
+                        },),);
+                      },
+                        child:
+                        Text(
+                          "Has oblidat la teva contrasenya?",
+                          style: TextStyle(color: Colors.blue),
+                        )
+                    ),
+                  ],
+                ),
+
 
               if (_errorMessage != null)
                 Padding(
