@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
+import 'user.dart';
 import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
 
 
 class Mainpage extends StatefulWidget {
-  
-
-
+  final User user;
+  Mainpage({required this.user});
   @override
-  _MainpageState createState() => _MainpageState();
+  _MainpageState createState() => _MainpageState(user: user);
 }
 
 class _MainpageState extends State<Mainpage> {
+  final User user;
+  _MainpageState({required this.user});
   bool _showFilters = false;
 
   void _toggleFilters() {

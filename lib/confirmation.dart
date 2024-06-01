@@ -1,3 +1,4 @@
+import 'package:bark_and_meet/Mainpage.dart';
 import 'package:bark_and_meet/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -33,7 +34,7 @@ class ProfileCreatedScreen extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => UserProfileScreen(
+                    builder: (context) => Mainpage(
                       user: user
                     ),
                   ),
