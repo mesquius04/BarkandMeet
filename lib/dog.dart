@@ -18,7 +18,7 @@ class Dog {
   int activityLevel;
 
   Dog({
-    File? dogPhoto=null,
+    File? dogPhoto = null,
     required this.name,
     required this.owner,
     required this.age,
