@@ -1,9 +1,9 @@
 import 'package:bark_and_meet/Mainpage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'user_profile.dart';
-import 'user_data.dart';
+import 'package:image_picker/image_picker.dart';
+import 'user.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -15,16 +15,23 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  User getUser(String mail, String password){
+    User user;
+    // XAVIII RECUPEREM USER
+    user= User(city: 'Barcelona', username: 'oliviar' , email: mail, name: 'Olivia' , surname: 'Rodrigo', gossera: false, numDogs: 0, premium: false, additionalInfo: '');
+    return user;
+  }
+
   void _login() {
     if (_formKey.currentState!.validate()) {
-      // Supongamos que el inicio de sesión es exitoso y recuperamos los datos del usuario de UserData
-      UserData userData = UserData();
-
+      // XAVI! VALIDAR AQUÍ INICI DE SESSIO
+      User user = getUser(_emailController.text, _passwordController.text);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => Mainpage(
-          
+          builder: (context) => UserProfileScreen(
+            user: user
+
           ),
         ),
       );

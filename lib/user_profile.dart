@@ -1,31 +1,23 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'user.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  final File? profilePhoto;
-  final String name;
-  final String surname;
-  final String email;
-  final String location;
-  final String additionalInfo;
+  final User user;
 
   UserProfileScreen({
-    required this.profilePhoto,
-    required this.name,
-    required this.surname,
-    required this.email,
-    required this.location,
-    required this.additionalInfo,
+    required this.user
   });
-
+  
   @override
-  _UserProfileScreenState createState() => _UserProfileScreenState();
+  _UserProfileScreenState createState() => _UserProfileScreenState(user:user);
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   List<File?> dogs = [];
-
+  final User user;
+  _UserProfileScreenState({required this.user});
   void _addDog() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -52,10 +44,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               children: [
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage: widget.profilePhoto != null
-                      ? FileImage(widget.profilePhoto!)
+                  backgroundImage: user.profilePhoto != null
+                      ? FileImage(user.profilePhoto!)
                       : null,
-                  child: widget.profilePhoto == null
+                  child: user.profilePhoto == null
                       ? Icon(Icons.account_circle, size: 50)
                       : null,
                 ),
@@ -63,10 +55,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.name, style: TextStyle(fontSize: 18)),
-                    Text(widget.surname, style: TextStyle(fontSize: 18)),
-                    Text(widget.email, style: TextStyle(color: Colors.grey)),
-                    Text(widget.location, style: TextStyle(color: Colors.grey)),
+                    Text(user.name, style: TextStyle(fontSize: 18)),
+                    Text(user.surname, style: TextStyle(fontSize: 18)),
+                    Text(user.email, style: TextStyle(color: Colors.grey)),
+                    Text(user.city, style: TextStyle(color: Colors.grey)),
                   ],
                 ),
               ],
@@ -78,7 +70,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
             SizedBox(height: 8),
             Text(
-              widget.additionalInfo,
+              user.additionalInfo,
               style: TextStyle(fontSize: 14),
             ),
             SizedBox(height: 20),

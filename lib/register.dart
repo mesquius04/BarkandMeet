@@ -1,6 +1,6 @@
 import 'package:bark_and_meet/confirmation.dart';
 import 'package:flutter/material.dart';
-import 'user_data.dart';
+import 'user.dart';
 import 'NewAccountScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -15,6 +15,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _usernameController = TextEditingController();
   bool _termsAccepted = false;
   String _errorMessage = '';
+
+  User newAccount(String username, String mail, String password){
+    User user;
+    user= User(city: 'Barcelona', username: username , email: mail, name: 'Olivia' , surname: 'Rodrigo', gossera: false, numDogs: 0, premium: false, additionalInfo: '');
+    //XAVI! afegir a BDD. Això és valors randoms, els canviem més tard.
+    return user;
+  }
 
   void _register() {
     String email = _emailController.text;
@@ -52,11 +59,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
       return;
     }
-
-    UserData.addUser(username, email, password);
+    User newUser = newAccount(username, email, password);
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => NewAccountScreen()),
+      MaterialPageRoute(builder: (context) => NewAccountScreen(user: newUser)),
     );
   }
 
