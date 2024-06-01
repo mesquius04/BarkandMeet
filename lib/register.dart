@@ -19,7 +19,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   User newAccount(String username, String mail, String password){
     User user;
     user= User(city: 'Barcelona', username: username , email: mail, name: 'Olivia' , surname: 'Rodrigo', gossera: false, numDogs: 0, premium: false, additionalInfo: '');
-    //XAVI! afegir a BDD. Això és valors randoms, els canviem més tard.
     return user;
   }
 

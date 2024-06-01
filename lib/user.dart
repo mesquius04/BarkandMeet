@@ -34,12 +34,17 @@ class User {
   })  : this.dogs = dogs,
         this.parks = parks;
   
-  static List<Dog> getDogs() { //Algorisme martí
+  List<Dog> getDogs() { //Algorisme martí
     List<Dog> dogs = [];
     List<int> scores= [];
     for (int i = 1; i <= 20; i++) {
       
     }
+
+    //PQ FUNCIONI DE MENTRES
+    User olivia=User(username: 'oliviarodrigo', email: 'mailprova', name: 'Olivia', surname: 'Rodrigo', numDogs: 2, gossera: false, premium: false, city: 'Barcelona', additionalInfo: 'Fan de don Xavier Cañadas');
+    dogs.add(Dog(activityLevel: 5,adopcio: false,age: 2,owner: olivia, male: false, castrat: false, raca: 'bulldog', name: 'Sanche', size : 3, endurance: 4, sociability: 5));
+
     return dogs;
   }
 }

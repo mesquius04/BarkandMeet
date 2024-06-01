@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
+import 'dog.dart';
 import 'user.dart';
+import 'dogProfile.dart';
 import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
 
 
@@ -15,7 +17,8 @@ class _MainpageState extends State<Mainpage> {
   final User user;
   _MainpageState({required this.user});
   bool _showFilters = false;
-
+  int N=20;
+  int pointer=0;
   void _toggleFilters() {
     setState(() {
       _showFilters = !_showFilters;
@@ -24,9 +27,10 @@ class _MainpageState extends State<Mainpage> {
 
   @override
   Widget build(BuildContext context) {
-return Scaffold(
-  
-      extendBodyBehindAppBar: true,
+    List<Dog> dogs = user.getDogs();
+
+    return Scaffold(
+        extendBodyBehindAppBar: true,
       
       appBar: _showFilters
           ? null: AppBar(
@@ -55,8 +59,8 @@ return Scaffold(
             children: [
               //Text('${widget.myDog.name}', style: TextStyle(fontSize: 30)),
               //Text('@${widget.myDog.owner.username}', style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7))),
-              Text('August', style: TextStyle(fontSize: 30,color: Colors.white)),
-              Text('@Juanillo23', style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7))),
+              Text(dogs[pointer].name, style: TextStyle(fontSize: 30,color: Colors.white)),
+              Text(dogs[pointer].owner.username, style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7))),
             ],
           ),
         ),
@@ -72,7 +76,12 @@ return Scaffold(
         children: [
           // Imagen de fondo
           Positioned.fill(
-            child: Image.asset(
+            child: dogs[pointer].dogPhoto != null
+          ? Image.file(
+              dogs[pointer].dogPhoto!,
+              fit: BoxFit.cover,
+            )
+          : Image.asset(
               'assets/fondo.png', // Asegúrate de tener la imagen en tu carpeta assets
               fit: BoxFit.cover,
             ),
@@ -148,7 +157,8 @@ return Scaffold(
                           },
                           pageBuilder: (BuildContext context, Animation<double> animation,
                               Animation<double> secondaryAnimation) {
-                              return ProfileScreen(); //la pagina del perro
+                              
+                              return ProfileScreen(currentdog : dogs[pointer]); //la pagina del perro
                           },
                         ),
                       );
@@ -269,7 +279,7 @@ return Scaffold(
               items: [
                 BottomNavigationBarItem(
                   icon: Icon(BarkMeet.step, color: Colors.black),
-                  label: 'Inicio',
+                  label: 'Inici',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(BarkMeet.message),
@@ -330,24 +340,6 @@ class _FilterOptionState extends State<FilterOption> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-
-class ProfileScreen extends StatelessWidget {
-
-  ProfileScreen();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("August"),
-      ),
-      body: Center(
-        child: Text('Perfil de August'),
       ),
     );
   }
