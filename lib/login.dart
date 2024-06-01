@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                  labelText: 'Correo Electrónico',
+                  labelText: 'Correu electrònic',
                   border: OutlineInputBorder()
                 ),
                 validator: (value) {
@@ -117,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
               TextFormField(
                 controller: _passwordController,
                 decoration: InputDecoration(
-                    labelText: 'Correo Electrónico',
+                    labelText: 'Contrasenya',
                     border: OutlineInputBorder()
                 ),
                 obscureText: true,
