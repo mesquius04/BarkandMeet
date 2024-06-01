@@ -1,3 +1,4 @@
+import 'package:bark_and_meet/Mainpage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -22,13 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => UserProfileScreen(
-            profilePhoto: userData.profilePhoto,
-            name: userData.name,
-            surname: userData.surname,
-            email: userData.email,
-            location: userData.location,
-            additionalInfo: userData.additionalInfo,
+          builder: (context) => Mainpage(
+          
           ),
         ),
       );

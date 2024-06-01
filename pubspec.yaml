@@ -56,9 +56,18 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  fonts:
+    - family: BarkMeet
+      fonts:
+        - asset: assets/fonts/BarkMeet.ttf
   assets:
-    - assets/Fondo1.png
     - assets/video_entrada.mp4
+    - assets/Like.png
+    - assets/Dislike.png
+    - assets/Fondo1.png
+    - assets/keyboard_arrow_down.png
+    - assets/fondo.png
+    - assets/foto1.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
