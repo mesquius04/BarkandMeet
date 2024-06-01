@@ -1,10 +1,12 @@
+import 'package:bark_and_meet/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'user.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  final User user;
+  final UserProfile user;
 
   UserProfileScreen({
     required this.user
@@ -16,7 +18,7 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   List<File?> dogs = [];
-  final User user;
+  final UserProfile user;
   _UserProfileScreenState({required this.user});
   void _addDog() async {
     final picker = ImagePicker();
@@ -81,6 +83,21 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               child: Text('Afegir un nou gos'),
             ),
             SizedBox(height: 10),
+
+            // Botó log out
+            ElevatedButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                        (route) => false,
+                  );
+                },
+              child: Text('Log out'),
+            ),
+            SizedBox(height: 10),
+
             Expanded(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "469541800643",
+    "project_id": "barkandmeet",
+    "storage_bucket": "barkandmeet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469541800643:android:f65d8814fbc802c4897076",
+        "android_client_info": {
+          "package_name": "com.example.bark_and_meet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQ8qZJeJPXxe4uuA0XMkZsp7U-YDoKItE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

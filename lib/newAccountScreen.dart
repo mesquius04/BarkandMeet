@@ -5,14 +5,14 @@ import 'user.dart';
 import 'confirmation.dart'; // Cambiado el nombre del archivo importado
 
 class NewAccountScreen extends StatefulWidget {
-  final User user;
+  final UserProfile user;
   NewAccountScreen({required this.user});
   @override
   _NewAccountScreenState createState() => _NewAccountScreenState(user: user);
 }
 
 class _NewAccountScreenState extends State<NewAccountScreen> {
-  final User user;
+  final UserProfile user;
   _NewAccountScreenState({required this.user});
 
   final _formKey = GlobalKey<FormState>();

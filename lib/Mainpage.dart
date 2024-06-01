@@ -7,14 +7,14 @@ import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
 
 
 class Mainpage extends StatefulWidget {
-  final User user;
+  final UserProfile user;
   Mainpage({required this.user});
   @override
   _MainpageState createState() => _MainpageState(user: user);
 }
 
 class _MainpageState extends State<Mainpage> {
-  final User user;
+  final UserProfile user;
   _MainpageState({required this.user});
   bool _showFilters = false;
   int N=20;

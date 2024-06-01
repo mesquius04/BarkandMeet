@@ -4,7 +4,7 @@ import 'dart:io';
 class Dog {
   File? dogPhoto;
   String name;
-  User owner;
+  UserProfile owner;
   int age;
   bool adopcio;
   bool castrat;

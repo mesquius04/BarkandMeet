@@ -5,7 +5,7 @@ import 'dart:io';
 import "user.dart";
 
 class ProfileCreatedScreen extends StatelessWidget {
-  final User user;
+  final UserProfile user;
 
   ProfileCreatedScreen({
     required this.user

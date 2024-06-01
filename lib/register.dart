@@ -1,4 +1,5 @@
 import 'package:bark_and_meet/confirmation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'user.dart';
 import 'NewAccountScreen.dart';
@@ -14,19 +15,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _confirmPasswordController = TextEditingController();
   final _usernameController = TextEditingController();
   bool _termsAccepted = false;
-  String _errorMessage = '';
+  String? _errorMessage;
 
-  User newAccount(String username, String mail, String password){
-    User user;
-    user= User(city: 'Barcelona', username: username , email: mail, name: 'Olivia' , surname: 'Rodrigo', gossera: false, numDogs: 0, premium: false, additionalInfo: '');
+  UserProfile newAccount(String username, String mail, String password) {
+    UserProfile user;
+    user = UserProfile(
+        city: 'Barcelona',
+        username: username,
+        email: mail,
+        name: 'Olivia',
+        surname: 'Rodrigo',
+        gossera: false,
+        numDogs: 0,
+        premium: false,
+        additionalInfo: '');
     return user;
   }
 
-  void _register() {
-    String email = _emailController.text;
-    String password = _passwordController.text;
-    String confirmPassword = _confirmPasswordController.text;
-    String username = _usernameController.text;
+  Future<void> _registre(BuildContext context) async {
+    // Es restableix el missatge d'error.
+    setState(() {
+      _errorMessage = null;
+    });
+  }
+
+  Future<void> _register(BuildContext context) async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+    String confirmPassword = _confirmPasswordController.text.trim();
+    String username = _usernameController.text.trim();
 
     if (username.isEmpty) {
       setState(() {
@@ -38,7 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (!validateTerms()) {
       setState(() {
         _errorMessage =
-            'Please accept the terms of service and privacy policy.';
+            "Si us plau, accepta els termes de condicions i política de privacitat";
       });
       return;
     }
@@ -46,23 +63,75 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (password != confirmPassword) {
       // verificar contra
       setState(() {
-        _errorMessage = 'Passwords do not match.';
+        _errorMessage = "Les contrasenyes no coincideixen";
       });
       return;
     }
 
-    if (password.length < 6 || !RegExp(r'\d').hasMatch(password)) {
+    if (!validatePassword(password)) {
       setState(() {
         _errorMessage =
-            'Password must be at least 6 characters long and contain at least one number.';
+            "La contrasenya ha de tenir com a mínim una majúscula, una minúscula i un número";
       });
       return;
     }
-    User newUser = newAccount(username, email, password);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => NewAccountScreen(user: newUser)),
-    );
+
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Es va al la vista de crear el perfil
+      UserProfile newUser = newAccount(username, email, password);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => NewAccountScreen(user: newUser)),
+      );
+    } on FirebaseAuthException catch (error) {
+      // Controlar errors.
+
+      // Si hi ha un error, s'assigna un valor a _errorMessage perquè surti a la pantalla
+      setState(() {
+        switch (error.code) {
+          case "email-already-in-use":
+            _errorMessage = "La direcció de correu electrònic ja està registrada.";
+            break;
+          case "invalid-email":
+            _errorMessage = "El format del correu electrònic és erroni.";
+            break;
+        }
+      });
+
+      // S'imprimeix l'error a la consola
+      print("Error a l'iniciar sessió: $error");
+    }
+  }
+
+  bool validatePassword(String password) {
+    // Verificar la longitud mínima de la contrasenya
+    if (password.length < 8) {
+      return false;
+    }
+
+    // Verificar si hi ha com a mínim una majúscula, una minúscula i un número
+    bool hasUppercase = false;
+    bool hasLowercase = false;
+    bool hasDigit = false;
+
+    for (int i = 0; i < password.length; i++) {
+      if (password[i].toUpperCase() == password[i]) {
+        hasUppercase = true;
+      } else if (password[i].toLowerCase() == password[i]) {
+        hasLowercase = true;
+      } else if (RegExp(r'\d').hasMatch(password[i])) {
+        hasDigit = true;
+      }
+    }
+
+    // La contrasenya ha de tenir com a mínim una majúscula, una minúscula i un número
+    return hasUppercase && hasLowercase && hasDigit;
   }
 
   bool validateTerms() {
@@ -92,9 +161,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 textAlign: TextAlign.start,
               ),
               SizedBox(height: 24),
-              if (_errorMessage.isNotEmpty)
+              if (_errorMessage != null)
                 Text(
-                  _errorMessage,
+                  _errorMessage!,
                   style: TextStyle(color: Colors.red),
                 ),
               TextField(
@@ -161,7 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     padding: EdgeInsets.symmetric(vertical: 16.0),
                   ),
-                  onPressed: _register,
+                  onPressed: () => _register(context),
                   child: Text('Sign Up'),
                 ),
               ),
@@ -173,85 +242,3 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 }
 
-class SignUpScreen extends StatelessWidget {
-  final String username;
-
-  SignUpScreen(this.username);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Sign Up'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 48),
-              Text(
-                'Sign Up',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontFamily: 'Comfortaa',
-                  color: Colors.black,
-                ),
-                textAlign: TextAlign.start,
-              ),
-              SizedBox(height: 24),
-              Text(
-                'Please enter your username:',
-                style: TextStyle(fontSize: 16),
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  Checkbox(
-                    value: false,
-                    onChanged: (value) {},
-                  ),
-                  Expanded(
-                    child: Text(
-                      'By signing up, you agree to Photo’s Terms of Service and\nPrivacy Policy.',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                  ),
-                  onPressed: () {},
-                  child: Text('Sign Up'),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: RegisterScreen(),
-  ));
-}
