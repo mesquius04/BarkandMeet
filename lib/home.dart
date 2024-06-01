@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'login.dart';
 import 'register.dart';
+import 'user.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

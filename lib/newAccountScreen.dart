@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'user_data.dart';
+import 'user.dart';
 import 'confirmation.dart'; // Cambiado el nombre del archivo importado
 
 class NewAccountScreen extends StatefulWidget {
+  final User user;
+  NewAccountScreen({required this.user});
   @override
-  _NewAccountScreenState createState() => _NewAccountScreenState();
+  _NewAccountScreenState createState() => _NewAccountScreenState(user: user);
 }
 
 class _NewAccountScreenState extends State<NewAccountScreen> {
+  final User user;
+  _NewAccountScreenState({required this.user});
+
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _surnameController = TextEditingController();
@@ -25,6 +30,7 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
     if (pickedFile != null) {
       setState(() {
         _profilePhoto = File(pickedFile.path);
+        user.profilePhoto=File(pickedFile.path);
       });
     }
   }
@@ -32,30 +38,24 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
   void _selectLocation() {
     setState(() {
       _locationController.text = '';
+      user.city='';
     });
   }
 
   void _saveProfile() {
     if (_formKey.currentState!.validate()) {
       // Guardar los datos del usuario en UserData
-      UserData().profilePhoto = _profilePhoto;
-      UserData().name = _nameController.text;
-      UserData().surname = _surnameController.text;
-      UserData().email =
-          'usuario@gmail.com'; // Asumiendo un correo fijo para el ejemplo
-      UserData().location = _locationController.text;
-      UserData().additionalInfo = _additionalInfoController.text;
+      user.profilePhoto = _profilePhoto;
+      user.name = _nameController.text;
+      user.surname = _surnameController.text;
+      user.city = _locationController.text;
+      user.additionalInfo = _additionalInfoController.text;
 
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => ProfileCreatedScreen(
-            profilePhoto: UserData().profilePhoto,
-            name: UserData().name,
-            surname: UserData().surname,
-            email: UserData().email,
-            location: UserData().location,
-            additionalInfo: UserData().additionalInfo,
+            user: user
           ),
         ),
       );
