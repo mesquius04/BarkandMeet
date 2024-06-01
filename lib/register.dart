@@ -40,6 +40,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _register(BuildContext context) async {
+
+    setState(() {
+      _errorMessage = null;
+    });
+
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
     String confirmPassword = _confirmPasswordController.text.trim();
@@ -57,6 +62,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _errorMessage =
             "Si us plau, accepta els termes de condicions i política de privacitat";
       });
+
       return;
     }
 
@@ -73,6 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _errorMessage =
             "La contrasenya ha de tenir com a mínim una majúscula, una minúscula i un número";
       });
+      print("AAAA");
       return;
     }
 
@@ -123,15 +130,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
     for (int i = 0; i < password.length; i++) {
       if (password[i].toUpperCase() == password[i]) {
         hasUppercase = true;
-      } else if (password[i].toLowerCase() == password[i]) {
+      }
+      if (password[i].toLowerCase() == password[i]) {
         hasLowercase = true;
-      } else if (RegExp(r'\d').hasMatch(password[i])) {
+      }
+      if (RegExp(r'\d').hasMatch(password[i])) {
         hasDigit = true;
       }
     }
 
     // La contrasenya ha de tenir com a mínim una majúscula, una minúscula i un número
     return hasUppercase && hasLowercase && hasDigit;
+  }
+
+  // es crida aquest mètode per alliberar recursos de memòria quan no s'utilitzen.
+  // en aquest cas es llibera la memòria dels controladors del correu i contrasenya
+  @override
+  void dispose() {
+
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _usernameController.dispose();
+    super.dispose();
   }
 
   bool validateTerms() {
