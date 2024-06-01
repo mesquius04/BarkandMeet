@@ -1,3 +1,4 @@
+import 'package:bark_and_meet/Mainpage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'user_profile.dart';
@@ -30,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
         MaterialPageRoute(
           builder: (context) => UserProfileScreen(
             user: user
+
           ),
         ),
       );
