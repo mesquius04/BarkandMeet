@@ -4,8 +4,8 @@ import 'package:bark_and_meet/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'home.dart';
-import 'Mainpage.dart';
+import '../home.dart';
+import '../Mainpage.dart';
 
 class Usersessionstate extends StatelessWidget {
   const Usersessionstate({Key? key}) : super(key: key);
@@ -33,7 +33,7 @@ class Usersessionstate extends StatelessWidget {
               builder: (context, snapshot) {
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
+                  return const Center(
                       child: CircularProgressIndicator(), // Muestra un indicador de carga mientras se espera
                   );
                 } else if (snapshot.data!.exists) {
@@ -48,6 +48,7 @@ class Usersessionstate extends StatelessWidget {
                       gossera: data['gossera'],
                       premium: data['premium'],
                       city: data['city'],
+                      profilePhotoUrl: data['photoURL'],
                       additionalInfo: data['additionalInfo']);
                   return UserProfileScreen(user: userProfile);
 

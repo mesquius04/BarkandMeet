@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'user.dart';
 import 'confirmation.dart'; // Cambiado el nombre del archivo importado
+
 
 class NewAccountScreen extends StatefulWidget {
   final UserProfile user;
@@ -36,7 +38,6 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
     if (pickedFile != null) {
       setState(() {
         _profilePhoto = File(pickedFile.path);
-        user.profilePhoto = File(pickedFile.path);
       });
     }
   }
@@ -48,18 +49,23 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
     });
   }
 
-  void _saveProfile() {
+  Future<void> _saveProfile() async {
     if (_formKey.currentState!.validate()) {
       // Guardar los datos del usuario en UserData
       user.username = _usernameController.text.trim();
-      user.profilePhoto = _profilePhoto;
+      //user.profilePhoto = _profilePhoto;
       user.name = _nameController.text.trim();
       user.surname = _surnameController.text.trim();
       user.city = _locationController.text.trim();
       user.additionalInfo = _additionalInfoController.text.trim();
 
+
       // Afegir l'usuari a la base de dades
-      _addUser(context);
+      String photoURL = await _saveProfilePhoto();
+
+      user.profilePhotoUrl = photoURL;
+
+      _addUser(context, photoURL);
 
       Navigator.pushReplacement(
         context,
@@ -70,7 +76,7 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
     }
   }
 
-  Future<void> _addUser(BuildContext context) async {
+  Future<void> _addUser(BuildContext context, String photoUrl) async {
     try {
       User? firebaseUser = FirebaseAuth.instance.currentUser;
 
@@ -88,6 +94,7 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
         'premium': user.premium,
         'city': user.city,
         'additionalInfo': user.additionalInfo,
+        'photoURL': photoUrl,
       });
     } catch (e) {
       // Si hi ha un error, mostra un missatge d'error
@@ -110,6 +117,44 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
         },
       );
     }
+  }
+
+  Future<String> _saveProfilePhoto() async {
+    String photoURL = "";
+    if (_profilePhoto != null) {
+      try {
+        User? firebaseUser = FirebaseAuth.instance.currentUser;
+
+        // Guardar la foto de perfil a Firebase Storage
+        String photoUrlUpload = '${firebaseUser!.uid}/fotoPerfil.jpeg';
+        await FirebaseStorage.instance.ref(photoUrlUpload).putFile(_profilePhoto!);
+
+        // coger la url de la foto subida
+        photoURL = await FirebaseStorage.instance.ref(photoUrlUpload).getDownloadURL();
+
+      } catch (e) {
+        // Si hi ha un error, mostra un missatge d'error
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: const Text(
+                  'Hi ha hagut un error al guardar la teva foto de perfil. Si us plau, torna a intentar-ho.'),
+              actions: [
+                TextButton(
+                  child: const Text('Tancar'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
+    return photoURL;
   }
 
   // es crida aquest mètode per alliberar recursos de memòria quan no s'utilitzen.

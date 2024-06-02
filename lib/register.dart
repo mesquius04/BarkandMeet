@@ -24,6 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         email: mail,
         name: 'Olivia',
         surname: 'Rodrigo',
+        profilePhotoUrl: "",
         gossera: false,
         numDogs: 0,
         premium: false,

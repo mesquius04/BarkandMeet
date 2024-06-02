@@ -1,5 +1,6 @@
 import 'package:bark_and_meet/Mainpage.dart';
 import 'package:bark_and_meet/recuperar_contrasenya.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -18,12 +19,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   String? _errorMessage; // Missatge d'error
 
-  UserProfile getUser(String mail, String password){
-    UserProfile user;
-    // XAVIII RECUPEREM USER
-    user= UserProfile(city: 'Barcelona', username: 'oliviar' , email: mail, name: 'Olivia' , surname: 'Rodrigo', gossera: false, numDogs: 0, premium: false, additionalInfo: '');
-    return user;
-  }
 
   Future<void> _login(BuildContext context) async {
 
@@ -32,22 +27,32 @@ class _LoginScreenState extends State<LoginScreen> {
       _errorMessage = null;
     });
 
-    UserProfile userProfile = UserProfile(
-        username: "Olivia",
-        email: "no@no",
-        name: "Olivia",
-        surname: "Rodrigo",
-        numDogs: 0,
-        gossera: false,
-        premium: true,
-        city: "Llafranc",
-        additionalInfo: "I'm so american");
     // es crida a la funció de firebase per verificar el correu i contrasenya per iniciar sessió
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+      // agafar la info del user de firestore
+      User? firebaseUser = FirebaseAuth.instance.currentUser;
+
+      final userCollection = FirebaseFirestore.instance.collection('Usuaris');
+      final userQuery = await userCollection.doc(firebaseUser!.uid).get();
+
+      Map<String, dynamic> data = userQuery.data() as Map<String, dynamic>;
+
+      UserProfile userProfile = UserProfile(
+          username: data['username'],
+          email: data['email'],
+          name: data['name'],
+          surname: data['surname'],
+          numDogs: data['numDogs'],
+          gossera: data['gossera'],
+          premium: data['premium'],
+          city: data['city'],
+          profilePhotoUrl: data['PhotoURL'],
+          additionalInfo: data['additionalInfo']);
+
       // Es va al la vista del perfil de l'usuari
       Navigator.pushAndRemoveUntil(
         context,

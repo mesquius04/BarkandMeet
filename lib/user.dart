@@ -6,6 +6,7 @@ import 'park.dart';
 
 class UserProfile {
   File? profilePhoto;
+  String profilePhotoUrl = '';
   String username;
   final String email;
   String name;
@@ -28,6 +29,7 @@ class UserProfile {
     required this.gossera,
     required this.premium,
     required this.city,
+    required this.profilePhotoUrl,
     List<Dog> dogs = const [],
     List<Park> parks = const [],
     required this.additionalInfo,
@@ -60,6 +62,7 @@ class UserProfile {
         email: 'mailprova',
         name: 'Olivia',
         surname: 'Rodrigo',
+        profilePhotoUrl: "",
         numDogs: 2,
         gossera: false,
         premium: false,

@@ -50,10 +50,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               children: [
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage: user.profilePhoto != null
-                      ? FileImage(user.profilePhoto!)
+                  backgroundImage: user.profilePhotoUrl != ""
+                      ? Image.network(user.profilePhotoUrl).image
                       : null,
-                  child: user.profilePhoto == null
+                  child: user.profilePhotoUrl == ""
                       ? Icon(Icons.account_circle, size: 50)
                       : null,
                 ),
@@ -61,10 +61,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(user.name, style: TextStyle(fontSize: 18)),
-                    Text(user.surname, style: TextStyle(fontSize: 18)),
-                    Text(user.email, style: TextStyle(color: Colors.grey)),
-                    Text(user.city, style: TextStyle(color: Colors.grey)),
+                    Text("${user.name} ${user.surname}", style: Theme.of(context).textTheme.headlineSmall),
+                    Text("@${user.username} · ${user.city}", style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey)),
                   ],
                 ),
               ],

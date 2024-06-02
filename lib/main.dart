@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:bark_and_meet/UserSessionState.dart';
-import 'package:bark_and_meet/firebase_options.dart';
+import 'package:bark_and_meet/fitxersAuxiliars/UserSessionState.dart';
+import 'package:bark_and_meet/fitxersAuxiliars/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'home.dart';
