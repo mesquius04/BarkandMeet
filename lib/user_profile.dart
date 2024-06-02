@@ -6,7 +6,7 @@ import 'user.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  final UserProfile user;
+  UserProfile user;
 
   UserProfileScreen({
     required this.user
@@ -18,7 +18,7 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   List<File?> dogs = [];
-  final UserProfile user;
+  UserProfile user;
   _UserProfileScreenState({required this.user});
   void _addDog() async {
     final picker = ImagePicker();

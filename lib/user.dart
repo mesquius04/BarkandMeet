@@ -7,7 +7,7 @@ import 'park.dart';
 class UserProfile {
   File? profilePhoto;
   String username;
-  String email;
+  final String email;
   String name;
   String surname;
   int numDogs;
@@ -33,6 +33,20 @@ class UserProfile {
     required this.additionalInfo,
   })  : this.dogs = dogs,
         this.parks = parks;
+
+  // Constructor que només demana el correu, nom d'usuari i tot el demés per defecte.
+  UserProfile.basic({
+    required this.email,
+  })  : this.username = '',
+        this.name = '',
+        this.surname = '',
+        this.numDogs = 0,
+        this.gossera = false,
+        this.premium = false,
+        this.city = '',
+        this.dogs = [],
+        this.parks = [],
+        this.additionalInfo = '';
 
   List<Dog> getDogs() {
     //Algorisme martí

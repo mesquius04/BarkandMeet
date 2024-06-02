@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 
 class RecuperarContrasenyaScreen extends StatefulWidget {
+  const RecuperarContrasenyaScreen({super.key});
+
   @override
-  _RecuperarContrasenyaState createState() => _RecuperarContrasenyaState();
+  RecuperarContrasenyaState createState() => RecuperarContrasenyaState();
 }
 
-class _RecuperarContrasenyaState extends State<RecuperarContrasenyaScreen> {
+class RecuperarContrasenyaState extends State<RecuperarContrasenyaScreen> {
   final _emailController = TextEditingController();
   String? _errorMessage; // Missatge d'error
 
@@ -27,8 +29,8 @@ class _RecuperarContrasenyaState extends State<RecuperarContrasenyaScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Correu enviat'),
-          content: Text(
+          title: const Text('Correu enviat'),
+          content: const Text(
               'S\'ha enviat un correu electrònic per restablir la contrasenya.'),
           actions: [
             TextButton(
@@ -41,7 +43,7 @@ class _RecuperarContrasenyaState extends State<RecuperarContrasenyaScreen> {
                   ),
                 );
               },
-              child: Text('D\'acord'),
+              child: const Text('D\'acord'),
             )
           ],
         ),
@@ -86,20 +88,20 @@ class _RecuperarContrasenyaState extends State<RecuperarContrasenyaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Recuperar contrasenya'),
+        title: const Text('Recuperar contrasenya'),
       ),
       body: Center(
           child: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
                 'Per recuperar la contrasenya, entra el teu correu electrònic:'),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Correu electrònic',
                 border: OutlineInputBorder(),
               ),
@@ -109,13 +111,13 @@ class _RecuperarContrasenyaState extends State<RecuperarContrasenyaScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   _errorMessage!,
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 ),
               ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () => _recuperarContrasenya(context),
-              child: Text('Recuperar contrasenya'),
+              child: const Text('Recuperar contrasenya'),
             )
           ],
         ),

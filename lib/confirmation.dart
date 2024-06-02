@@ -5,7 +5,7 @@ import 'dart:io';
 import "user.dart";
 
 class ProfileCreatedScreen extends StatelessWidget {
-  final UserProfile user;
+  UserProfile user;
 
   ProfileCreatedScreen({
     required this.user
@@ -24,7 +24,7 @@ class ProfileCreatedScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              'Tu perfil ha sido creado con éxito!',
+              "El teu perfil s'ha creat correctament!",
               style: TextStyle(fontSize: 20),
               textAlign: TextAlign.center,
             ),
@@ -34,7 +34,7 @@ class ProfileCreatedScreen extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Mainpage(
+                    builder: (context) => UserProfileScreen(
                       user: user
                     ),
                   ),

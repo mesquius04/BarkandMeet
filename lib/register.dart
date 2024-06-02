@@ -13,7 +13,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final _usernameController = TextEditingController();
   bool _termsAccepted = false;
   String? _errorMessage;
 
@@ -32,12 +31,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return user;
   }
 
-  Future<void> _registre(BuildContext context) async {
-    // Es restableix el missatge d'error.
-    setState(() {
-      _errorMessage = null;
-    });
-  }
+
+
 
   Future<void> _register(BuildContext context) async {
 
@@ -48,14 +43,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
     String confirmPassword = _confirmPasswordController.text.trim();
-    String username = _usernameController.text.trim();
-
-    if (username.isEmpty) {
-      setState(() {
-        _errorMessage = 'Introdueix un username.';
-      });
-      return;
-    }
 
     if (!validateTerms()) {
       setState(() {
@@ -90,7 +77,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
 
       // Es va al la vista de crear el perfil
-      UserProfile newUser = newAccount(username, email, password);
+      UserProfile newUser = UserProfile.basic(email: email);
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -151,7 +138,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-    _usernameController.dispose();
     super.dispose();
   }
 
@@ -187,14 +173,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   _errorMessage!,
                   style: TextStyle(color: Colors.red),
                 ),
-              TextField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16),
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(

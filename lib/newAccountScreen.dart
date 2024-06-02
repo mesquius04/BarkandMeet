@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -6,16 +8,20 @@ import 'confirmation.dart'; // Cambiado el nombre del archivo importado
 
 class NewAccountScreen extends StatefulWidget {
   final UserProfile user;
+
   NewAccountScreen({required this.user});
+
   @override
   _NewAccountScreenState createState() => _NewAccountScreenState(user: user);
 }
 
 class _NewAccountScreenState extends State<NewAccountScreen> {
-  final UserProfile user;
+  UserProfile user;
+
   _NewAccountScreenState({required this.user});
 
   final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
   final _nameController = TextEditingController();
   final _surnameController = TextEditingController();
   final _additionalInfoController = TextEditingController();
@@ -30,7 +36,7 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
     if (pickedFile != null) {
       setState(() {
         _profilePhoto = File(pickedFile.path);
-        user.profilePhoto=File(pickedFile.path);
+        user.profilePhoto = File(pickedFile.path);
       });
     }
   }
@@ -38,28 +44,85 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
   void _selectLocation() {
     setState(() {
       _locationController.text = '';
-      user.city='';
+      user.city = '';
     });
   }
 
   void _saveProfile() {
     if (_formKey.currentState!.validate()) {
       // Guardar los datos del usuario en UserData
+      user.username = _usernameController.text.trim();
       user.profilePhoto = _profilePhoto;
-      user.name = _nameController.text;
-      user.surname = _surnameController.text;
-      user.city = _locationController.text;
-      user.additionalInfo = _additionalInfoController.text;
+      user.name = _nameController.text.trim();
+      user.surname = _surnameController.text.trim();
+      user.city = _locationController.text.trim();
+      user.additionalInfo = _additionalInfoController.text.trim();
+
+      // Afegir l'usuari a la base de dades
+      _addUser(context);
 
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => ProfileCreatedScreen(
-            user: user
-          ),
+          builder: (context) => ProfileCreatedScreen(user: user),
         ),
       );
     }
+  }
+
+  Future<void> _addUser(BuildContext context) async {
+    try {
+      User? firebaseUser = FirebaseAuth.instance.currentUser;
+
+      // s'intenta afegir l'usuari a la base de dades
+      await FirebaseFirestore.instance
+          .collection("Usuaris")
+          .doc(firebaseUser!.uid)
+          .set({
+        'username': user.username,
+        'email': user.email,
+        'name': user.name,
+        'surname': user.surname,
+        'numDogs': user.numDogs,
+        'gossera': user.gossera,
+        'premium': user.premium,
+        'city': user.city,
+        'additionalInfo': user.additionalInfo,
+      });
+    } catch (e) {
+      // Si hi ha un error, mostra un missatge d'error
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: const Text(
+                'Hi ha hagut un error al crear el teu perfil. Si us plau, torna a intentar-ho.'),
+            actions: [
+              TextButton(
+                child: const Text('Tancar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  // es crida aquest mètode per alliberar recursos de memòria quan no s'utilitzen.
+  // en aquest cas es llibera la memòria dels controladors del correu i contrasenya
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _nameController.dispose();
+    _surnameController.dispose();
+    _locationController.dispose();
+    _additionalInfoController.dispose();
+    _profilePhoto = null;
+    super.dispose();
   }
 
   void _showGosseraInfo() {
@@ -87,20 +150,15 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(''),
+        backgroundColor: Colors.white,
+      ),
       body: Stack(
         children: [
           Positioned.fill(
             child: Container(
               color: Colors.white,
-            ),
-          ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.grey),
-              onPressed: () {
-                Navigator.pop(context);
-              },
             ),
           ),
           Padding(
@@ -111,7 +169,7 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 48),
+                    SizedBox(height: 10),
                     Text(
                       'Registre',
                       style: TextStyle(
@@ -133,90 +191,101 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        GestureDetector(
-                          onTap: _pickImage,
-                          child: CircleAvatar(
-                            radius: 60,
-                            backgroundImage: _profilePhoto != null
-                                ? FileImage(_profilePhoto!)
-                                : null,
-                            child: _profilePhoto == null
-                                ? Icon(Icons.add_a_photo, size: 60)
-                                : null,
-                          ),
+                        Column(
+                          children: [
+                            GestureDetector(
+                              onTap: _pickImage,
+                              child: CircleAvatar(
+                                radius: 60,
+                                backgroundImage: _profilePhoto != null
+                                    ? FileImage(_profilePhoto!)
+                                    : null,
+                                child: _profilePhoto == null
+                                    ? Icon(Icons.add_a_photo, size: 60)
+                                    : null,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: _isGossera,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      _isGossera = value ?? false;
+                                    });
+                                  },
+                                ),
+                                Text('Gossera'),
+                                IconButton(
+                                  icon: Icon(Icons.help_outline),
+                                  onPressed: _showGosseraInfo,
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                         SizedBox(width: 16),
                         Expanded(
                           child: Column(
                             children: [
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                padding: EdgeInsets.only(left: 8.0),
-                                child: Text(
-                                  'Nom',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'Comfortaa',
+                              TextFormField(
+                                controller: _usernameController,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.black, width: 2.0),
+                                  ),
+                                  labelText: "Nom d'usuari",
+                                  labelStyle: TextStyle(
                                     color: Colors.black54,
                                   ),
                                 ),
-                              ),
-                              Container(
-                                height: 40,
-                                child: TextFormField(
-                                  controller: _nameController,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.black, width: 2.0),
-                                    ),
-                                    labelText: '',
-                                    labelStyle: TextStyle(
-                                      color: Colors.black54,
-                                    ),
-                                  ),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Si us plau, introdueix el teu nom';
-                                    }
-                                    return null;
-                                  },
-                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Si us plau, introdueix el teu nom';
+                                  }
+                                  return null;
+                                },
                               ),
                               SizedBox(height: 16),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                padding: EdgeInsets.only(left: 8.0),
-                                child: Text(
-                                  'Cognom',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'Comfortaa',
+                              TextFormField(
+                                controller: _nameController,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.black, width: 2.0),
+                                  ),
+                                  labelText: 'Nom',
+                                  labelStyle: TextStyle(
                                     color: Colors.black54,
                                   ),
                                 ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Si us plau, introdueix el teu nom';
+                                  }
+                                  return null;
+                                },
                               ),
-                              Container(
-                                height: 40,
-                                child: TextFormField(
-                                  controller: _surnameController,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.black, width: 2.0),
-                                    ),
-                                    labelText: '',
-                                    labelStyle: TextStyle(
-                                      color: Colors.black54,
-                                    ),
+                              SizedBox(height: 16),
+                              TextFormField(
+                                controller: _surnameController,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.black, width: 2.0),
                                   ),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Si us plau, introdueix el teu cognom';
-                                    }
-                                    return null;
-                                  },
+                                  labelText: 'Cognom',
+                                  labelStyle: TextStyle(
+                                    color: Colors.black54,
+                                  ),
                                 ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Si us plau, introdueix el teu cognom';
+                                  }
+                                  return null;
+                                },
                               ),
                             ],
                           ),
@@ -224,36 +293,6 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                       ],
                     ),
                     SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: _isGossera,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              _isGossera = value ?? false;
-                            });
-                          },
-                        ),
-                        Text('Gossera'),
-                        IconButton(
-                          icon: Icon(Icons.help_outline),
-                          onPressed: _showGosseraInfo,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        'Localització',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Comfortaa',
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ),
                     TextFormField(
                       controller: _locationController,
                       decoration: InputDecoration(
@@ -261,7 +300,7 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                           borderSide:
                               BorderSide(color: Colors.black, width: 2.0),
                         ),
-                        labelText: '',
+                        labelText: 'Localització',
                         labelStyle: TextStyle(
                           color: Colors.black54,
                         ),
@@ -278,18 +317,6 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                       },
                     ),
                     SizedBox(height: 16),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        'Informació Addicional',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Comfortaa',
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ),
                     TextFormField(
                       controller: _additionalInfoController,
                       decoration: InputDecoration(
@@ -297,7 +324,7 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                           borderSide:
                               BorderSide(color: Colors.black, width: 2.0),
                         ),
-                        labelText: '',
+                        labelText: 'Informació Addicional',
                         labelStyle: TextStyle(
                           color: Colors.black54,
                         ),
