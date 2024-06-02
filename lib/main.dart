@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:bark_and_meet/UserSessionState.dart';
 import 'package:bark_and_meet/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -21,6 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Bark & Meet',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

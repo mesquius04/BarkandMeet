@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // Es va al la vista del perfil de l'usuari
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => UserProfileScreen(user: userProfile,)),
+        MaterialPageRoute(builder: (context) => Mainpage(user: userProfile,)),
           (route) => false,
       );
     } on FirebaseAuthException catch (error) {

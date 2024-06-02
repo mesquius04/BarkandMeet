@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'main.dart';
 import 'dog.dart';
 import 'user.dart';
+import 'mapa.dart';
+import 'chat.dart';
+import 'user_profile.dart';
 import 'dogProfile.dart';
 import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
 
@@ -295,6 +298,41 @@ class _MainpageState extends State<Mainpage> {
                 ),
               ],
               type: BottomNavigationBarType.fixed,
+              onTap: (int index) {
+
+                if (index == 0) {
+                  //Do nothing
+                } else if (index==1){
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatScreen(
+                        user: user
+                      ),
+                    ),
+                  );
+                }
+                else if (index==2){
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MapScreen(
+                        user: user
+                      ),
+                    ),
+                  );
+                }
+                else{
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UserProfileScreen(
+                        user: user
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
           );
         }
