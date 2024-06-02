@@ -33,8 +33,9 @@ class Usersessionstate extends StatelessWidget {
               builder: (context, snapshot) {
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator(); // Muestra un indicador de carga mientras se espera
-
+                  return Center(
+                      child: CircularProgressIndicator(), // Muestra un indicador de carga mientras se espera
+                  );
                 } else if (snapshot.data!.exists) {
                   Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
