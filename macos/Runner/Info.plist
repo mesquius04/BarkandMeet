@@ -12,6 +12,10 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Es necessita accés a la llibreria per poder pujar fotos sobre els gossos.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Es necessita accés a la càmara per poder fer fotos sobre els gossos.</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>

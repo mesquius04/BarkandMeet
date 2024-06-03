@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'dog.dart';
 import 'park.dart';
 
-class User {
+class UserProfile {
   File? profilePhoto;
+  String profilePhotoUrl = '';
   String username;
-  String email;
+  final String email;
   String name;
   String surname;
   int numDogs;
@@ -18,8 +17,8 @@ class User {
   String city;
   String additionalInfo;
 
-  User({
-    File? profilePhoto=null,
+  UserProfile({
+    File? profilePhoto,
     required this.username,
     required this.email,
     required this.name,
@@ -28,18 +27,62 @@ class User {
     required this.gossera,
     required this.premium,
     required this.city,
+    required this.profilePhotoUrl,
     List<Dog> dogs = const [],
     List<Park> parks = const [],
     required this.additionalInfo,
-  })  : this.dogs = dogs,
-        this.parks = parks;
-  
-  static List<Dog> getDogs() { //Algorisme martí
+  })  : dogs = dogs,
+        parks = parks;
+
+  // Constructor que només demana el correu, nom d'usuari i tot el demés per defecte.
+  UserProfile.basic({
+    required this.email,
+  })  : username = '',
+        name = '',
+        surname = '',
+        numDogs = 0,
+        gossera = false,
+        premium = false,
+        city = '',
+        dogs = [],
+        parks = [],
+        additionalInfo = '';
+
+  List<Dog> getDogs() {
+    // Agafar els gossos de la base de dades
+
+
+
+    //Algorisme martí
     List<Dog> dogs = [];
-    List<int> scores= [];
-    for (int i = 1; i <= 20; i++) {
-      
-    }
+    List<int> scores = [];
+    for (int i = 1; i <= 20; i++) {}
+
+    //PQ FUNCIONI DE MENTRES
+    UserProfile olivia = UserProfile(
+        username: 'oliviarodrigo',
+        email: 'mailprova',
+        name: 'Olivia',
+        surname: 'Rodrigo',
+        profilePhotoUrl: "",
+        numDogs: 2,
+        gossera: false,
+        premium: false,
+        city: 'Barcelona',
+        additionalInfo: 'Fan de don Xavier Cañadas');
+    dogs.add(Dog(
+        activityLevel: 5,
+        adopcio: false,
+        owner: olivia,
+        male: false,
+        castrat: false,
+        raca2: "a",
+        dateOfBirth: "12/12/2012",
+        name: 'Sanche',
+        size: 3,
+        endurance: 4,
+        sociability: 5, friends: []));
+
     return dogs;
   }
 }

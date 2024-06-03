@@ -1,9 +1,11 @@
-import 'package:bark_and_meet/confirmation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'user.dart';
 import 'NewAccountScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -12,58 +14,133 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final _usernameController = TextEditingController();
   bool _termsAccepted = false;
-  String _errorMessage = '';
+  String? _errorMessage;
 
-  User newAccount(String username, String mail, String password){
-    User user;
-    user= User(city: 'Barcelona', username: username , email: mail, name: 'Olivia' , surname: 'Rodrigo', gossera: false, numDogs: 0, premium: false, additionalInfo: '');
-    //XAVI! afegir a BDD. Això és valors randoms, els canviem més tard.
+  UserProfile newAccount(String username, String mail, String password) {
+    UserProfile user;
+    user = UserProfile(
+        city: 'Barcelona',
+        username: username,
+        email: mail,
+        name: 'Olivia',
+        surname: 'Rodrigo',
+        profilePhotoUrl: "",
+        gossera: false,
+        numDogs: 0,
+        premium: false,
+        additionalInfo: '');
     return user;
   }
 
-  void _register() {
-    String email = _emailController.text;
-    String password = _passwordController.text;
-    String confirmPassword = _confirmPasswordController.text;
-    String username = _usernameController.text;
 
-    if (username.isEmpty) {
-      setState(() {
-        _errorMessage = 'Introdueix un username.';
-      });
-      return;
-    }
+
+
+  Future<void> _register(BuildContext context) async {
+
+    setState(() {
+      _errorMessage = null;
+    });
+
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+    String confirmPassword = _confirmPasswordController.text.trim();
 
     if (!validateTerms()) {
       setState(() {
         _errorMessage =
-            'Please accept the terms of service and privacy policy.';
+            "Si us plau, accepta els termes de condicions i política de privacitat";
       });
+
       return;
     }
 
     if (password != confirmPassword) {
       // verificar contra
       setState(() {
-        _errorMessage = 'Passwords do not match.';
+        _errorMessage = "Les contrasenyes no coincideixen";
       });
       return;
     }
 
-    if (password.length < 6 || !RegExp(r'\d').hasMatch(password)) {
+    if (!validatePassword(password)) {
       setState(() {
         _errorMessage =
-            'Password must be at least 6 characters long and contain at least one number.';
+            "La contrasenya ha de tenir com a mínim una majúscula, una minúscula i un número";
       });
+      print("AAAA");
       return;
     }
-    User newUser = newAccount(username, email, password);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => NewAccountScreen(user: newUser)),
-    );
+
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Es va al la vista de crear el perfil
+      UserProfile newUser = UserProfile.basic(email: email);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => NewAccountScreen(user: newUser)),
+      );
+    } on FirebaseAuthException catch (error) {
+      // Controlar errors.
+
+      // Si hi ha un error, s'assigna un valor a _errorMessage perquè surti a la pantalla
+      setState(() {
+        switch (error.code) {
+          case "email-already-in-use":
+            _errorMessage = "La direcció de correu electrònic ja està registrada.";
+            break;
+          case "invalid-email":
+            _errorMessage = "El format del correu electrònic és erroni.";
+            break;
+        }
+      });
+
+      // S'imprimeix l'error a la consola
+      print("Error a l'iniciar sessió: $error");
+    }
+  }
+
+  bool validatePassword(String password) {
+    // Verificar la longitud mínima de la contrasenya
+    if (password.length < 8) {
+      return false;
+    }
+
+    // Verificar si hi ha com a mínim una majúscula, una minúscula i un número
+    bool hasUppercase = false;
+    bool hasLowercase = false;
+    bool hasDigit = false;
+
+    for (int i = 0; i < password.length; i++) {
+      if (password[i].toUpperCase() == password[i]) {
+        hasUppercase = true;
+      }
+      if (password[i].toLowerCase() == password[i]) {
+        hasLowercase = true;
+      }
+      if (RegExp(r'\d').hasMatch(password[i])) {
+        hasDigit = true;
+      }
+    }
+
+    // La contrasenya ha de tenir com a mínim una majúscula, una minúscula i un número
+    return hasUppercase && hasLowercase && hasDigit;
+  }
+
+  // es crida aquest mètode per alliberar recursos de memòria quan no s'utilitzen.
+  // en aquest cas es llibera la memòria dels controladors del correu i contrasenya
+  @override
+  void dispose() {
+
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
   }
 
   bool validateTerms() {
@@ -74,7 +151,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: const Text(''),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -82,8 +159,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 48),
-              Text(
+              const SizedBox(height: 48),
+              const Text(
                 'Registrar-se',
                 style: TextStyle(
                   fontSize: 32,
@@ -92,46 +169,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 textAlign: TextAlign.start,
               ),
-              SizedBox(height: 24),
-              if (_errorMessage.isNotEmpty)
+              const SizedBox(height: 24),
+              if (_errorMessage != null)
                 Text(
-                  _errorMessage,
-                  style: TextStyle(color: Colors.red),
+                  _errorMessage!,
+                  style: const TextStyle(color: Colors.red),
                 ),
-              TextField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16),
               TextField(
                 controller: _emailController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
                 controller: _passwordController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Constrasenya',
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
                 controller: _confirmPasswordController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Confirmar contrasenya',
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Checkbox(
@@ -142,7 +211,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       });
                     },
                   ),
-                  Expanded(
+                  const Expanded(
                     child: Text(
                       'By signing up, you agree to Photo’s Terms of Service and\nPrivacy Policy.',
                       style: TextStyle(fontSize: 12),
@@ -150,7 +219,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -160,10 +229,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
                   ),
-                  onPressed: _register,
-                  child: Text('Sign Up'),
+                  onPressed: () => _register(context),
+                  child: const Text('Sign Up'),
                 ),
               ),
             ],
@@ -174,85 +243,3 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 }
 
-class SignUpScreen extends StatelessWidget {
-  final String username;
-
-  SignUpScreen(this.username);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Sign Up'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 48),
-              Text(
-                'Sign Up',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontFamily: 'Comfortaa',
-                  color: Colors.black,
-                ),
-                textAlign: TextAlign.start,
-              ),
-              SizedBox(height: 24),
-              Text(
-                'Please enter your username:',
-                style: TextStyle(fontSize: 16),
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  Checkbox(
-                    value: false,
-                    onChanged: (value) {},
-                  ),
-                  Expanded(
-                    child: Text(
-                      'By signing up, you agree to Photo’s Terms of Service and\nPrivacy Policy.',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                  ),
-                  onPressed: () {},
-                  child: Text('Sign Up'),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: RegisterScreen(),
-  ));
-}

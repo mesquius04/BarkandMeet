@@ -16,6 +16,10 @@
 	<string>bark_and_meet</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Es necessita accés a la càmara per poder fer fotos sobre els gossos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Es necessita accés a la llibreria per poder pujar fotos sobre els gossos.</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>

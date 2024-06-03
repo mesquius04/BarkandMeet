@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'login.dart';
 import 'register.dart';
-import 'user.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -57,38 +58,38 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.black,
-                        side: BorderSide(color: Colors.black),
-                        minimumSize: Size(150, 50),
+                        side: const BorderSide(color: Colors.black),
+                        minimumSize: const Size(150, 50),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                       ),
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginScreen()),
+                          MaterialPageRoute(builder: (context) => const LoginScreen()),
                         );
                       },
-                      child: Text('Iniciar Sessió'),
+                      child: const Text('Iniciar Sessió'),
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         foregroundColor: Colors.white,
-                        minimumSize: Size(150, 50),
+                        minimumSize: const Size(150, 50),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                       ),
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => RegisterScreen()),
+                          MaterialPageRoute(builder: (context) => const RegisterScreen()),
                         );
                       },
-                      child: Text('Registrar-se'),
+                      child: const Text('Registrar-se'),
                     ),
                   ],
                 ),
