@@ -1,6 +1,9 @@
 import 'package:bark_and_meet/dog.dart';
 import 'package:bark_and_meet/user.dart';
 import 'package:bark_and_meet/user_profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -9,14 +12,14 @@ import 'dart:io';
 class DogCreateScreen extends StatefulWidget {
   final UserProfile user;
 
-  DogCreateScreen({required this.user});
+  const DogCreateScreen({super.key, required this.user});
 
   @override
   _DogCreateState createState() => _DogCreateState(user: user);
 }
 
 class _DogCreateState extends State<DogCreateScreen> {
-  final UserProfile user;
+  UserProfile user;
   Dog? dog;
 
   _DogCreateState({required this.user});
@@ -24,22 +27,21 @@ class _DogCreateState extends State<DogCreateScreen> {
   final dateController = TextEditingController();
   final textFieldFocusNode1 = FocusNode();
 
-  final textController2 = TextEditingController();
+  final nomTextController2 = TextEditingController();
   final textFieldFocusNode2 = FocusNode();
 
-  final textController3 = TextEditingController();
+  final descripcioTextController3 = TextEditingController();
   final textFieldFocusNode3 = FocusNode();
 
-  final textRacaController = TextEditingController();
+  final racaTextController = TextEditingController();
 
-  bool? dropDownValue1;
-  bool? dropDownValue2;
-  bool? dropDownValue3;
+  bool? maleDropDownValue1 = false;
+  bool? castratDropDownValue3 = false;
 
-  int sliderValue1 = 3;
-  int sliderValue2 = 3;
-  int sliderValue3 = 3;
-  int sliderValue4 = 3;
+  int midaSliderValue1 = 3;
+  int resistenciaSliderValue2 = 3;
+  int mogudesaSliderValue3 = 3;
+  int sociabilitatSliderValue4 = 3;
 
   @override
   void initState() {
@@ -47,11 +49,10 @@ class _DogCreateState extends State<DogCreateScreen> {
     dog = Dog(
       name: "null",
       owner: user,
-      age: 0,
+      dateOfBirth: "03-05-2024",
       adopcio: false,
       castrat: false,
       male: false,
-      raca: false,
       size: 0,
       endurance: 0,
       sociability: 0,
@@ -65,20 +66,22 @@ class _DogCreateState extends State<DogCreateScreen> {
   File? _imageFile1;
   File? _imageFile2;
   File? _imageFile3;
+
+  List<File?> images = [null, null, null];
+
   String defaultPhoto =
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlsVMLy_CE0EXDGSnLrMPU04z9_FZVRjYR5w&s';
 
   void _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       setState(() {
-        if (_imageFile1 == null) {
-          _imageFile1 = File(image.path);
-        } else if (_imageFile2 == null) {
-          _imageFile2 = File(image.path);
-        } else if (_imageFile3 == null) {
-          _imageFile3 = File(image.path);
+        for (int i = 0; i < images.length; i++) {
+          if (images[i] == null) {
+            images[i] = File(image.path);
+            break;
+          }
         }
       });
     }
@@ -87,50 +90,166 @@ class _DogCreateState extends State<DogCreateScreen> {
   bool _validateForm() {
     if (dateController.text.isEmpty) return false;
 
-    if (textRacaController.text.isEmpty) return false;
+    if (racaTextController.text.isEmpty) return false;
 
-    if (textController2.text.isEmpty) return false;
-    print("\n1\n");
-    if (dropDownValue1 == null) return false;
-    print("\n2\n");
-    if (dropDownValue2 == null) return false;
-    print("\n3\n");
-    if (dropDownValue3 == null) return false;
-    print("\n4\n");
-    if (sliderValue1 == 0) return false;
-    print("\n5\n");
-    if (sliderValue2 == 0) return false;
-    print("\n6\n");
-    if (sliderValue3 == 0) return false;
-    print("\n7\n");
-    if (sliderValue4 == 0) return false;
-    print("\n8\n");
-    if (textController3.text.isEmpty) return false;
-    print("\n9\n");
-    if (_imageFile1 == null || _imageFile2 == null || _imageFile3 == null)
+    if (nomTextController2.text.isEmpty) return false;
+
+
+    if (maleDropDownValue1 == null) return false;
+
+
+    if (castratDropDownValue3 == null) return false;
+
+    if (midaSliderValue1 == 0) return false;
+
+
+    if (descripcioTextController3.text.isEmpty) return false;
+
+    if (images[0] == null) {
       return false;
-    print("\n10\n");
+    }
 
     return true;
   }
 
-  void _saveDog() {
-    dog?.name = textController2.text;
-    dog?.male = dropDownValue1!;
-    dog?.raca = dropDownValue2!;
-    dog?.castrat = dropDownValue3!;
-    dog?.size = sliderValue1;
-    dog?.endurance = sliderValue2;
-    dog?.sociability = sliderValue3;
-    dog?.activityLevel = sliderValue4;
-    dog?.description = textController3.text;
-    dog?.dogPhoto = _imageFile1;
-    print("\n9\n");
-    dog?.dogPhotos.add(_imageFile1!);
-    dog?.dogPhotos.add(_imageFile2!);
-    dog?.dogPhotos.add(_imageFile3!);
+  Future<void> _saveDog() async {
+
+    // Guardar les noves dades de dog
+    dog!.name = nomTextController2.text.trim();
+    dog!.dateOfBirth = dateController.text.trim();
+    dog!.raca2 = racaTextController.text.trim();
+    dog!.description = descripcioTextController3.text.trim();
+
+    dog!.adopcio = user.gossera;
+    dog!.castrat = castratDropDownValue3!;
+    dog!.male = maleDropDownValue1!;
+
+    dog!.size = midaSliderValue1;
+    dog!.endurance = resistenciaSliderValue2;
+    dog!.sociability = sociabilitatSliderValue4;
+    dog!.activityLevel = mogudesaSliderValue3;
+
+    user.numDogs++;
+
+    List<String> photosUrl = await _savePhotosInCloud();
+
+    dog!.photosUrls = photosUrl;
+
+    await _addDogInCloud(context, photosUrl);
+
 
     user.dogs.add(dog!);
+  }
+
+  Future<void> _addDogInCloud(BuildContext context, List<String> photosUrl) async {
+    try {
+      User? firebaseUser = FirebaseAuth.instance.currentUser;
+
+      dog!.ownerId = firebaseUser!.uid;
+
+      // Guardar el gos a Firebase Firestore
+
+      String dogId = "${firebaseUser!.uid}_${user.numDogs}";
+
+      await FirebaseFirestore.instance.collection('Gossos').doc(dogId).set({
+        'name': dog?.name,
+        'ownerId': firebaseUser.uid,
+        'birthday': dog?.dateOfBirth,
+        'adoption': dog?.adopcio,
+        'castrat': dog?.castrat,
+        'city': user.city,
+        'description': dog?.description,
+        'endurance': dog?.endurance,
+        'activityLevel': dog?.activityLevel,
+        'size': dog?.size,
+        'sociability': dog?.sociability,
+        'raça': dog?.raca2,
+        'male': dog?.male,
+        'photosUrls': photosUrl,
+      });
+
+      // afegir el gos a la llista de gossos del usuari i actualitzar numDogs a firestore
+      await FirebaseFirestore.instance.collection('Usuaris').doc(firebaseUser.uid).update({
+        'dogs': FieldValue.arrayUnion([dogId]),
+        'numDogs': user.numDogs,
+      });
+
+    } catch (e) {
+      // Si hi ha un error, mostra un missatge d'error
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: const Text(
+                'Hi ha hagut un error al guardar el gos. Si us plau, torna a intentar-ho.'),
+            actions: [
+              TextButton(
+                child: const Text('Tancar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  Future<List<String>> _savePhotosInCloud() async {
+    String photoURL = "";
+    List<String> photosUrls = [];
+
+    // iterar per la llista de fotos per guardar-les a Firebase Storage les no nules
+    for (int i = 0; i < images.length; i++) {
+      if (images[i] != null) {
+        try {
+          User? firebaseUser = FirebaseAuth.instance.currentUser;
+
+          // Guardar la foto a Firebase Storage
+          String photoUrlUpload = '${firebaseUser!.uid}/gos_${user.numDogs}/foto_$i.jpeg';
+          await FirebaseStorage.instance.ref(photoUrlUpload).putFile(images[i]!);
+
+          // agafar la url de la foto pujada
+          photoURL = await FirebaseStorage.instance.ref(photoUrlUpload).getDownloadURL();
+          photosUrls.add(photoURL);
+        } catch (e) {
+          // Si hi ha un error, mostra un missatge d'error
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Error'),
+                content: const Text(
+                    'Hi ha hagut un error al guardar una foto. Si us plau, torna a intentar-ho.'),
+                actions: [
+                  TextButton(
+                    child: const Text('Tancar'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      }
+    }
+
+    return photosUrls;
+  }
+
+  // es crida aquest mètode per alliberar recursos de memòria quan no s'utilitzen.
+  // en aquest cas es llibera la memòria dels controladors del correu i contrasenya
+  @override
+  void dispose() {
+    dateController.dispose();
+    racaTextController.dispose();
+    nomTextController2.dispose();
+    descripcioTextController3.dispose();
+    super.dispose();
   }
 
   @override
@@ -138,26 +257,41 @@ class _DogCreateState extends State<DogCreateScreen> {
     return Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'Crear perfil',
           ),
           //TITULO
           actions: [
             IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.check,
                 size: 24,
               ),
-              onPressed: () {
-                if (_validateForm()) {
-                  _saveDog();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => UserProfileScreen(user: user),
-                    ),
-                  );
+              onPressed: () async {
+                if (_validateForm())  {
+                  await _saveDog();
+                  Navigator.of(context).pop();
+
                 } else {
-                  print('Form is not valid');
+                  // Mostrar un diàleg d'error
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Error'),
+                        content: const Text(
+                            'Si us plau, omple tots els camps abans de guardar.'),
+                        actions: [
+                          TextButton(
+                            child: const Text('Tancar'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 }
               },
             ),
@@ -170,51 +304,51 @@ class _DogCreateState extends State<DogCreateScreen> {
           top: true,
           child: Column(mainAxisSize: MainAxisSize.max, children: [
             Align(
-              alignment: AlignmentDirectional(0, 0),
+              alignment: const AlignmentDirectional(0, 0),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(25, 15, 25, 0),
+                padding: const EdgeInsetsDirectional.fromSTEB(25, 15, 25, 0),
                 child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                         child: TextFormField(
-                          controller: textController2,
+                          controller: nomTextController2,
                           focusNode: textFieldFocusNode2,
                           autofocus: true,
                           obscureText: false,
                           decoration: InputDecoration(
                             labelText: 'Nom',
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Color(0xFF020202),
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Color.fromARGB(255, 255, 0, 0),
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Color.fromARGB(255, 255, 0, 0),
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             contentPadding:
-                                EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
+                                const EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                           ),
                           //style:
                           validator: (value) {
@@ -226,7 +360,7 @@ class _DogCreateState extends State<DogCreateScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                         child: TextFormField(
                           controller: dateController,
                           focusNode: textFieldFocusNode1,
@@ -236,7 +370,7 @@ class _DogCreateState extends State<DogCreateScreen> {
                           decoration: InputDecoration(
                             labelText: 'Data de naixement',
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Colors.black,
                                 width: 1,
                               ),
@@ -245,7 +379,7 @@ class _DogCreateState extends State<DogCreateScreen> {
                           ),
                           onTap: () async {
                             FocusScope.of(context).requestFocus(
-                                new FocusNode()); // to prevent opening default keyboard
+                                FocusNode()); // to prevent opening default keyboard
                             final DateTime? picked = await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
@@ -262,47 +396,47 @@ class _DogCreateState extends State<DogCreateScreen> {
                             return;
                           },
                           onSaved: (value) =>
-                              dog?.dateOfBirth = DateTime.parse(value!),
+                              dog?.dateOfBirth = value.toString(),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                         child: TextFormField(
-                          controller: textRacaController,
-                          focusNode: textFieldFocusNode2,
+                          controller: racaTextController,
+                          focusNode: FocusNode(),
                           autofocus: true,
                           obscureText: false,
                           decoration: InputDecoration(
                             labelText: 'Raça',
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Colors.black,
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Color.fromARGB(255, 255, 0, 0),
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Color.fromARGB(255, 255, 0, 0),
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             contentPadding:
-                                EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
+                                const EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                           ),
                           //style:
                           validator: (value) {
@@ -314,13 +448,13 @@ class _DogCreateState extends State<DogCreateScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Align(
+                            const Align(
                               alignment: AlignmentDirectional(0, 0),
                               child: Padding(
                                 padding:
@@ -333,33 +467,33 @@ class _DogCreateState extends State<DogCreateScreen> {
                             ),
                             Flexible(
                               child: Align(
-                                alignment: AlignmentDirectional(1, 0),
+                                alignment: const AlignmentDirectional(1, 0),
                                 child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                     0,
                                     5,
                                     0,
                                     0,
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
                                       15,
                                       0,
                                       0,
                                       0,
                                     ),
                                     child: DropdownButton<bool>(
-                                      value: dropDownValue1,
+                                      value: maleDropDownValue1,
                                       onChanged: (val) => setState(
-                                          () => dropDownValue1 = val ?? false),
+                                          () => maleDropDownValue1 = val ?? false),
                                       items: [true, false].map((e) {
                                         return DropdownMenuItem<bool>(
                                           value: e,
                                           child: Text(e ? 'Mascle' : 'Femella'),
                                         );
                                       }).toList(),
-                                      hint: Text('Selecciona'),
-                                      icon: Icon(
+                                      hint: const Text('Selecciona'),
+                                      icon: const Icon(
                                         Icons.keyboard_arrow_down_rounded,
                                         size: 24,
                                       ),
@@ -374,13 +508,13 @@ class _DogCreateState extends State<DogCreateScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Padding(
+                            const Padding(
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(1, 0, 14, 0),
                               child: Text(
@@ -389,33 +523,33 @@ class _DogCreateState extends State<DogCreateScreen> {
                             ),
                             Flexible(
                               child: Align(
-                                alignment: AlignmentDirectional(1, 0),
+                                alignment: const AlignmentDirectional(1, 0),
                                 child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                     0,
                                     5,
                                     0,
                                     0,
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
                                       15,
                                       0,
                                       0,
                                       0,
                                     ),
                                     child: DropdownButton<bool>(
-                                      value: dropDownValue3,
+                                      value: castratDropDownValue3,
                                       onChanged: (val) => setState(
-                                          () => dropDownValue3 = val ?? false),
+                                          () => castratDropDownValue3 = val ?? false),
                                       items: [true, false].map((e) {
                                         return DropdownMenuItem<bool>(
                                           value: e,
                                           child: Text(e ? 'Sí' : 'No'),
                                         );
                                       }).toList(),
-                                      hint: Text('Selecciona'),
-                                      icon: Icon(
+                                      hint: const Text('Selecciona'),
+                                      icon: const Icon(
                                         Icons.keyboard_arrow_down_rounded,
                                         size: 24,
                                       ),
@@ -432,7 +566,7 @@ class _DogCreateState extends State<DogCreateScreen> {
                       Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Align(
+                          const Align(
                             alignment: AlignmentDirectional(0, -1),
                             child: Padding(
                               padding:
@@ -442,7 +576,7 @@ class _DogCreateState extends State<DogCreateScreen> {
                               ),
                             ),
                           ),
-                          Align(
+                          const Align(
                             alignment: AlignmentDirectional(0, 0),
                             child: Padding(
                               padding:
@@ -454,19 +588,19 @@ class _DogCreateState extends State<DogCreateScreen> {
                           ),
                           Flexible(
                             child: Slider(
-                              activeColor: Color(0xFF6730B4),
+                              activeColor: const Color(0xFF6730B4),
                               //inactiveColor: FlutterFlowTheme.of(context).alternate,
                               min: 0,
                               max: 5,
-                              value: sliderValue1.toDouble(),
+                              value: midaSliderValue1.toDouble(),
                               onChanged: (newValue) {
                                 setState(() {
-                                  sliderValue1 = newValue.toInt();
+                                  midaSliderValue1 = newValue.toInt();
                                 });
                               },
                             ),
                           ),
-                          Padding(
+                          const Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 0, 15, 0),
                             child: Text(
@@ -478,7 +612,7 @@ class _DogCreateState extends State<DogCreateScreen> {
                       Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Align(
+                          const Align(
                             alignment: AlignmentDirectional(-1, 0),
                             child: Padding(
                               padding:
@@ -488,7 +622,7 @@ class _DogCreateState extends State<DogCreateScreen> {
                               ),
                             ),
                           ),
-                          Padding(
+                          const Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                             child: Text(
@@ -497,19 +631,19 @@ class _DogCreateState extends State<DogCreateScreen> {
                           ),
                           Flexible(
                             child: Slider(
-                              activeColor: Color(0xFF6730B4),
+                              activeColor: const Color(0xFF6730B4),
                               //inactiveColor: FlutterFlowTheme.of(context).alternate,
                               min: 0,
                               max: 5,
-                              value: sliderValue2.toDouble(),
+                              value: resistenciaSliderValue2.toDouble(),
                               onChanged: (newValue) {
                                 setState(() {
-                                  sliderValue2 = newValue.toInt();
+                                  resistenciaSliderValue2 = newValue.toInt();
                                 });
                               },
                             ),
                           ),
-                          Padding(
+                          const Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 0, 15, 0),
                             child: Text(
@@ -521,7 +655,7 @@ class _DogCreateState extends State<DogCreateScreen> {
                       Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Align(
+                          const Align(
                             alignment: AlignmentDirectional(-1, 0),
                             child: Padding(
                               padding:
@@ -531,7 +665,7 @@ class _DogCreateState extends State<DogCreateScreen> {
                               ),
                             ),
                           ),
-                          Padding(
+                          const Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(18, 0, 0, 0),
                             child: Text(
@@ -540,19 +674,19 @@ class _DogCreateState extends State<DogCreateScreen> {
                           ),
                           Flexible(
                             child: Slider(
-                              activeColor: Color(0xFF6730B4),
+                              activeColor: const Color(0xFF6730B4),
                               //inactiveColor: FlutterFlowTheme.of(context).alternate,
                               min: 0,
                               max: 5,
-                              value: sliderValue3.toDouble(),
+                              value: mogudesaSliderValue3.toDouble(),
                               onChanged: (newValue) {
                                 setState(() {
-                                  sliderValue3 = newValue.toInt();
+                                  mogudesaSliderValue3 = newValue.toInt();
                                 });
                               },
                             ),
                           ),
-                          Padding(
+                          const Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 0, 15, 0),
                             child: Text(
@@ -564,7 +698,7 @@ class _DogCreateState extends State<DogCreateScreen> {
                       Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Align(
+                          const Align(
                             alignment: AlignmentDirectional(-1, 0),
                             child: Padding(
                               padding:
@@ -574,7 +708,7 @@ class _DogCreateState extends State<DogCreateScreen> {
                               ),
                             ),
                           ),
-                          Padding(
+                          const Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                             child: Text(
@@ -583,19 +717,19 @@ class _DogCreateState extends State<DogCreateScreen> {
                           ),
                           Flexible(
                             child: Slider(
-                              activeColor: Color(0xFF6730B4),
+                              activeColor: const Color(0xFF6730B4),
                               //inactiveColor: FlutterFlowTheme.of(context).alternate,
                               min: 0,
                               max: 5,
-                              value: sliderValue4.toDouble(),
+                              value: sociabilitatSliderValue4.toDouble(),
                               onChanged: (newValue) {
                                 setState(() {
-                                  sliderValue4 = newValue.toInt();
+                                  sociabilitatSliderValue4 = newValue.toInt();
                                 });
                               },
                             ),
                           ),
-                          Padding(
+                          const Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 0, 15, 0),
                             child: Text(
@@ -610,9 +744,9 @@ class _DogCreateState extends State<DogCreateScreen> {
                           Expanded(
                             child: Padding(
                               padding:
-                                  EdgeInsetsDirectional.fromSTEB(8, 2, 8, 0),
+                                  const EdgeInsetsDirectional.fromSTEB(8, 2, 8, 0),
                               child: TextFormField(
-                                controller: textController3,
+                                controller: descripcioTextController3,
                                 focusNode: textFieldFocusNode3,
                                 autofocus: true,
                                 obscureText: false,
@@ -620,35 +754,35 @@ class _DogCreateState extends State<DogCreateScreen> {
                                   labelText:
                                       'Escriu una descripció de la teva mascota',
                                   enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                       // color: FlutterFlowTheme.of(context).alternate,
                                       width: 2,
                                     ),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                       //color:FlutterFlowTheme.of(context).primary,
                                       width: 2,
                                     ),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   errorBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                       color: Color.fromARGB(255, 255, 0, 0),
                                       width: 2,
                                     ),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   focusedErrorBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                       color: Color.fromARGB(255, 255, 0, 0),
                                       width: 2,
                                     ),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   contentPadding:
-                                      EdgeInsetsDirectional.fromSTEB(
+                                      const EdgeInsetsDirectional.fromSTEB(
                                           15, 0, 0, 0),
                                 ),
                                 validator: (value) {
@@ -662,7 +796,7 @@ class _DogCreateState extends State<DogCreateScreen> {
                           ),
                         ],
                       ),
-                      Align(
+                      const Align(
                         alignment: AlignmentDirectional(-1, 0),
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(15, 7, 0, 0),
@@ -672,17 +806,17 @@ class _DogCreateState extends State<DogCreateScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 2, 0, 0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 2, 0, 0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Expanded(
                               child: Align(
-                                alignment: AlignmentDirectional(-1, 0),
+                                alignment: const AlignmentDirectional(-1, 0),
                                 child: GestureDetector(
                                   onTap: () => _pickImage(),
-                                  child: _imageFile1 != null
-                                      ? Image.file(_imageFile1!,
+                                  child: images[0] != null
+                                      ? Image.file(images[0]!,
                                           width: 105,
                                           height: 105,
                                           fit: BoxFit.cover)
@@ -695,11 +829,11 @@ class _DogCreateState extends State<DogCreateScreen> {
                             ),
                             Expanded(
                               child: Align(
-                                alignment: AlignmentDirectional(0, 0),
+                                alignment: const AlignmentDirectional(0, 0),
                                 child: GestureDetector(
                                   onTap: () => _pickImage(),
-                                  child: _imageFile2 != null
-                                      ? Image.file(_imageFile2!,
+                                  child: images[1] != null
+                                      ? Image.file(images[1]!,
                                           width: 105,
                                           height: 105,
                                           fit: BoxFit.cover)
@@ -712,11 +846,11 @@ class _DogCreateState extends State<DogCreateScreen> {
                             ),
                             Expanded(
                               child: Align(
-                                alignment: AlignmentDirectional(1, 0),
+                                alignment: const AlignmentDirectional(1, 0),
                                 child: GestureDetector(
                                   onTap: () => _pickImage(),
-                                  child: _imageFile3 != null
-                                      ? Image.file(_imageFile3!,
+                                  child: images[2] != null
+                                      ? Image.file(images[2]!,
                                           width: 105,
                                           height: 105,
                                           fit: BoxFit.cover)

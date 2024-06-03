@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
 import 'dog.dart';
 import 'user.dart';
 import 'mapa.dart';
@@ -11,7 +10,7 @@ import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
 class Mainpage extends StatefulWidget {
   final UserProfile user;
 
-  Mainpage({required this.user});
+  const Mainpage({super.key, required this.user});
 
   @override
   _MainpageState createState() => _MainpageState(user: user);
@@ -41,7 +40,7 @@ class _MainpageState extends State<Mainpage> {
       appBar: _showFilters
           ? null
           : AppBar(
-              iconTheme: IconThemeData(
+              iconTheme: const IconThemeData(
                 color: Colors
                     .white, // Aquí se cambia el color de la flecha de regreso
               ),
@@ -67,7 +66,7 @@ class _MainpageState extends State<Mainpage> {
                     //Text('${widget.myDog.name}', style: TextStyle(fontSize: 30)),
                     //Text('@${widget.myDog.owner.username}', style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7))),
                     Text(dogs[pointer].name,
-                        style: TextStyle(fontSize: 30, color: Colors.white)),
+                        style: const TextStyle(fontSize: 30, color: Colors.white)),
                     Text(dogs[pointer].owner.username,
                         style: TextStyle(
                             fontSize: 14,
@@ -77,7 +76,7 @@ class _MainpageState extends State<Mainpage> {
               ),
               actions: [
                 IconButton(
-                  icon: Icon(BarkMeet.points),
+                  icon: const Icon(BarkMeet.points),
                   color: Colors.white,
                   onPressed: _toggleFilters,
                 ),
@@ -102,7 +101,7 @@ class _MainpageState extends State<Mainpage> {
           SafeArea(
             child: Column(
               children: [
-                Spacer(),
+                const Spacer(),
                 // Botones inferiores
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 44.0),
@@ -120,7 +119,7 @@ class _MainpageState extends State<Mainpage> {
                         child: Container(
                           width: 74,
                           height: 74,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage('assets/Dislike.png'),
                               // Ruta de la imagen
@@ -140,7 +139,7 @@ class _MainpageState extends State<Mainpage> {
                         child: Container(
                           width: 74,
                           height: 74,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage('assets/Like.png'),
                               // Ruta de la imagen
@@ -152,7 +151,7 @@ class _MainpageState extends State<Mainpage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 // Botón central
                 Center(
                   child: ElevatedButton(
@@ -160,7 +159,7 @@ class _MainpageState extends State<Mainpage> {
                       Navigator.push(
                         context,
                         PageRouteBuilder(
-                          transitionDuration: Duration(milliseconds: 500),
+                          transitionDuration: const Duration(milliseconds: 500),
                           transitionsBuilder: (BuildContext context,
                               Animation<double> animation,
                               Animation<double> secondaryAnimation,
@@ -192,7 +191,7 @@ class _MainpageState extends State<Mainpage> {
                     child: Container(
                       width: 52,
                       height: 52,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage('assets/keyboard_arrow_down.png'),
                           // Ruta de la imagen
@@ -202,7 +201,7 @@ class _MainpageState extends State<Mainpage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -212,7 +211,7 @@ class _MainpageState extends State<Mainpage> {
             left: 0,
             right: 0,
             child: AnimatedContainer(
-              duration: Duration(milliseconds: 0),
+              duration: const Duration(milliseconds: 0),
               height: _showFilters
                   ? MediaQuery.of(context).size.height / 3 * 2
                   : 0.0,
@@ -228,75 +227,75 @@ class _MainpageState extends State<Mainpage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Actualment mostrant:',
+                            const Text('Actualment mostrant:',
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 16)),
                             IconButton(
-                              icon: Icon(Icons.close, color: Colors.black),
+                              icon: const Icon(Icons.close, color: Colors.black),
                               onPressed: _toggleFilters,
                             ),
                           ],
                         ),
                         // Filtros de "En adopció" y "No en adopció"
-                        Row(
+                        const Row(
                           children: [
                             FilterOption(label: 'En adopció'),
                             FilterOption(label: 'No en adopció'),
                           ],
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         // Título "Genère"
-                        Text('Genère',
+                        const Text('Genère',
                             style:
                                 TextStyle(color: Colors.black, fontSize: 16)),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         // Filtros de "Mascle" y "Femella"
-                        Row(
+                        const Row(
                           children: [
                             FilterOption(label: 'Mascle'),
                             FilterOption(label: 'Femella'),
                           ],
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         // Título "Estat Sexual"
-                        Text('Estat Sexual',
+                        const Text('Estat Sexual',
                             style:
                                 TextStyle(color: Colors.black, fontSize: 16)),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         // Filtros de "Fèrtil" y "Infèrtil"
-                        Row(
+                        const Row(
                           children: [
                             FilterOption(label: 'Fèrtil'),
                             FilterOption(label: 'Infèrtil'),
                           ],
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         // Título "Mida"
-                        Text('Mida',
+                        const Text('Mida',
                             style:
                                 TextStyle(color: Colors.black, fontSize: 16)),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         // Filtros de "Petit", "Mitjà" y "Gran"
-                        Row(
+                        const Row(
                           children: [
                             FilterOption(label: 'Petit'),
                             FilterOption(label: 'Mitjà'),
                             FilterOption(label: 'Gran'),
                           ],
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         // Botón de aplicar filtros
                         Center(
                           child: ElevatedButton(
                             onPressed: () {
                               // Lógica para aplicar los filtros
                             },
-                            child: Text('Aplicar filtres',
-                                style: TextStyle(color: Colors.white)),
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   Colors.black, // Color de fondo del botón
                             ),
+                            child: const Text('Aplicar filtres',
+                                style: TextStyle(color: Colors.white)),
                           ),
                         ),
                       ],
@@ -311,14 +310,14 @@ class _MainpageState extends State<Mainpage> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         selectedItemColor: Colors.black,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(BarkMeet.step, color: Colors.black),
             label: 'Inici',
           ),
           BottomNavigationBarItem(
             icon: Icon(BarkMeet.message),
-            label: 'Chat',
+            label: 'Xat',
           ),
           BottomNavigationBarItem(
             icon: Icon(BarkMeet.map),
@@ -367,7 +366,7 @@ class _MainpageState extends State<Mainpage> {
 class FilterOption extends StatefulWidget {
   final String label;
 
-  FilterOption({required this.label});
+  const FilterOption({super.key, required this.label});
 
   @override
   _FilterOptionState createState() => _FilterOptionState();
@@ -398,7 +397,7 @@ class _FilterOptionState extends State<FilterOption> {
             ),
             Text(
               widget.label,
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
             ),
           ],
         ),

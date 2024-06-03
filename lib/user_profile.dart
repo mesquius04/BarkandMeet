@@ -16,7 +16,7 @@ import 'package:image_picker/image_picker.dart';
 class UserProfileScreen extends StatefulWidget {
   UserProfile user;
 
-  UserProfileScreen({
+  UserProfileScreen({super.key, 
     required this.user
   });
   
@@ -29,7 +29,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   UserProfile user;
   _UserProfileScreenState({required this.user});
 
-  CarouselController _carouselController1 = CarouselController();
+  final CarouselController _carouselController1 = CarouselController();
   
   void _addDog() async {
     final picker = ImagePicker();
@@ -106,11 +106,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             SizedBox(height: 10),
             Align(
               alignment: AlignmentDirectional(0, 0),
-              child: Container(
+              child: SizedBox(
               width: double.infinity,
               height: 127,
               child: CarouselSlider(
-  items: user.dogs.length == 0
+  items: user.dogs.isEmpty
   ? [ // Mostrar solo un elemento si la lista está vacía
       GestureDetector(
         onTap: () {
@@ -175,11 +175,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 ),
 Align(
               alignment: AlignmentDirectional(0, 0),
-              child: Container(
+              child: SizedBox(
               width: double.infinity,
               height: 127,
               child: CarouselSlider(
-  items: user.dogs.length == 0
+  items: user.dogs.isEmpty
   ? [ // Mostrar solo un elemento si la lista está vacía
       GestureDetector(
         onTap: () {
@@ -267,7 +267,7 @@ Align(
             bottomNavigationBar: BottomNavigationBar(
               backgroundColor: Colors.white,
               selectedItemColor: Colors.black,
-              items: [
+              items: const [
                 BottomNavigationBarItem(
                   icon: Icon(BarkMeet.step, color: Colors.black),
                   label: 'Inici',

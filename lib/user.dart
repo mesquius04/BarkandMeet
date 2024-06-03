@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'dog.dart';
 import 'park.dart';
 
@@ -20,7 +18,7 @@ class UserProfile {
   String additionalInfo;
 
   UserProfile({
-    File? profilePhoto = null,
+    File? profilePhoto,
     required this.username,
     required this.email,
     required this.name,
@@ -33,22 +31,22 @@ class UserProfile {
     List<Dog> dogs = const [],
     List<Park> parks = const [],
     required this.additionalInfo,
-  })  : this.dogs = dogs,
-        this.parks = parks;
+  })  : dogs = dogs,
+        parks = parks;
 
   // Constructor que només demana el correu, nom d'usuari i tot el demés per defecte.
   UserProfile.basic({
     required this.email,
-  })  : this.username = '',
-        this.name = '',
-        this.surname = '',
-        this.numDogs = 0,
-        this.gossera = false,
-        this.premium = false,
-        this.city = '',
-        this.dogs = [],
-        this.parks = [],
-        this.additionalInfo = '';
+  })  : username = '',
+        name = '',
+        surname = '',
+        numDogs = 0,
+        gossera = false,
+        premium = false,
+        city = '',
+        dogs = [],
+        parks = [],
+        additionalInfo = '';
 
   List<Dog> getDogs() {
     // Agafar els gossos de la base de dades
@@ -75,11 +73,11 @@ class UserProfile {
     dogs.add(Dog(
         activityLevel: 5,
         adopcio: false,
-        age: 2,
         owner: olivia,
         male: false,
         castrat: false,
-        raca: true,
+        raca2: "a",
+        dateOfBirth: "12/12/2012",
         name: 'Sanche',
         size: 3,
         endurance: 4,

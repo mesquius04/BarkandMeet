@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NewDogScreen extends StatefulWidget {
+  const NewDogScreen({super.key});
+
   @override
   _NewDogScreenState createState() => _NewDogScreenState();
 }
@@ -11,9 +12,9 @@ class _NewDogScreenState extends State<NewDogScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Crear perfil de gos'),
+        title: const Text('Crear perfil de gos'),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

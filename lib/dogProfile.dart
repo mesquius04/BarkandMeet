@@ -1,10 +1,9 @@
 import 'dog.dart';
 import 'package:flutter/material.dart';
-import 'Mainpage.dart';
 
 class ProfileScreen extends StatelessWidget {
   Dog currentdog;
-  ProfileScreen({required this.currentdog});
+  ProfileScreen({super.key, required this.currentdog});
 
   @override
   Widget build(BuildContext context) {

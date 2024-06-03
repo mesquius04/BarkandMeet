@@ -1,29 +1,26 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
-import 'dog.dart';
 import 'user.dart';
 import 'mapa.dart';
 import 'Mainpage.dart';
 import 'user_profile.dart';
-import 'dogProfile.dart';
 import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
 
 class ChatScreen extends StatelessWidget {
   UserProfile user;
-  ChatScreen({required this.user});
+  ChatScreen({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pantalla Chat'),
+        title: const Text('Pantalla Chat'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Aqui van els chats'),
       ),bottomNavigationBar: BottomNavigationBar(
               backgroundColor: Colors.white,
               selectedItemColor: Colors.black,
-              items: [
+              items: const [
                 BottomNavigationBarItem(
                   icon: Icon(BarkMeet.step, color: Colors.black),
                   label: 'Inici',

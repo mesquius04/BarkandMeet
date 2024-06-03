@@ -5,10 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../home.dart';
-import '../Mainpage.dart';
 
 class Usersessionstate extends StatelessWidget {
-  const Usersessionstate({Key? key}) : super(key: key);
+  const Usersessionstate({super.key});
 
   Future<DocumentSnapshot> _usuariExisteix(String uid) async {
     final userCollection = FirebaseFirestore.instance.collection('Usuaris');
@@ -62,7 +61,7 @@ class Usersessionstate extends StatelessWidget {
               },
             );
           } else {
-            return HomeScreen();
+            return const HomeScreen();
           }
         },
       ),
