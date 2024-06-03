@@ -1,30 +1,27 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
 import 'Mainpage.dart';
-import 'chat.dart';
-import 'dog.dart';
+import 'HomeScreen.dart';
 import 'user.dart';
 import 'user_profile.dart';
-import 'dogProfile.dart';
 import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
 
 class MapScreen extends StatelessWidget {
   UserProfile user;
-  MapScreen({required this.user});
+  MapScreen({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pantalla Mapa'),
+        title: const Text('Pantalla Mapa'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Aqui va el mapa'),
       ),
             bottomNavigationBar: BottomNavigationBar(
               backgroundColor: Colors.white,
               selectedItemColor: Colors.black,
-              items: [
+              items: const [
                 BottomNavigationBarItem(
                   icon: Icon(BarkMeet.step, color: Colors.black),
                   label: 'Inici',
@@ -58,7 +55,7 @@ class MapScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChatScreen(
+                      builder: (context) => HomeChatScreen(
                         user: user
                       ),
                     ),
