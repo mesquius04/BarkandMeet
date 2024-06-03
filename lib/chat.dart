@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
-import 'Mainpage.dart';
-import 'chat.dart';
 import 'dog.dart';
 import 'user.dart';
+import 'mapa.dart';
+import 'Mainpage.dart';
 import 'user_profile.dart';
 import 'dogProfile.dart';
 import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
 
-class MapScreen extends StatelessWidget {
+class ChatScreen extends StatelessWidget {
   UserProfile user;
-  MapScreen({required this.user});
+  ChatScreen({required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pantalla Mapa'),
+        title: Text('Pantalla Chat'),
       ),
       body: Center(
-        child: Text('Aqui va el mapa'),
-      ),
-            bottomNavigationBar: BottomNavigationBar(
+        child: Text('Aqui van els chats'),
+      ),bottomNavigationBar: BottomNavigationBar(
               backgroundColor: Colors.white,
               selectedItemColor: Colors.black,
               items: [
@@ -55,17 +54,17 @@ class MapScreen extends StatelessWidget {
                     ),
                   );
                 } else if (index==1){
+                  //do nothing
+                }
+                else if (index==2){
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChatScreen(
+                      builder: (context) => MapScreen(
                         user: user
                       ),
                     ),
                   );
-                }
-                else if (index==2){
-                  //do nothing
                 }
                 else{
                   Navigator.pushReplacement(

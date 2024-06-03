@@ -35,7 +35,6 @@ dependencies:
     sdk: flutter
   chewie: 
   video_player:
-  intl: ^0.17.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -74,17 +73,6 @@ flutter:
     - assets/keyboard_arrow_down.png
     - assets/fondo.png
     - assets/foto1.png
-    - assets/images/a.png
-    - assets/images/b.png
-    - assets/images/c.png
-    - assets/images/chat111.png
-    - assets/images/chat222.png
-    - assets/images/chat333.png
-    - assets/images/chat555.png
-    - assets/images/d.png
-    - assets/images/e.png
-    - assets/images/g.png
-
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

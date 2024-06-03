@@ -8,7 +8,7 @@ class Park {
   List<String> attributes;
 
   Park({
-    File? parkPhoto,
+    File? parkPhoto=null,
     required this.name,
     required this.city,
     this.score = 0.0,

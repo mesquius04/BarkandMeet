@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'main.dart';
 import 'dog.dart';
 import 'user.dart';
 import 'mapa.dart';
-import 'HomeScreen.dart';
+import 'chat.dart';
 import 'user_profile.dart';
 import 'dogProfile.dart';
 import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
@@ -10,7 +11,7 @@ import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
 class Mainpage extends StatefulWidget {
   final UserProfile user;
 
-  const Mainpage({super.key, required this.user});
+  Mainpage({required this.user});
 
   @override
   _MainpageState createState() => _MainpageState(user: user);
@@ -40,7 +41,7 @@ class _MainpageState extends State<Mainpage> {
       appBar: _showFilters
           ? null
           : AppBar(
-              iconTheme: const IconThemeData(
+              iconTheme: IconThemeData(
                 color: Colors
                     .white, // Aquí se cambia el color de la flecha de regreso
               ),
@@ -66,8 +67,8 @@ class _MainpageState extends State<Mainpage> {
                     //Text('${widget.myDog.name}', style: TextStyle(fontSize: 30)),
                     //Text('@${widget.myDog.owner.username}', style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7))),
                     Text(dogs[pointer].name,
-                        style: const TextStyle(fontSize: 30, color: Colors.white)),
-                    Text(dogs[pointer].owner!.username,
+                        style: TextStyle(fontSize: 30, color: Colors.white)),
+                    Text(dogs[pointer].owner.username,
                         style: TextStyle(
                             fontSize: 14,
                             color: Colors.white.withOpacity(0.7))),
@@ -76,7 +77,7 @@ class _MainpageState extends State<Mainpage> {
               ),
               actions: [
                 IconButton(
-                  icon: const Icon(BarkMeet.points),
+                  icon: Icon(BarkMeet.points),
                   color: Colors.white,
                   onPressed: _toggleFilters,
                 ),
@@ -101,7 +102,7 @@ class _MainpageState extends State<Mainpage> {
           SafeArea(
             child: Column(
               children: [
-                const Spacer(),
+                Spacer(),
                 // Botones inferiores
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 44.0),
@@ -119,7 +120,7 @@ class _MainpageState extends State<Mainpage> {
                         child: Container(
                           width: 74,
                           height: 74,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage('assets/Dislike.png'),
                               // Ruta de la imagen
@@ -139,7 +140,7 @@ class _MainpageState extends State<Mainpage> {
                         child: Container(
                           width: 74,
                           height: 74,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage('assets/Like.png'),
                               // Ruta de la imagen
@@ -151,7 +152,7 @@ class _MainpageState extends State<Mainpage> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 // Botón central
                 Center(
                   child: ElevatedButton(
@@ -159,7 +160,7 @@ class _MainpageState extends State<Mainpage> {
                       Navigator.push(
                         context,
                         PageRouteBuilder(
-                          transitionDuration: const Duration(milliseconds: 500),
+                          transitionDuration: Duration(milliseconds: 500),
                           transitionsBuilder: (BuildContext context,
                               Animation<double> animation,
                               Animation<double> secondaryAnimation,
@@ -190,7 +191,7 @@ class _MainpageState extends State<Mainpage> {
                     child: Container(
                       width: 52,
                       height: 52,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage('assets/keyboard_arrow_down.png'),
                           // Ruta de la imagen
@@ -200,7 +201,7 @@ class _MainpageState extends State<Mainpage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
               ],
             ),
           ),
@@ -210,95 +211,90 @@ class _MainpageState extends State<Mainpage> {
             left: 0,
             right: 0,
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 0),
+              duration: Duration(milliseconds: 0),
               height: _showFilters
                   ? MediaQuery.of(context).size.height / 3 * 2
                   : 0.0,
               color: Colors.white,
-              child: SafeArea(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(36.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Título y botón de cerrar
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text('Actualment mostrant:',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16)),
-                            IconButton(
-                              icon: const Icon(Icons.close, color: Colors.black),
-                              onPressed: _toggleFilters,
-                            ),
-                          ],
-                        ),
-                        // Filtros de "En adopció" y "No en adopció"
-                        const Row(
-                          children: [
-                            FilterOption(label: 'En adopció'),
-                            FilterOption(label: 'No en adopció'),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        // Título "Genère"
-                        const Text('Genère',
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 16)),
-                        const SizedBox(height: 8),
-                        // Filtros de "Mascle" y "Femella"
-                        const Row(
-                          children: [
-                            FilterOption(label: 'Mascle'),
-                            FilterOption(label: 'Femella'),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        // Título "Estat Sexual"
-                        const Text('Estat Sexual',
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 16)),
-                        const SizedBox(height: 8),
-                        // Filtros de "Fèrtil" y "Infèrtil"
-                        const Row(
-                          children: [
-                            FilterOption(label: 'Fèrtil'),
-                            FilterOption(label: 'Infèrtil'),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        // Título "Mida"
-                        const Text('Mida',
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 16)),
-                        const SizedBox(height: 8),
-                        // Filtros de "Petit", "Mitjà" y "Gran"
-                        const Row(
-                          children: [
-                            FilterOption(label: 'Petit'),
-                            FilterOption(label: 'Mitjà'),
-                            FilterOption(label: 'Gran'),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        // Botón de aplicar filtros
-                        Center(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              // Lógica para aplicar los filtros
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Colors.black, // Color de fondo del botón
-                            ),
-                            child: const Text('Aplicar filtres',
-                                style: TextStyle(color: Colors.white)),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Título y botón de cerrar
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Actualment mostrant:',
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 16)),
+                          IconButton(
+                            icon: Icon(Icons.close, color: Colors.black),
+                            onPressed: _toggleFilters,
+                          ),
+                        ],
+                      ),
+                      // Filtros de "En adopció" y "No en adopció"
+                      Row(
+                        children: [
+                          FilterOption(label: 'En adopció'),
+                          FilterOption(label: 'No en adopció'),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      // Título "Genère"
+                      Text('Genère',
+                          style: TextStyle(color: Colors.black, fontSize: 16)),
+                      SizedBox(height: 8),
+                      // Filtros de "Mascle" y "Femella"
+                      Row(
+                        children: [
+                          FilterOption(label: 'Mascle'),
+                          FilterOption(label: 'Femella'),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      // Título "Estat Sexual"
+                      Text('Estat Sexual',
+                          style: TextStyle(color: Colors.black, fontSize: 16)),
+                      SizedBox(height: 8),
+                      // Filtros de "Fèrtil" y "Infèrtil"
+                      Row(
+                        children: [
+                          FilterOption(label: 'Fèrtil'),
+                          FilterOption(label: 'Infèrtil'),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      // Título "Mida"
+                      Text('Mida',
+                          style: TextStyle(color: Colors.black, fontSize: 16)),
+                      SizedBox(height: 8),
+                      // Filtros de "Petit", "Mitjà" y "Gran"
+                      Row(
+                        children: [
+                          FilterOption(label: 'Petit'),
+                          FilterOption(label: 'Mitjà'),
+                          FilterOption(label: 'Gran'),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      // Botón de aplicar filtros
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Lógica para aplicar los filtros
+                          },
+                          child: Text('Aplicar filtres',
+                              style: TextStyle(color: Colors.white)),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Colors.black, // Color de fondo del botón
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -309,14 +305,14 @@ class _MainpageState extends State<Mainpage> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         selectedItemColor: Colors.black,
-        items: const [
+        items: [
           BottomNavigationBarItem(
             icon: Icon(BarkMeet.step, color: Colors.black),
             label: 'Inici',
           ),
           BottomNavigationBarItem(
             icon: Icon(BarkMeet.message),
-            label: 'Xat',
+            label: 'Chat',
           ),
           BottomNavigationBarItem(
             icon: Icon(BarkMeet.map),
@@ -335,9 +331,9 @@ class _MainpageState extends State<Mainpage> {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => HomeChatScreen(user: user),
+                builder: (context) => ChatScreen(user: user),
               ),
-              (route) => false,
+                  (route) => false,
             );
           } else if (index == 2) {
             Navigator.pushAndRemoveUntil(
@@ -345,7 +341,7 @@ class _MainpageState extends State<Mainpage> {
               MaterialPageRoute(
                 builder: (context) => MapScreen(user: user),
               ),
-              (route) => false,
+                  (route) => false,
             );
           } else {
             Navigator.pushAndRemoveUntil(
@@ -353,7 +349,7 @@ class _MainpageState extends State<Mainpage> {
               MaterialPageRoute(
                 builder: (context) => UserProfileScreen(user: user),
               ),
-              (route) => false,
+                  (route) => false,
             );
           }
         },
@@ -365,7 +361,7 @@ class _MainpageState extends State<Mainpage> {
 class FilterOption extends StatefulWidget {
   final String label;
 
-  const FilterOption({super.key, required this.label});
+  FilterOption({required this.label});
 
   @override
   _FilterOptionState createState() => _FilterOptionState();
@@ -396,7 +392,7 @@ class _FilterOptionState extends State<FilterOption> {
             ),
             Text(
               widget.label,
-              style: const TextStyle(color: Colors.black),
+              style: TextStyle(color: Colors.black),
             ),
           ],
         ),

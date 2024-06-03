@@ -3,11 +3,12 @@ import 'package:bark_and_meet/recuperar_contrasenya.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'user_profile.dart';
+import 'package:image_picker/image_picker.dart';
 import 'user.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
-
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -40,12 +41,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
       Map<String, dynamic> data = userQuery.data() as Map<String, dynamic>;
 
-      List<dynamic> dogsData = data['dogs'];
-
-      // Convert the dynamic array to a List<String>
-      List<String> dogs =
-      dogsData.map((item) => item.toString()).toList();
-
       UserProfile userProfile = UserProfile(
           username: data['username'],
           email: data['email'],
@@ -55,9 +50,8 @@ class _LoginScreenState extends State<LoginScreen> {
           gossera: data['gossera'],
           premium: data['premium'],
           city: data['city'],
-          profilePhotoUrl: data['photoURL'],
-          additionalInfo: data['additionalInfo'],
-          dogsIds: dogs);
+          profilePhotoUrl: data['PhotoURL'],
+          additionalInfo: data['additionalInfo']);
 
       // Es va al la vista del perfil de l'usuari
       Navigator.pushAndRemoveUntil(
@@ -96,25 +90,25 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(''),
+        title: Text(''),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'Iniciar Sesión',
                 style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               // Text Field de Correu
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Correu electrònic',
                   border: OutlineInputBorder()
                 ),
@@ -128,12 +122,12 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
 
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               // Text Field de contrasenya
               TextFormField(
                 controller: _passwordController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                     labelText: 'Contrasenya',
                     border: OutlineInputBorder()
                 ),
@@ -146,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
               ),
 
-              const SizedBox(height: 5),
+              SizedBox(height: 5),
 
               // Recuperar contrasenya
               Row(
@@ -156,11 +150,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       onTap: () {
                         Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                          return const RecuperarContrasenyaScreen();
+                          return RecuperarContrasenyaScreen();
                         },),);
                       },
                         child:
-                        const Text(
+                        Text(
                           "Has oblidat la teva contrasenya?",
                           style: TextStyle(color: Colors.blue),
                         )
@@ -174,17 +168,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Text(
                     _errorMessage!,
-                    style: const TextStyle(color: Colors.red),
+                    style: TextStyle(color: Colors.red),
                   ),
                 ),
 
               // Botó de Iniciar Sessió
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () => _login(context),
-                  child: const Text('Iniciar Sesión'),
+                  child: Text('Iniciar Sesión'),
                 ),
               ),
             ],

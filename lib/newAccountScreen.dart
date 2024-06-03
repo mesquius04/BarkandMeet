@@ -11,7 +11,7 @@ import 'confirmation.dart'; // Cambiado el nombre del archivo importado
 class NewAccountScreen extends StatefulWidget {
   final UserProfile user;
 
-  const NewAccountScreen({super.key, required this.user});
+  NewAccountScreen({required this.user});
 
   @override
   _NewAccountScreenState createState() => _NewAccountScreenState(user: user);
@@ -51,31 +51,6 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
 
   Future<void> _saveProfile() async {
     if (_formKey.currentState!.validate()) {
-
-      // comprovar si el nom d'usuari ja l'ha utilitzat algú a la base de dades
-      bool usernameExists = await this.usernameExists(_usernameController.text.trim());
-      if (usernameExists) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Error'),
-              content: const Text(
-                  'Aquest nom d\'usuari ja està en ús. Si us plau, tria un altre.'),
-              actions: [
-                TextButton(
-                  child: const Text('Tancar'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-        return;
-      }
-
       // Guardar los datos del usuario en UserData
       user.username = _usernameController.text.trim();
       //user.profilePhoto = _profilePhoto;
@@ -182,19 +157,6 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
     return photoURL;
   }
 
-  Future<bool> usernameExists(String username) async {
-    final users = FirebaseFirestore.instance.collection('Usuaris');
-    final querySnapshot = await users.where('username', isEqualTo: username).get();
-
-    if (querySnapshot.docs.isEmpty) {
-      // No se encontró ningún usuario con ese nombre de usuario
-      return false;
-    } else {
-      // Se encontró al menos un usuario con ese nombre de usuario
-      return true;
-    }
-  }
-
   // es crida aquest mètode per alliberar recursos de memòria quan no s'utilitzen.
   // en aquest cas es llibera la memòria dels controladors del correu i contrasenya
   @override
@@ -213,13 +175,13 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(''),
-          content: const Text(
+          title: Text(''),
+          content: Text(
               'Clica aquí només si vols que el teu perfil sigui considerat una gossera que pugui posar gossos en adopció.\n\n'
               'Si ets un propietari de gos o vols adoptar un ignora aquesta casella.'),
           actions: [
             TextButton(
-              child: const Text('Tancar'),
+              child: Text('Tancar'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -234,7 +196,7 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(''),
+        title: Text(''),
         backgroundColor: Colors.white,
       ),
       body: Stack(
@@ -252,8 +214,8 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 10),
-                    const Text(
+                    SizedBox(height: 10),
+                    Text(
                       'Registre',
                       style: TextStyle(
                         fontSize: 32,
@@ -261,8 +223,8 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 24),
-                    const Text(
+                    SizedBox(height: 24),
+                    Text(
                       'Foto de perfil',
                       style: TextStyle(
                         fontSize: 16,
@@ -270,7 +232,7 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                         color: Colors.black54,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -284,7 +246,7 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                                     ? FileImage(_profilePhoto!)
                                     : null,
                                 child: _profilePhoto == null
-                                    ? const Icon(Icons.add_a_photo, size: 60)
+                                    ? Icon(Icons.add_a_photo, size: 60)
                                     : null,
                               ),
                             ),
@@ -298,22 +260,22 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                                     });
                                   },
                                 ),
-                                const Text('Gossera'),
+                                Text('Gossera'),
                                 IconButton(
-                                  icon: const Icon(Icons.help_outline),
+                                  icon: Icon(Icons.help_outline),
                                   onPressed: _showGosseraInfo,
                                 ),
                               ],
                             ),
                           ],
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16),
                         Expanded(
                           child: Column(
                             children: [
                               TextFormField(
                                 controller: _usernameController,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.black, width: 2.0),
@@ -324,21 +286,16 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                                   ),
                                 ),
                                 validator: (value) {
-
-                                  // comprobar si el nom d'usuari ja l'ha utilitzat algú a la base de dades
-
-
-
                                   if (value == null || value.isEmpty) {
                                     return 'Si us plau, introdueix el teu nom';
                                   }
                                   return null;
                                 },
                               ),
-                              const SizedBox(height: 16),
+                              SizedBox(height: 16),
                               TextFormField(
                                 controller: _nameController,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.black, width: 2.0),
@@ -355,10 +312,10 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                                   return null;
                                 },
                               ),
-                              const SizedBox(height: 16),
+                              SizedBox(height: 16),
                               TextFormField(
                                 controller: _surnameController,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.black, width: 2.0),
@@ -380,20 +337,20 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     TextFormField(
                       controller: _locationController,
                       decoration: InputDecoration(
-                        border: const OutlineInputBorder(
+                        border: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.black, width: 2.0),
                         ),
                         labelText: 'Localització',
-                        labelStyle: const TextStyle(
+                        labelStyle: TextStyle(
                           color: Colors.black54,
                         ),
                         suffixIcon: IconButton(
-                          icon: const Icon(Icons.location_on),
+                          icon: Icon(Icons.location_on),
                           onPressed: _selectLocation,
                         ),
                       ),
@@ -404,10 +361,10 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     TextFormField(
                       controller: _additionalInfoController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.black, width: 2.0),
@@ -419,12 +376,12 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                       ),
                       maxLines: 3,
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: _saveProfile,
-                        child: const Text('Guardar Perfil'),
+                        child: Text('Guardar Perfil'),
                       ),
                     ),
                   ],

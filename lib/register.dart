@@ -1,11 +1,10 @@
+import 'package:bark_and_meet/confirmation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'user.dart';
 import 'NewAccountScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
-
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -151,7 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(''),
+        title: Text(''),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -159,8 +158,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 48),
-              const Text(
+              SizedBox(height: 48),
+              Text(
                 'Registrar-se',
                 style: TextStyle(
                   fontSize: 32,
@@ -169,38 +168,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 textAlign: TextAlign.start,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               if (_errorMessage != null)
                 Text(
                   _errorMessage!,
-                  style: const TextStyle(color: Colors.red),
+                  style: TextStyle(color: Colors.red),
                 ),
               TextField(
                 controller: _emailController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               TextField(
                 controller: _passwordController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Constrasenya',
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               TextField(
                 controller: _confirmPasswordController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Confirmar contrasenya',
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Row(
                 children: [
                   Checkbox(
@@ -211,7 +210,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       });
                     },
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       'By signing up, you agree to Photo’s Terms of Service and\nPrivacy Policy.',
                       style: TextStyle(fontSize: 12),
@@ -219,7 +218,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -229,10 +228,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
                   ),
                   onPressed: () => _register(context),
-                  child: const Text('Sign Up'),
+                  child: Text('Sign Up'),
                 ),
               ),
             ],
