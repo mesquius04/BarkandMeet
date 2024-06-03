@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'dog.dart';
 import 'user.dart';
 import 'mapa.dart';
-import 'chat.dart';
+import 'HomeScreen.dart';
 import 'user_profile.dart';
 import 'dogProfile.dart';
 import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
-import 'HomeScreen.dart';
 
 class Mainpage extends StatefulWidget {
   final UserProfile user;
@@ -337,7 +336,7 @@ class _MainpageState extends State<Mainpage> {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => ChatScreen(user: user),
+                builder: (context) => HomeChatScreen(user: user),
               ),
               (route) => false,
             );

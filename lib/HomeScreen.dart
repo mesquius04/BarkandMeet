@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'ChatScreen.dart';
 import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
 import 'Mainpage.dart';
+import 'mapa.dart';
+import 'user_profile.dart';
+import 'user.dart';
 
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomeChatScreen extends StatelessWidget {
+  final UserProfile user;
+
+  const HomeChatScreen({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +235,7 @@ class HomeScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ChatScreen()),
+                          MaterialPageRoute(builder: (context) => ChatScreen(user : user)),
                         );
                       },
                       child: Padding(
@@ -427,28 +432,61 @@ class HomeScreen extends StatelessWidget {
       ),
 
       bottomNavigationBar: BottomNavigationBar(
-              backgroundColor: Colors.white,
-              selectedItemColor: const Color.fromRGBO(0, 0, 0, 1),
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(BarkMeet.step),
-                  label: 'Inicio',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(BarkMeet.message, color: Colors.black),
-                  label: 'Chat',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(BarkMeet.map),
-                  label: 'Mapa',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(BarkMeet.person),
-                  label: 'Perfil',
-                ),
-              ],
-              type: BottomNavigationBarType.fixed,
-            
+        backgroundColor: Colors.white,
+        selectedItemColor: Colors.black,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(BarkMeet.step, color: Colors.black),
+            label: 'Inici',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(BarkMeet.message),
+            label: 'Xat',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(BarkMeet.map),
+            label: 'Mapa',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(BarkMeet.person),
+            label: 'Perfil',
+          ),
+        ],
+        type: BottomNavigationBarType.fixed,
+        onTap: (int index) {
+          if (index == 0) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Mainpage(
+                        user: user
+                      ),
+                    ),
+                  );
+                } else if (index==1){
+                  //do nothing
+                }
+                else if (index==2){
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MapScreen(
+                        user: user
+                      ),
+                    ),
+                  );
+                }
+                else{
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UserProfileScreen(
+                        user: user
+                      ),
+                    ),
+                  );
+                }
+        },
       ),
 
     );

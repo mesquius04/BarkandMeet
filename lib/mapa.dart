@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Mainpage.dart';
-import 'chat.dart';
+import 'HomeScreen.dart';
 import 'user.dart';
 import 'user_profile.dart';
 import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
@@ -55,7 +55,7 @@ class MapScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChatScreen(
+                      builder: (context) => HomeChatScreen(
                         user: user
                       ),
                     ),
