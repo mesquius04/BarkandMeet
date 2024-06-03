@@ -3,6 +3,7 @@ import 'dart:io';
 
 class Dog {
   File? dogPhoto;
+  List<File?> dogPhotos;
   String name;
   UserProfile owner;
   int age;
@@ -11,7 +12,7 @@ class Dog {
   bool castrat;
   bool male;
   List<Dog> friends;
-  String raca;
+  bool raca;
   String description;
   int size;
   int endurance;
@@ -19,20 +20,22 @@ class Dog {
   int activityLevel;
 
   Dog({
-    File? dogPhoto = null,
+    this.dogPhoto,
     required this.name,
     required this.owner,
     required this.age,
     required this.adopcio,
     required this.castrat,
     required this.male,
-    this.friends = const [],
-    this.dateOfBirth = null,
+    this.dateOfBirth,
     required this.raca,
     this.description = '',
     required this.size,
     required this.endurance,
     required this.sociability,
     required this.activityLevel,
-  });
+    List<Dog> friends = const [],
+    List<File?> dogPhotos = const [null, null, null],
+  })  : this.friends = friends,
+        this.dogPhotos = dogPhotos;
 }

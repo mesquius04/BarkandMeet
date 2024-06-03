@@ -1,4 +1,3 @@
-// ignore_for_file: sort_child_properties_last
 
 import 'package:bark_and_meet/dog.dart';
 import 'package:bark_and_meet/user.dart';
@@ -7,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-
+ 
 class DogCreateScreen extends StatefulWidget {
   final UserProfile user;
   DogCreateScreen({required this.user});
@@ -24,7 +23,6 @@ class _DogCreateState extends State<DogCreateScreen> {
 
 
 
-  final _textController1Validator =  GlobalKey<FormState>();
   final textFieldFocusNode1 = FocusNode();
 
   final textController2 = TextEditingController();
@@ -34,52 +32,97 @@ class _DogCreateState extends State<DogCreateScreen> {
   final textFieldFocusNode3 = FocusNode();
 
     
-    var dropDownValue1;var dropDownValue2;var dropDownValue3;
+    bool? dropDownValue1;
+    bool? dropDownValue2;
+    bool? dropDownValue3;
+
+
     int sliderValue1 = 5;
     int sliderValue2 = 5;
     int sliderValue3 = 5;
     int sliderValue4 = 5;
-  @override
-  void initState() {
-    super.initState();
-    dog = Dog(
-      name: "null", 
-      owner: user, 
-      age: 0, 
-      adopcio: false, 
-      castrat: false, 
-      male: false, 
-      raca: "null", 
-      size: 0, 
-      endurance: 0, 
-      sociability: 0, 
-      activityLevel: 0,
-    );
-  }
-
+@override
+void initState() {
+  super.initState();
+  dog = Dog(
+    name: "null", 
+    owner: user, 
+    age: 0, 
+    adopcio: false, 
+    castrat: false, 
+    male: false, 
+    raca: false, 
+    size: 0, 
+    endurance: 0, 
+    sociability: 0, 
+    activityLevel: 0,
+    friends: [], // or some other default value
+    dogPhotos: [null, null, null], // or some other default value
+  );
+}
  
+
   
-  File? _dogPhoto;
+  File? _imageFile1;
+  File? _imageFile2;
+  File? _imageFile3;
+  String defaultPhoto = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlsVMLy_CE0EXDGSnLrMPU04z9_FZVRjYR5w&s';
 
-  void _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
-      setState(() {
-        _dogPhoto = File(pickedFile.path);
-        dog?.dogPhoto=File(pickedFile.path);
-      });
-    }
+void _pickImage() async {
+  final ImagePicker _picker = ImagePicker();
+  final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  if (image != null) {
+    setState(() {
+      if (_imageFile1 == null) {
+        _imageFile1 = File(image.path);
+      } else if (_imageFile2 == null) {
+        _imageFile2 = File(image.path);
+      } else if (_imageFile3 == null) {
+        _imageFile3 = File(image.path);
+      }
+    });
   }
+}
 
+bool _validateForm() {
+  if (textController2.text.isEmpty) return false; print("\n1\n");
+  if (dropDownValue1 == null) return false;print("\n2\n");
+  if (dropDownValue2 == null) return false;print("\n3\n");
+  if (dropDownValue3 == null) return false;print("\n4\n");
+  if (sliderValue1 == 0) return false;print("\n5\n");
+  if (sliderValue2 == 0) return false;print("\n6\n");
+  if (sliderValue3 == 0) return false;print("\n7\n");
+  if (sliderValue4 == 0) return false;print("\n8\n");
+  if (textController3.text.isEmpty) return false;print("\n9\n");
+  if (_imageFile1 == null || _imageFile2 == null || _imageFile3 == null) return false;print("\n10\n");
 
+  return true;
+}
 
-  
+void _saveDog() {
+  dog?.name = textController2.text;
+  dog?.male = dropDownValue1!;
+  dog?.raca = dropDownValue2!;
+  dog?.castrat = dropDownValue3!;
+  dog?.size = sliderValue1;
+  dog?.endurance = sliderValue2;
+  dog?.sociability = sliderValue3;
+  dog?.activityLevel = sliderValue4;
+  dog?.description = textController3.text;
+  dog?.dogPhoto=_imageFile1; print("\n9\n");
+  dog?.dogPhotos.add(_imageFile1!);
+  dog?.dogPhotos.add(_imageFile2!);
+  dog?.dogPhotos.add(_imageFile3!);
+
+  user.dogs.add(dog!);
+}
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         leading: IconButton( //TICK
           icon: Icon(Icons.arrow_back,size: 24,),
@@ -93,19 +136,28 @@ class _DogCreateState extends State<DogCreateScreen> {
         ),
         title: Text('Crear perfil',), //TITULO
         actions: [
-          IconButton(
-            icon: Icon(Icons.check,size: 24,),
-            onPressed: () {
-              print('CHECKEANDO LA INFO ES CORRECTA');
-            },
-          ),
-          ],
+         IconButton(
+           icon: Icon(Icons.check, size: 24,),
+           onPressed: () {
+             if (_validateForm()) {
+               _saveDog();
+               Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) =>  UserProfileScreen(user: user),
+              ),
+            );
+             } else {
+               print('Form is not valid');
+             }
+           },
+         ),
+        ],
         centerTitle: true,
         elevation: 2,
       ),
 
-
-      body: SafeArea(
+      body: SingleChildScrollView(
+      child: SafeArea(
         top: true,
         child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -192,7 +244,12 @@ class _DogCreateState extends State<DogCreateScreen> {
                                 EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                           ),
                           //style:
-                          //validator:  textController2Validator.asValidator(context),
+                          validator: (value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor, introduce un nombre';
+    }
+    return null;
+  },
                         ),
                       ),
                       Padding(
@@ -224,23 +281,23 @@ class _DogCreateState extends State<DogCreateScreen> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                       15, 0, 0, 0,
                                     ),
-                                    child: DropdownButton<String>(
-                                      value: dropDownValue1,
-                                      onChanged: (val) => setState(() => dropDownValue1 = val),
-                                      items: ['No', 'Sí'].map((e) {
-                                        return DropdownMenuItem<String>(
-                                          value: e,
-                                          child: Text(e),
-                                        );
-                                      }).toList(),
-                                      hint: Text('Selecciona'),
-                                      icon: Icon(
-                                        Icons.keyboard_arrow_down_rounded,
-                                        size: 24,
-                                      ),
-                                      elevation: 2,
-                                      borderRadius: BorderRadius.circular(1),
-                                    ),
+                                    child: DropdownButton<bool>(
+  value: dropDownValue1,
+onChanged: (val) => setState(() => dropDownValue1 = val?? false),
+  items: [true, false].map((e) {
+    return DropdownMenuItem<bool>(
+      value: e,
+      child: Text(e? 'Masculí' : 'Femení'),
+    );
+  }).toList(),
+  hint: Text('Selecciona'),
+  icon: Icon(
+    Icons.keyboard_arrow_down_rounded,
+    size: 24,
+  ),
+  elevation: 2,
+  borderRadius: BorderRadius.circular(1),
+),
                                   ),
                                 ),
                               ),
@@ -270,23 +327,23 @@ class _DogCreateState extends State<DogCreateScreen> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                       15, 0, 0, 0,
                                     ),
-                                    child: DropdownButton<String>(
-                                      value: dropDownValue2,
-                                      onChanged: (val) => setState(() => dropDownValue2 = val),
-                                      items: ['No', 'Sí'].map((e) {
-                                        return DropdownMenuItem<String>(
-                                          value: e,
-                                          child: Text(e),
-                                        );
-                                      }).toList(),
-                                      hint: Text('Selecciona'),
-                                      icon: Icon(
-                                        Icons.keyboard_arrow_down_rounded,
-                                        size: 24,
-                                      ),
-                                      elevation: 2,
-                                      borderRadius: BorderRadius.circular(1),
-                                    ),
+                                    child: DropdownButton<bool>(
+  value: dropDownValue1,
+  onChanged: (val) => setState(() => dropDownValue2 = val?? false),
+  items: [true, false].map((e) {
+    return DropdownMenuItem<bool>(
+      value: e,
+      child: Text(e? 'Sí' : 'No'),
+    );
+  }).toList(),
+  hint: Text('Selecciona'),
+  icon: Icon(
+    Icons.keyboard_arrow_down_rounded,
+    size: 24,
+  ),
+  elevation: 2,
+  borderRadius: BorderRadius.circular(1),
+),
                                   ),
                                 ),
                               ),
@@ -320,23 +377,23 @@ class _DogCreateState extends State<DogCreateScreen> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                       15, 0, 0, 0,
                                     ),
-                                    child: DropdownButton<String>(
-                                      value: dropDownValue3,
-                                      onChanged: (val) => setState(() => dropDownValue3 = val),
-                                      items: ['No', 'Sí'].map((e) {
-                                        return DropdownMenuItem<String>(
-                                          value: e,
-                                          child: Text(e),
-                                        );
-                                      }).toList(),
-                                      hint: Text('Selecciona'),
-                                      icon: Icon(
-                                        Icons.keyboard_arrow_down_rounded,
-                                        size: 24,
-                                      ),
-                                      elevation: 2,
-                                      borderRadius: BorderRadius.circular(1),
-                                    ),
+                                    child:DropdownButton<bool>(
+  value: dropDownValue1,
+  onChanged: (val) => setState(() => dropDownValue3 = val?? false),
+  items: [true, false].map((e) {
+    return DropdownMenuItem<bool>(
+      value: e,
+      child: Text(e? 'Sí' : 'No'),
+    );
+  }).toList(),
+  hint: Text('Selecciona'),
+  icon: Icon(
+    Icons.keyboard_arrow_down_rounded,
+    size: 24,
+  ),
+  elevation: 2,
+  borderRadius: BorderRadius.circular(1),
+),
                                   ),
                                 ),
                               ),
@@ -578,8 +635,14 @@ class _DogCreateState extends State<DogCreateScreen> {
                                       EdgeInsetsDirectional.fromSTEB(
                                           15, 0, 0, 0),
                                 ),
+                                
                                  
-                               // validator: textController3.asValidator(context),
+                               validator: (value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor, introduce un nombre';
+    }
+    return null;
+  },
                               ),
                             ),
                           ),
@@ -603,52 +666,47 @@ class _DogCreateState extends State<DogCreateScreen> {
                             Expanded(
                               child: Align(
                                 alignment: AlignmentDirectional(-1, 0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.network(
-                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlsVMLy_CE0EXDGSnLrMPU04z9_FZVRjYR5w&s',
-                                    width: 105,
-                                    height: 105,
-                                    fit: BoxFit.cover,
-                                  ),
+                                child: GestureDetector(
+                                  onTap: () => _pickImage(),
+                                  child: _imageFile1 != null
+                                      ? Image.file(_imageFile1!, width: 105, height: 105, fit: BoxFit.cover)
+                                      : Image.network(defaultPhoto, width: 105, height: 105, fit: BoxFit.cover),
                                 ),
                               ),
                             ),
                             Expanded(
                               child: Align(
                                 alignment: AlignmentDirectional(0, 0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.network(
-                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlsVMLy_CE0EXDGSnLrMPU04z9_FZVRjYR5w&s',
-                                    width: 105,
-                                    height: 105,
-                                    fit: BoxFit.cover,
-                                  ),
+                                child: GestureDetector(
+                                  onTap: () => _pickImage(),
+                                  child: _imageFile2 != null
+                                      ? Image.file(_imageFile2!, width: 105, height: 105, fit: BoxFit.cover)
+                                      : Image.network(defaultPhoto, width: 105, height: 105, fit: BoxFit.cover),
                                 ),
                               ),
                             ),
                             Expanded(
                               child: Align(
                                 alignment: AlignmentDirectional(1, 0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.network(
-                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlsVMLy_CE0EXDGSnLrMPU04z9_FZVRjYR5w&s',
-                                    width: 105,
-                                    height: 105,
-                                    fit: BoxFit.cover,
-                                  ),
+                                child: GestureDetector(
+                                  onTap: () => _pickImage(),
+                                  child: _imageFile3 != null
+                                      ? Image.file(_imageFile3!, width: 105, height: 105, fit: BoxFit.cover)
+                                      : Image.network(defaultPhoto, width: 105, height: 105, fit: BoxFit.cover),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                      )
+                   ]
                   ),
-                ),),]),
-              ),);
-
+                ),
+              )
+           ]
+          ),
+       ) 
+      )
+    );
   }
 }

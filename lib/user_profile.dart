@@ -1,3 +1,7 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:bark_and_meet/create_dog.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -24,6 +28,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   List<File?> dogs = [];
   UserProfile user;
   _UserProfileScreenState({required this.user});
+
+  CarouselController _carouselController1 = CarouselController();
+  
   void _addDog() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -40,6 +47,23 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Perfil'),
+        backgroundColor: Color(0xFFFFFCFC),
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout,size: 24,),
+            onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                        (route) => false,
+                  );
+                },
+          ),
+          ],
+        centerTitle: true,
+        elevation: 0,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -80,26 +104,139 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             SizedBox(height: 20),
             Text('Els meus gossos', style: TextStyle(fontSize: 18)),
             SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: _addDog,
-              child: Text('Afegir un nou gos'),
-            ),
-            SizedBox(height: 10),
-
-            // Botó log out
-            ElevatedButton(
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                        (route) => false,
-                  );
-                },
-              child: Text('Log out'),
-            ),
-            SizedBox(height: 10),
-
+            Align(
+              alignment: AlignmentDirectional(0, 0),
+              child: Container(
+              width: double.infinity,
+              height: 127,
+              child: CarouselSlider(
+  items: user.dogs.length == 0
+  ? [ // Mostrar solo un elemento si la lista está vacía
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => DogCreateScreen(user: user)),
+          );
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.network(
+            "https://cdn0.iconfinder.com/data/icons/circles-2/100/sign-square-dashed-plus-512.png",
+            width: 150,
+            height: 130,
+            fit: BoxFit.contain,
+            alignment: Alignment(0, 0),
+          ),
+        ),
+      ),
+    ]
+    : List.generate(user.dogs.length, (index) {
+      return GestureDetector(
+        onTap: () {
+          print('Imagen ${index + 1} seleccionada');
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.network(
+            "https://cdn0.iconfinder.com/data/icons/circles-2/100/sign-square-dashed-plus-512.png",
+            width: 150,
+            height: 130,
+            fit: BoxFit.contain,
+            alignment: Alignment(0, 0),
+          ),
+        ),
+      );
+    }),
+  carouselController: _carouselController1,
+  options: CarouselOptions(
+    initialPage: 1,
+    viewportFraction: 0.3,
+    disableCenter: true,
+    enlargeCenterPage: true,
+    enlargeFactor: 0.25,
+    enableInfiniteScroll: true,
+    scrollDirection: Axis.horizontal,
+    autoPlay: false,
+    onPageChanged: (index, _) => print('Page changed to $index'),
+  ),
+)
+        ),
+      ),
+      SizedBox(height: 10),
+      Align(
+  alignment: AlignmentDirectional(-1, 0),
+  child: Padding(
+    padding: EdgeInsetsDirectional.fromSTEB(25, 35, 0, 10),
+    child: Text(
+      'Parcs preferits',
+    ),
+  ),
+),
+Align(
+              alignment: AlignmentDirectional(0, 0),
+              child: Container(
+              width: double.infinity,
+              height: 127,
+              child: CarouselSlider(
+  items: user.dogs.length == 0
+  ? [ // Mostrar solo un elemento si la lista está vacía
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MapScreen(user: user)),
+          );
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.network(
+            "https://cdn0.iconfinder.com/data/icons/circles-2/100/sign-square-dashed-plus-512.png",
+            width: 150,
+            height: 130,
+            fit: BoxFit.contain,
+            alignment: Alignment(0, 0),
+          ),
+        ),
+      ),
+    ]
+    : List.generate(user.dogs.length, (index) {
+      return GestureDetector(
+        onTap: () {
+          print('Imagen ${index + 1} seleccionada');
+        },
+        child: ClipRRect  (
+          borderRadius: BorderRadius.circular(8),
+          child: Image.network(
+            "https://cdn0.iconfinder.com/data/icons/circles-2/100/sign-square-dashed-plus-512.png",
+            width: 150,
+            height: 130,
+            fit: BoxFit.contain,
+            alignment: Alignment(0, 0),
+          ),
+        ),
+      );
+    }),
+  carouselController: _carouselController1,
+  options: CarouselOptions(
+    initialPage: 1,
+    viewportFraction: 0.3,
+    disableCenter: true,
+    enlargeCenterPage: true,
+    enlargeFactor: 0.25,
+    enableInfiniteScroll: true,
+    scrollDirection: Axis.horizontal,
+    autoPlay: false,
+    onPageChanged: (index, _) => print('Page changed to $index'),
+  ),
+)
+        ),
+      ),
+      SizedBox(height: 10),
+      Align(
+  alignment: AlignmentDirectional(-1, 0),
+  
+),
             Expanded(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

@@ -75,11 +75,11 @@ class UserProfile {
         owner: olivia,
         male: false,
         castrat: false,
-        raca: 'bulldog',
+        raca: true,
         name: 'Sanche',
         size: 3,
         endurance: 4,
-        sociability: 5));
+        sociability: 5, friends: []));
 
     return dogs;
   }
