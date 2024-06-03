@@ -256,20 +256,24 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
                 ),
-                itemCount: dogs.length,
+                itemCount: user.numDogs,
                 itemBuilder: (context, index) {
+                  // imptimit el nomrbe de gossos que té. El print ha de tenir un indicador de gos
+
+                  print(user.dogs[0].photosUrls[0]);
+
+
                   return Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: dogs[index] != null
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.file(dogs[index]!, fit: BoxFit.cover),
-                          )
-                        : Center(child: Text('No image')),
-                  );
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          user.dogs[index].photosUrls[0],
+                        ),
+                      ));
                 },
               ),
             ),
