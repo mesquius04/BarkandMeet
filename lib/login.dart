@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       Map<String, dynamic> data = userQuery.data() as Map<String, dynamic>;
 
-      List<dynamic> dogsData = data['dogs'];
+      List<dynamic> dogsData = data['dogs'] ?? [];
 
       // Convert the dynamic array to a List<String>
       List<String> dogs =
@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
           gossera: data['gossera'],
           premium: data['premium'],
           city: data['city'],
-          profilePhotoUrl: data['photoURL'],
+          profilePhotoUrl: data['photoURL'] ?? '',
           additionalInfo: data['additionalInfo'],
           dogsIds: dogs);
 

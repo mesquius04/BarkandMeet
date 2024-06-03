@@ -54,7 +54,7 @@ class _UserSessionState extends State<UserSession> {
                       userSnapshot.data!.data() as Map<String, dynamic>;
 
                   // Get the dogs array from the data
-                  List<dynamic> dogsData = data['dogs'];
+                  List<dynamic> dogsData = data['dogs'] ?? [];
 
                   // Convert the dynamic array to a List<String>
                   List<String> dogs =
