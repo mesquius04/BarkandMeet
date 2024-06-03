@@ -6,6 +6,7 @@ class Dog {
   String name;
   UserProfile owner;
   int age;
+  DateTime? dateOfBirth;
   bool adopcio;
   bool castrat;
   bool male;
@@ -26,6 +27,7 @@ class Dog {
     required this.castrat,
     required this.male,
     this.friends = const [],
+    this.dateOfBirth = null,
     required this.raca,
     this.description = '',
     required this.size,
