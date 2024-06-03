@@ -40,6 +40,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
       Map<String, dynamic> data = userQuery.data() as Map<String, dynamic>;
 
+      List<dynamic> dogsData = data['dogs'];
+
+      // Convert the dynamic array to a List<String>
+      List<String> dogs =
+      dogsData.map((item) => item.toString()).toList();
+
       UserProfile userProfile = UserProfile(
           username: data['username'],
           email: data['email'],
@@ -49,8 +55,9 @@ class _LoginScreenState extends State<LoginScreen> {
           gossera: data['gossera'],
           premium: data['premium'],
           city: data['city'],
-          profilePhotoUrl: data['PhotoURL'],
-          additionalInfo: data['additionalInfo']);
+          profilePhotoUrl: data['photoURL'],
+          additionalInfo: data['additionalInfo'],
+          dogsIds: dogs);
 
       // Es va al la vista del perfil de l'usuari
       Navigator.pushAndRemoveUntil(
