@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'user.dart';
 
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+  final UserProfile user;
+
+  const ChatScreen({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {

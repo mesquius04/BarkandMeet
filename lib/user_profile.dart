@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'home.dart';
-import 'chat.dart';
+import 'HomeScreen.dart';
 import 'mapa.dart';
 import 'user.dart';
 import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
@@ -301,7 +301,7 @@ Align(
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChatScreen(
+                      builder: (context) => HomeChatScreen(
                         user: user
                       ),
                     ),
