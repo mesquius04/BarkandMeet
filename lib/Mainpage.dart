@@ -177,8 +177,7 @@ class _MainpageState extends State<Mainpage> {
                               Animation<double> animation,
                               Animation<double> secondaryAnimation) {
                             return ProfileScreen(
-                                currentdog:
-                                    dogs[pointer]); //la pagina del perro
+                                currentdog: dogs[pointer]); //la pagina del perro
                           },
                         ),
                       );
