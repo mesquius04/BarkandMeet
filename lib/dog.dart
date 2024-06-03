@@ -24,6 +24,9 @@ class Dog {
   int sociability;
   int activityLevel;
 
+  // testing
+  static late CollectionReference dogCollection;
+
   Dog({
     File? dogPhoto,
     required this.name,

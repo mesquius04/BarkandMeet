@@ -258,11 +258,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
                 itemCount: user.numDogs,
                 itemBuilder: (context, index) {
-                  // imptimit el nomrbe de gossos que té. El print ha de tenir un indicador de gos
-
-                  print(user.dogs[0].photosUrls[0]);
-
-
                   return Container(
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),

@@ -73,33 +73,41 @@ class _UserSessionState extends State<UserSession> {
                       additionalInfo: data['additionalInfo'],
                       dogsIds: dogs);
 
+                  // S'ha d'arreglar tot això, és una aberració.
+                  // S'ha de fer un mètode estàtic per agafar el perfil de l'usuari
+                  // i un altre per agafar el gos de l'usuari.
+                  if (userProfile.numDogs > 0) {
+                    return FutureBuilder<Dog?>(
+                      future: userProfile.dogsIds.isNotEmpty ? Dog.getDog(
+                          userProfile.dogsIds[0]) : Future.value(null),
+                      builder: (context, dogSnapshot) {
+                        if (dogSnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (dogSnapshot.hasData) {
+                          Dog dog = dogSnapshot.data!;
+                          dog.owner = userProfile;
 
-                  return FutureBuilder<Dog>(
-                    future: Dog.getDog(userProfile.dogsIds[0]),
-                    builder: (context, dogSnapshot) {
-                      if (dogSnapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (dogSnapshot.hasData) {
-                        Dog dog = dogSnapshot.data!;
-                        dog.owner = userProfile;
+                          userProfile.dogs.add(dog);
 
-                        userProfile.dogs.add(dog);
-
-                        return UserProfileScreen(user: userProfile);
-                      } else if (dogSnapshot.hasError) {
-                        return Center(
-                          child: Text('Failed to get dog: ${dogSnapshot.error}'),
-                        );
-                      } else {
-                        return Center(
-                          child: Text('Dog not found'),
-                        );
-                      }
-                    },
-                  );
+                          return UserProfileScreen(user: userProfile);
+                        } else if (dogSnapshot.hasError) {
+                          return Center(
+                            child: Text(
+                                'Failed to get dog: ${dogSnapshot.error}'),
+                          );
+                        } else {
+                          return Center(
+                            child: Text('Dog not found'),
+                          );
+                        }
+                      },
+                    );
+                  } else {
+                    return UserProfileScreen(user: userProfile);
+                  }
                 } else {
                   User user = FirebaseAuth.instance.currentUser!;
                   UserProfile userProfile =
