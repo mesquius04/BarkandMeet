@@ -4,10 +4,22 @@ import 'package:bark_and_meet/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../dog.dart';
 import '../home.dart';
 
-class Usersessionstate extends StatelessWidget {
-  const Usersessionstate({super.key});
+
+class UserSession extends StatefulWidget {
+  const UserSession({super.key});
+
+  @override
+  _UserSessionState createState() => _UserSessionState();
+}
+
+class _UserSessionState extends State<UserSession> {
+
+  Future<DocumentSnapshot>? _userFuture;
+
+  _UserSessionState();
 
   Future<DocumentSnapshot> _usuariExisteix(String uid) async {
     final userCollection = FirebaseFirestore.instance.collection('Usuaris');
@@ -26,17 +38,27 @@ class Usersessionstate extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-
+            if (_userFuture == null || snapshot.connectionState == ConnectionState.waiting) {
+              _userFuture = _usuariExisteix(snapshot.data!.uid);
+            }
             return FutureBuilder<DocumentSnapshot>(
-              future: _usuariExisteix(snapshot.data!.uid),
-              builder: (context, snapshot) {
-
-                if (snapshot.connectionState == ConnectionState.waiting) {
+              future: _userFuture,
+              builder: (context, userSnapshot) {
+                if (userSnapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
-                      child: CircularProgressIndicator(), // Muestra un indicador de carga mientras se espera
+                    child:
+                        CircularProgressIndicator(), // Muestra un indicador de carga mientras se espera
                   );
-                } else if (snapshot.data!.exists) {
-                  Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                } else if (userSnapshot.data!.exists && userSnapshot.hasData) {
+                  Map<String, dynamic> data =
+                      userSnapshot.data!.data() as Map<String, dynamic>;
+
+                  // Get the dogs array from the data
+                  List<dynamic> dogsData = data['dogs'];
+
+                  // Convert the dynamic array to a List<String>
+                  List<String> dogs =
+                      dogsData.map((item) => item.toString()).toList();
 
                   UserProfile userProfile = UserProfile(
                       username: data['username'],
@@ -48,13 +70,40 @@ class Usersessionstate extends StatelessWidget {
                       premium: data['premium'],
                       city: data['city'],
                       profilePhotoUrl: data['photoURL'],
-                      additionalInfo: data['additionalInfo']);
-                  return UserProfileScreen(user: userProfile);
+                      additionalInfo: data['additionalInfo'],
+                      dogsIds: dogs);
 
+
+                  return FutureBuilder<Dog>(
+                    future: Dog.getDog(userProfile.dogsIds[0]),
+                    builder: (context, dogSnapshot) {
+                      if (dogSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (dogSnapshot.hasData) {
+                        Dog dog = dogSnapshot.data!;
+                        dog.owner = userProfile;
+
+                        userProfile.dogs.add(dog);
+
+                        return UserProfileScreen(user: userProfile);
+                      } else if (dogSnapshot.hasError) {
+                        return Center(
+                          child: Text('Failed to get dog: ${dogSnapshot.error}'),
+                        );
+                      } else {
+                        return Center(
+                          child: Text('Dog not found'),
+                        );
+                      }
+                    },
+                  );
                 } else {
                   User user = FirebaseAuth.instance.currentUser!;
-                  UserProfile userProfile = UserProfile.basic(
-                      email: user.email!);
+                  UserProfile userProfile =
+                      UserProfile.basic(email: user.email!);
 
                   return NewAccountScreen(user: userProfile);
                 }

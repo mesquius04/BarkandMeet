@@ -67,7 +67,7 @@ class _MainpageState extends State<Mainpage> {
                     //Text('@${widget.myDog.owner.username}', style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7))),
                     Text(dogs[pointer].name,
                         style: const TextStyle(fontSize: 30, color: Colors.white)),
-                    Text(dogs[pointer].owner.username,
+                    Text(dogs[pointer].owner!.username,
                         style: TextStyle(
                             fontSize: 14,
                             color: Colors.white.withOpacity(0.7))),

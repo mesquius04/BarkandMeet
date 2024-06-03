@@ -63,10 +63,6 @@ class _DogCreateState extends State<DogCreateScreen> {
     );
   }
 
-  File? _imageFile1;
-  File? _imageFile2;
-  File? _imageFile3;
-
   List<File?> images = [null, null, null];
 
   String defaultPhoto =
@@ -138,7 +134,7 @@ class _DogCreateState extends State<DogCreateScreen> {
     await _addDogInCloud(context, photosUrl);
 
 
-    user.dogs.add(dog!);
+    //user.dogs.add(dog!);
   }
 
   Future<void> _addDogInCloud(BuildContext context, List<String> photosUrl) async {
@@ -197,6 +193,7 @@ class _DogCreateState extends State<DogCreateScreen> {
     }
   }
 
+  // Guarda la foto a Firebase Storage i retorna la url de la foto
   Future<List<String>> _savePhotosInCloud() async {
     String photoURL = "";
     List<String> photosUrls = [];

@@ -13,6 +13,7 @@ class UserProfile {
   int numDogs;
   bool gossera;
   bool premium;
+  List<String> dogsIds;
   List<Dog> dogs;
   List<Park> parks;
   String city;
@@ -30,11 +31,13 @@ class UserProfile {
     required this.premium,
     required this.city,
     required this.profilePhotoUrl,
-    List<Dog> dogs = const [],
-    List<Park> parks = const [],
+    dogsIds = const [],
+    dogs = const [],
+    parks = const [],
     required this.additionalInfo,
-  })  : dogs = dogs,
-        parks = parks;
+  }) : dogsIds = List.from(dogsIds),
+        dogs = List.from(dogs),
+        parks = List.from(parks);
 
   // Constructor que només demana el correu, nom d'usuari i tot el demés per defecte.
   UserProfile.basic({
@@ -48,7 +51,10 @@ class UserProfile {
         city = '',
         dogs = [],
         parks = [],
-        additionalInfo = '';
+        additionalInfo = '',
+        profilePhotoUrl = '',
+        dogsIds = [],
+        profilePhoto = null;
 
   List<Dog> getDogs() {
     // Falta Extreure els gossos de la BDD
