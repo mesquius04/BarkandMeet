@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'main.dart';
 import 'user.dart';
 import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
+import 'HomeScreen.dart';
 
 
 class Mainpage extends StatefulWidget {
@@ -265,7 +266,7 @@ return Scaffold(
       ),
             bottomNavigationBar: BottomNavigationBar(
               backgroundColor: Colors.white,
-              selectedItemColor: Colors.black,
+              selectedItemColor: const Color.fromRGBO(0, 0, 0, 1),
               items: [
                 BottomNavigationBarItem(
                   icon: Icon(BarkMeet.step, color: Colors.black),
@@ -285,10 +286,19 @@ return Scaffold(
                 ),
               ],
               type: BottomNavigationBarType.fixed,
-            ),
-          );
-        }
-      }
+              onTap: (int index) {
+                if (index == 1) {
+                // Se o índice for 1 (correspondendo ao item "Chat"), navegue para HomeScreen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+             );
+          }
+        },
+      ),
+    );
+  }
+}
 
 
 
