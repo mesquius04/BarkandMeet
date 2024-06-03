@@ -6,6 +6,7 @@ import 'chat.dart';
 import 'user_profile.dart';
 import 'dogProfile.dart';
 import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
+import 'HomeScreen.dart';
 
 class Mainpage extends StatefulWidget {
   final UserProfile user;
