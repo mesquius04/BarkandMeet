@@ -2,6 +2,10 @@ import 'user.dart';
 import 'dart:io';
 
 class Dog {
+  String ownerUsername = '';
+  List<String> photosUrls = [];
+  String city = '';
+
   File? dogPhoto;
   List<File?> dogPhotos;
   String name;
@@ -13,6 +17,7 @@ class Dog {
   bool male;
   List<Dog> friends;
   bool raca;
+  String raca2 = '';
   String description;
   int size;
   int endurance;
@@ -20,7 +25,7 @@ class Dog {
   int activityLevel;
 
   Dog({
-    this.dogPhoto,
+    File? dogPhoto = null,
     required this.name,
     required this.owner,
     required this.age,

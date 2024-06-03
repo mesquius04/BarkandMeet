@@ -51,6 +51,31 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
 
   Future<void> _saveProfile() async {
     if (_formKey.currentState!.validate()) {
+
+      // comprovar si el nom d'usuari ja l'ha utilitzat algú a la base de dades
+      bool usernameExists = await this.usernameExists(_usernameController.text.trim());
+      if (usernameExists) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: const Text(
+                  'Aquest nom d\'usuari ja està en ús. Si us plau, tria un altre.'),
+              actions: [
+                TextButton(
+                  child: const Text('Tancar'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      }
+
       // Guardar los datos del usuario en UserData
       user.username = _usernameController.text.trim();
       //user.profilePhoto = _profilePhoto;
@@ -155,6 +180,19 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
       }
     }
     return photoURL;
+  }
+
+  Future<bool> usernameExists(String username) async {
+    final users = FirebaseFirestore.instance.collection('Usuaris');
+    final querySnapshot = await users.where('username', isEqualTo: username).get();
+
+    if (querySnapshot.docs.isEmpty) {
+      // No se encontró ningún usuario con ese nombre de usuario
+      return false;
+    } else {
+      // Se encontró al menos un usuario con ese nombre de usuario
+      return true;
+    }
   }
 
   // es crida aquest mètode per alliberar recursos de memòria quan no s'utilitzen.
@@ -286,6 +324,11 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
                                   ),
                                 ),
                                 validator: (value) {
+
+                                  // comprobar si el nom d'usuari ja l'ha utilitzat algú a la base de dades
+
+
+
                                   if (value == null || value.isEmpty) {
                                     return 'Si us plau, introdueix el teu nom';
                                   }

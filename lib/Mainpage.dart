@@ -217,85 +217,90 @@ class _MainpageState extends State<Mainpage> {
                   ? MediaQuery.of(context).size.height / 3 * 2
                   : 0.0,
               color: Colors.white,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Título y botón de cerrar
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Actualment mostrant:',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 16)),
-                          IconButton(
-                            icon: Icon(Icons.close, color: Colors.black),
-                            onPressed: _toggleFilters,
-                          ),
-                        ],
-                      ),
-                      // Filtros de "En adopció" y "No en adopció"
-                      Row(
-                        children: [
-                          FilterOption(label: 'En adopció'),
-                          FilterOption(label: 'No en adopció'),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-                      // Título "Genère"
-                      Text('Genère',
-                          style: TextStyle(color: Colors.black, fontSize: 16)),
-                      SizedBox(height: 8),
-                      // Filtros de "Mascle" y "Femella"
-                      Row(
-                        children: [
-                          FilterOption(label: 'Mascle'),
-                          FilterOption(label: 'Femella'),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-                      // Título "Estat Sexual"
-                      Text('Estat Sexual',
-                          style: TextStyle(color: Colors.black, fontSize: 16)),
-                      SizedBox(height: 8),
-                      // Filtros de "Fèrtil" y "Infèrtil"
-                      Row(
-                        children: [
-                          FilterOption(label: 'Fèrtil'),
-                          FilterOption(label: 'Infèrtil'),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-                      // Título "Mida"
-                      Text('Mida',
-                          style: TextStyle(color: Colors.black, fontSize: 16)),
-                      SizedBox(height: 8),
-                      // Filtros de "Petit", "Mitjà" y "Gran"
-                      Row(
-                        children: [
-                          FilterOption(label: 'Petit'),
-                          FilterOption(label: 'Mitjà'),
-                          FilterOption(label: 'Gran'),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-                      // Botón de aplicar filtros
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Lógica para aplicar los filtros
-                          },
-                          child: Text('Aplicar filtres',
-                              style: TextStyle(color: Colors.white)),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Colors.black, // Color de fondo del botón
+              child: SafeArea(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(36.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Título y botón de cerrar
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Actualment mostrant:',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16)),
+                            IconButton(
+                              icon: Icon(Icons.close, color: Colors.black),
+                              onPressed: _toggleFilters,
+                            ),
+                          ],
+                        ),
+                        // Filtros de "En adopció" y "No en adopció"
+                        Row(
+                          children: [
+                            FilterOption(label: 'En adopció'),
+                            FilterOption(label: 'No en adopció'),
+                          ],
+                        ),
+                        SizedBox(height: 16),
+                        // Título "Genère"
+                        Text('Genère',
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 16)),
+                        SizedBox(height: 8),
+                        // Filtros de "Mascle" y "Femella"
+                        Row(
+                          children: [
+                            FilterOption(label: 'Mascle'),
+                            FilterOption(label: 'Femella'),
+                          ],
+                        ),
+                        SizedBox(height: 16),
+                        // Título "Estat Sexual"
+                        Text('Estat Sexual',
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 16)),
+                        SizedBox(height: 8),
+                        // Filtros de "Fèrtil" y "Infèrtil"
+                        Row(
+                          children: [
+                            FilterOption(label: 'Fèrtil'),
+                            FilterOption(label: 'Infèrtil'),
+                          ],
+                        ),
+                        SizedBox(height: 16),
+                        // Título "Mida"
+                        Text('Mida',
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 16)),
+                        SizedBox(height: 8),
+                        // Filtros de "Petit", "Mitjà" y "Gran"
+                        Row(
+                          children: [
+                            FilterOption(label: 'Petit'),
+                            FilterOption(label: 'Mitjà'),
+                            FilterOption(label: 'Gran'),
+                          ],
+                        ),
+                        SizedBox(height: 16),
+                        // Botón de aplicar filtros
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Lógica para aplicar los filtros
+                            },
+                            child: Text('Aplicar filtres',
+                                style: TextStyle(color: Colors.white)),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Colors.black, // Color de fondo del botón
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -334,7 +339,7 @@ class _MainpageState extends State<Mainpage> {
               MaterialPageRoute(
                 builder: (context) => ChatScreen(user: user),
               ),
-                  (route) => false,
+              (route) => false,
             );
           } else if (index == 2) {
             Navigator.pushAndRemoveUntil(
@@ -342,7 +347,7 @@ class _MainpageState extends State<Mainpage> {
               MaterialPageRoute(
                 builder: (context) => MapScreen(user: user),
               ),
-                  (route) => false,
+              (route) => false,
             );
           } else {
             Navigator.pushAndRemoveUntil(
@@ -350,7 +355,7 @@ class _MainpageState extends State<Mainpage> {
               MaterialPageRoute(
                 builder: (context) => UserProfileScreen(user: user),
               ),
-                  (route) => false,
+              (route) => false,
             );
           }
         },

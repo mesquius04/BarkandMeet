@@ -51,6 +51,10 @@ class UserProfile {
         this.additionalInfo = '';
 
   List<Dog> getDogs() {
+    // Agafar els gossos de la base de dades
+
+
+
     //Algorisme martí
     List<Dog> dogs = [];
     List<int> scores = [];
