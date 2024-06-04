@@ -106,7 +106,7 @@ class UserProfile {
     String randomiser(){
       Random random = Random();
       int randomNumber = random.nextInt(6);
-      switch(random){
+      switch(randomNumber){
         case 1: return 'name';
         case 2: return 'birthday';
         case 3: return 'raça';
@@ -118,37 +118,28 @@ class UserProfile {
     String randomField=randomiser();
     bool a=false;
     Random random = Random();
-    int randomNumber = random.nextInt(2);
-    if (randomNumber>1){
+    int rnd = random.nextInt(2);
+    if (rnd>0){
       a=true;
     }
+    print("CURRENT FIELD");
+    print(randomField);
     QuerySnapshot querySnapshot =
-        await gossosCollection.orderBy(randomField, descending: a).limit(30).get();
-    querySnapshot.docs.shuffle();
+        await gossosCollection.orderBy(randomField, descending: a).limit(20).get();
     // Devolver la lista de documentos
-    return querySnapshot.docs.sublist(0, 20);
+    return querySnapshot.docs;
   }
   
   Future<void> getDogs() async{
     // Falta Extreure els gossos de la BDD
-    print("PROVA DE PRINT");
+    print("Entrem a l'agorisme");
     //Algorisme martí (secret)
     Stopwatch stopwatch = Stopwatch();
     stopwatch.start();
-    print("PROVA DE PRINT");
     Future<List<DocumentSnapshot>> Dogsdoc=  getFirstDogs();
-    print("PROVA DE PRINT");
     List<Dog> dogsBdd = await _convertDogs(Dogsdoc);
-    print("PROVA DE PRINT");
-    print(dogsBdd.length);
-    print("PROVA DE NOM");
-    print(dogsBdd[0].name);
-    print("PROVA DE MIDA");
-    print(dogsBdd[0].size);
 
     // Iniciar el cronómetro
-   
-    
     List<int> scores = [];
     List<Dog> sortedDogs = [];
     bool noDogs;
@@ -157,8 +148,6 @@ class UserProfile {
     } else {
       noDogs = false;
     }
-    print("User has dogs:");
-    print(this.dogs.length);
     for (int i = 0; i < dogsBdd.length; i++) {
       //init all subscores
       if (noDogs) {
@@ -347,28 +336,18 @@ class UserProfile {
           localScore += (charPoints * 0.80).toInt();
 
           //FINISHED
-          print("LOCAL SCORE");
-          print (localScore);
           scoreOurDogs.add(localScore);
         }
-        print(scoreOurDogs.length);
+
         int max = scoreOurDogs[0];
-        print("first");
-        print(max);
         for (int j = 0; j < scoreOurDogs.length; j++) {
           if (scoreOurDogs[j] > max) {
             max = scoreOurDogs[j];
           }
         }
-        print("MAX");
-        print(max);
         scores.add(max);
-        print(scores);
       }
-      
     }
-    print("PROVA DE PRINT SCORES");
-    print(scores);
     List<int> indexs = List<int>.generate(scores.length, (index) => index);
     indexs.sort((a, b) => scores[b].compareTo(scores[a]));
     sortedDogs = indexs.map((index) => dogsBdd[index]).toList();
@@ -381,40 +360,13 @@ class UserProfile {
         break;
       }
     }
-    print("PROVA DE PRINT");
+    
     stopwatch.stop();
 
     // Imprimir el tiempo transcurrido en milisegundos
     print(
-        'Algorisme Acabat, temps transcorregut: ${stopwatch.elapsedMilliseconds} milisegundos');
-    print(sortedIndex);
+        'Sortim del algorisme, temps transcorregut: ${stopwatch.elapsedMilliseconds} ms');
+
     this.dogsToShow = sortedDogs;
-    /*
-    //RETURN PROVISIONAL
-    UserProfile olivia = UserProfile(
-        username: 'oliviarodrigo',
-        email: 'mailprova',
-        name: 'Olivia',
-        surname: 'Rodrigo',
-        profilePhotoUrl: "",
-        numDogs: 2,
-        gossera: false,
-        premium: false,
-        city: 'Barcelona',
-        additionalInfo: 'Fan de don Xavier Cañadas');
-    sortedDogs.add(Dog(
-        activityLevel: 5,
-        adopcio: false,
-        owner: olivia,
-        male: false,
-        castrat: false,
-        raca2: "a",
-        dateOfBirth: "12/12/2012",
-        name: 'Sanche',
-        size: 3,
-        endurance: 4,
-        sociability: 5,
-        friends: []));*/
-    this.dogsToShow=sortedDogs;
   }
 }
