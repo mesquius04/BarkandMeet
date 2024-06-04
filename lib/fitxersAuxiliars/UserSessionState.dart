@@ -19,14 +19,8 @@ class _UserSessionState extends State<UserSession> {
 
   Future<DocumentSnapshot>? _userFuture;
 
-
-  @override
-  void initState() {
-    super.initState();
-    _userFuture = UserProfile.usuariExisteix(FirebaseAuth.instance.currentUser!.uid);
-  }
-
   _UserSessionState();
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +37,20 @@ class _UserSessionState extends State<UserSession> {
               builder: (context, userSnapshot) {
                 if (userSnapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
-                    child: CircularProgressIndicator(),
+                    child:
+                        CircularProgressIndicator(), // Muestra un indicador de carga mientras se espera
                   );
-                } else if (userSnapshot.hasData && userSnapshot.data!.exists) {
+                } else if (userSnapshot.data!.exists && userSnapshot.hasData) {
+
+
                   UserProfile userProfile = UserProfile.userFromDocumentSnapshot(userSnapshot.data!);
+
+                  // S'ha d'arreglar tot això, és una aberració.
+                  // S'ha de fer un mètode estàtic per agafar el perfil de l'usuari
+                  // i un altre per agafar el gos de l'usuari.
                   if (userProfile.numDogs > 0) {
                     return FutureBuilder<void>(
-                      future: userProfile.getUserDogs() ,
+                      future: userProfile.getUserDogs(),
                       builder: (context, dogsSnapshot) {
                         if (dogsSnapshot.connectionState == ConnectionState.waiting) {
                           return const Center(
@@ -65,7 +66,9 @@ class _UserSessionState extends State<UserSession> {
                   }
                 } else {
                   User user = FirebaseAuth.instance.currentUser!;
-                  UserProfile userProfile = UserProfile.basic(email: user.email!);
+                  UserProfile userProfile =
+                      UserProfile.basic(email: user.email!);
+
                   return NewAccountScreen(user: userProfile);
                 }
               },
