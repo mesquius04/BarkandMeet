@@ -358,6 +358,10 @@ class UserProfile {
           }
           localScore += (charPoints * 0.80).toInt();
 
+          //Check not the same
+          if (this.dogs[j].activityLevel == dogsBdd[i].activityLevel && dogsBdd[i].sociability== this.dogs[j].sociability && dogsBdd[i].name == this.dogs[j].name && dogsBdd[i].size == this.dogs[j].size && dogsBdd[i].endurance == this.dogs[j].endurance && dogsBdd[i].dateOfBirth ==this.dogs[j].dateOfBirth){
+            localScore=-435;
+          }
           //FINISHED
           scoreOurDogs.add(localScore);
         }
@@ -367,6 +371,10 @@ class UserProfile {
           if (scoreOurDogs[j] > max) {
             max = scoreOurDogs[j];
           }
+          if (scoreOurDogs[j]==-435){
+            max=-500;
+            break;
+          }
         }
         scores.add(max);
       }
@@ -375,8 +383,8 @@ class UserProfile {
     indexs.sort((a, b) => scores[b].compareTo(scores[a]));
     sortedDogs = indexs.map((index) => dogsBdd[index]).toList();
     List<int> sortedIndex = indexs.map((index) => scores[index]).toList();
-    while (sortedDogs.length >= 5) {
-      if (sortedIndex[sortedIndex.length - 1] <= 100) {
+    while (sortedDogs.length >= 8) {
+      if (sortedIndex[sortedIndex.length - 1] <= 20) {
         sortedIndex.removeLast();
         sortedDogs.removeLast();
       } else {
