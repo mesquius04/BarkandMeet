@@ -61,6 +61,31 @@ class UserProfile {
         dogsToShow = [],
         profilePhoto = null;
 
+
+
+  /// Aquesta funció comproba si l'usuari amb el uid passat per paràmetre ja existeix a la BDD.
+  /// Retorna un DocumentSnapshot amb la informació de l'usuari si existeix, o un DocumentSnapshot
+  /// buit si no existeix.
+  /// Si hi ha algun error, es llença una excepció.
+  ///
+  /// @param uid String amb el uid de l'usuari a comprobar.
+  static Future<DocumentSnapshot> usuariExisteix(String uid) async {
+
+    try {
+      // Es comprova si l'usuari amb el uid passat per paràmetre ja existeix a la BDD.
+      final userCollection = FirebaseFirestore.instance.collection('Usuaris');
+      final userQuery = await userCollection.doc(uid).get();
+
+      return userQuery;
+
+    } catch (e) {
+      // Si hi ha hagut algun error, es fa una excepció.
+      throw Exception("Error al buscar l'usuari: $e");
+    }
+  }
+
+
+
   Future<List<Dog>> _convertDogs(Future<List<DocumentSnapshot>> dogsDocuments) async{
     List<Dog> dogs = [];
 

@@ -66,12 +66,12 @@ class _MainpageState extends State<Mainpage> {
                   children: [
                     //Text('${widget.myDog.name}', style: TextStyle(fontSize: 30)),
                     //Text('@${widget.myDog.owner.username}', style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7))),
-                    Text(user.dogsToShow[0].name,
+                    Text((user.dogsToShow.isNotEmpty) ? user.dogsToShow[0].name : "No hi ha gossos",
                         style: const TextStyle(fontSize: 30, color: Colors.white)),
-                    Text(user.dogsToShow[0].owner!.username,
+                    /*Text((user.dogsToShow.isNotEmpty) ? user.dogsToShow[0].owner!.username : "No hi ha gossos",
                         style: TextStyle(
                             fontSize: 14,
-                            color: Colors.white.withOpacity(0.7))),
+                            color: Colors.white.withOpacity(0.7))),*/
                   ],
                 ),
               ),
@@ -87,7 +87,7 @@ class _MainpageState extends State<Mainpage> {
         children: [
           // Imagen de fondo
           Positioned.fill(
-            child: user.dogsToShow[0].dogPhoto != null
+            child: (user.dogsToShow.isNotEmpty && user.dogsToShow[0].dogPhoto != null)
                 ? Image.file(
                     user.dogsToShow[0].dogPhoto!,
                     fit: BoxFit.cover,

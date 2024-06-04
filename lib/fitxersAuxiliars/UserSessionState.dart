@@ -39,7 +39,7 @@ class _UserSessionState extends State<UserSession> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (_userFuture == null || snapshot.connectionState == ConnectionState.waiting) {
-              _userFuture = _usuariExisteix(snapshot.data!.uid);
+              _userFuture = UserProfile.usuariExisteix(snapshot.data!.uid);
             }
             return FutureBuilder<DocumentSnapshot>(
               future: _userFuture,
@@ -79,7 +79,7 @@ class _UserSessionState extends State<UserSession> {
                   if (userProfile.numDogs > 0) {
                     return FutureBuilder<Dog?>(
                       future: userProfile.dogsIds.isNotEmpty ? Dog.getDog(
-                          userProfile.dogsIds[0]) : Future.value(null),
+                          userProfile.dogsIds[0], firestoreInstance: FirebaseFirestore.instance) : Future.value(null),
                       builder: (context, dogSnapshot) {
                         if (dogSnapshot.connectionState ==
                             ConnectionState.waiting) {
