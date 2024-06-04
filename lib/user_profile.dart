@@ -300,26 +300,45 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
           if (index == 0) {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => MainPageAsync(user: user),
-              ),
+              PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => MainPageAsync(user: user),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
             );
+          },
+        ),
+      );
+              
           } else if (index == 1) {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => HomeChatScreen(user: user),
-              ),
+              PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => HomeChatScreen(user: user),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
             );
+          },
+        ),
+          );
           } else if (index == 2) {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => MapScreen(user: user),
-              ),
+              PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => MapScreen(user: user),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
             );
+          },
+        ),
+          );;
           } else {
             //do nothing
           }

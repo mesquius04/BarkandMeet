@@ -1,4 +1,5 @@
 import 'package:bark_and_meet/fitxersAuxiliars/MainPageAsync.dart';
+import 'package:bark_and_meet/home.dart';
 import 'package:flutter/material.dart';
 import 'HomeScreen.dart';
 import 'user.dart';
@@ -43,36 +44,54 @@ class MapScreen extends StatelessWidget {
               onTap: (int index) {
 
                 if (index == 0) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MainPageAsync(
-                        user: user
-                      ),
-                    ),
-                  );
+                  Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => MainPageAsync(
+            user: user
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
+      );
                 } else if (index==1){
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomeChatScreen(
-                        user: user
-                      ),
-                    ),
-                  );
+                  Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => HomeChatScreen(
+            user: user
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
+      );
                 }
                 else if (index==2){
                   //do nothing
                 }
                 else{
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => UserProfileScreen(
-                        user: user
-                      ),
-                    ),
-                  );
+                  Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => UserProfileScreen(
+            user: user
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
+      );
                 }
               },
             ),

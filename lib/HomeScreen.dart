@@ -455,36 +455,54 @@ class HomeChatScreen extends StatelessWidget {
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
           if (index == 0) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MainPageAsync(
-                        user: user
-                      ),
-                    ),
-                  );
+                  Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => MainPageAsync(
+            user: user
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
+      );
                 } else if (index==1){
                   //do nothing
                 }
                 else if (index==2){
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MapScreen(
-                        user: user
-                      ),
-                    ),
-                  );
+                  Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => MapScreen(
+            user: user
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
+      );
                 }
                 else{
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => UserProfileScreen(
+                  Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => UserProfileScreen(
                         user: user
-                      ),
-                    ),
-                  );
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
+      );
                 }
         },
       ),

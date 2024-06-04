@@ -69,7 +69,7 @@ class _MainpageState extends State<Mainpage> {
 
                         style: TextStyle(
                             fontSize: 14,
-                            color: Colors.white.withOpacity(0.7))),*/
+                            color: Colors.white.withOpacity(0.7))),
                   ],
                 ),
               ),
