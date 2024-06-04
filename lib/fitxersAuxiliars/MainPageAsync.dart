@@ -34,13 +34,10 @@ class _MainPageAsync extends State<MainPageAsync> {
         future: user.getDogs(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            print("NENE");
             return const Center(
               child: CircularProgressIndicator(),
             );
           } else {
-            print("HOLAHOLA");
-            print(user.dogsToShow.length);
             return Mainpage(user: user);
           }
         },

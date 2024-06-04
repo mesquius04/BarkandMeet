@@ -31,7 +31,6 @@ class _MainpageState extends State<Mainpage> {
   
   @override
   Widget build(BuildContext context) {
-    print("awanawana");
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: _showFilters
@@ -66,7 +65,6 @@ class _MainpageState extends State<Mainpage> {
                         style: const TextStyle(fontSize: 30, color: Colors.white)),
 
                     Text("Unknown user",
-
                         style: TextStyle(
                             fontSize: 14,
                             color: Colors.white.withOpacity(0.7))),
@@ -85,16 +83,18 @@ class _MainpageState extends State<Mainpage> {
         children: [
           // Imagen de fondo
           Positioned.fill(
-            child: (user.dogsToShow.isNotEmpty && user.dogsToShow[0].dogPhoto != null)
-                ? Image.file(
-                    user.dogsToShow[0].dogPhoto!,
-                    fit: BoxFit.cover,
-                  )
-                : Image.asset(
+            child: user.dogsToShow[0].photosUrls[0].isEmpty
+                ? Image.asset(
+
                     'assets/fondo.png',
                     // Asegúrate de tener la imagen en tu carpeta assets
                     fit: BoxFit.cover,
+                  )
+                : Image.network(
+                    user.dogsToShow[0].photosUrls[0],
+                    fit: BoxFit.cover,
                   ),
+                
           ),
           // Contenido principal
           SafeArea(
@@ -111,9 +111,18 @@ class _MainpageState extends State<Mainpage> {
                         onPressed: () {
                           user.dogsToShow.removeAt(0);
                           if (user.dogsToShow.length>1){
-                            Mainpage(user: user);
+                            Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Mainpage(user:user)),
+                            (route) => false,
+                          );
                           }else{
-                            MainPageAsync(user: user);
+                            Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainPageAsync(user: user),
+                            ),
+                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(
