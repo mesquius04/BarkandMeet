@@ -1,3 +1,4 @@
+import 'package:bark_and_meet/fitxersAuxiliars/MainPageAsync.dart';
 import 'package:flutter/material.dart';
 import 'dog.dart';
 import 'user.dart';
@@ -9,6 +10,7 @@ import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
 
 class Mainpage extends StatefulWidget {
   final UserProfile user;
+  
 
   const Mainpage({super.key, required this.user});
 
@@ -29,13 +31,7 @@ class _MainpageState extends State<Mainpage> {
   
   @override
   Widget build(BuildContext context) {
-    if (user.dogsToShow.isEmpty || user.dogsToShow.length<=1){
-      print("IS EMPTY LALALA");
-      print("entrem algo");
-      user.getDogs();
-      print("sortim algo");
-      print(user.dogsToShow.length);
-    }
+    print("awanawana");
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: _showFilters
@@ -68,7 +64,7 @@ class _MainpageState extends State<Mainpage> {
                     //Text('@${widget.myDog.owner.username}', style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7))),
                     Text(user.dogsToShow[0].name,
                         style: const TextStyle(fontSize: 30, color: Colors.white)),
-                    Text(user.dogsToShow[0].owner!.username,
+                    Text("user.dogsToShow[0].owner!.username",
                         style: TextStyle(
                             fontSize: 14,
                             color: Colors.white.withOpacity(0.7))),
@@ -112,6 +108,11 @@ class _MainpageState extends State<Mainpage> {
                       ElevatedButton(
                         onPressed: () {
                           user.dogsToShow.removeAt(0);
+                          if (user.dogsToShow.length>1){
+                            Mainpage(user: user);
+                          }else{
+                            MainPageAsync(user: user);
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.zero,
@@ -134,6 +135,20 @@ class _MainpageState extends State<Mainpage> {
                       ElevatedButton(
                         onPressed: () {
                           user.dogsToShow.removeAt(0);
+                          if (user.dogsToShow.length>1){
+                            Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Mainpage(user:user)),
+                            (route) => false,
+                          );
+                          }else{
+                            Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainPageAsync(user: user),
+                            ),
+                          );
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.zero,

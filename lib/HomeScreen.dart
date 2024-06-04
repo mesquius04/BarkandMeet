@@ -1,7 +1,7 @@
+import 'package:bark_and_meet/fitxersAuxiliars/MainPageAsync.dart';
 import 'package:flutter/material.dart';
 import 'ChatScreen.dart';
 import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
-import 'Mainpage.dart';
 import 'mapa.dart';
 import 'user_profile.dart';
 import 'user.dart';
@@ -458,7 +458,7 @@ class HomeChatScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Mainpage(
+                      builder: (context) => MainPageAsync(
                         user: user
                       ),
                     ),

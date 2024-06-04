@@ -1,4 +1,4 @@
-import 'package:bark_and_meet/Mainpage.dart';
+import 'package:bark_and_meet/fitxersAuxiliars/MainPageAsync.dart';
 import 'package:bark_and_meet/recuperar_contrasenya.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -62,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // Es va al la vista del perfil de l'usuari
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => Mainpage(user: userProfile,)),
+        MaterialPageRoute(builder: (context) => MainPageAsync(user: userProfile,)),
           (route) => false,
       );
     } on FirebaseAuthException catch (error) {
