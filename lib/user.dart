@@ -122,8 +122,6 @@ class UserProfile {
     if (rnd>0){
       a=true;
     }
-    print("CURRENT FIELD");
-    print(randomField);
     QuerySnapshot querySnapshot =
         await gossosCollection.orderBy(randomField, descending: a).limit(20).get();
     // Devolver la lista de documentos
@@ -365,7 +363,7 @@ class UserProfile {
 
     // Imprimir el tiempo transcurrido en milisegundos
     print(
-        'Sortim del algorisme, temps transcorregut: ${stopwatch.elapsedMilliseconds} ms');
+        'Algorisme finalitzat. Temps transcorregut: ${stopwatch.elapsedMilliseconds} ms');
 
     this.dogsToShow = sortedDogs;
   }
