@@ -1,9 +1,7 @@
-import 'package:bark_and_meet/fitxersAuxiliars/MainPageAsync.dart';
+import 'package:bark_and_meet/fitxersAuxiliars/UserSessionState.dart';
 import 'package:bark_and_meet/recuperar_contrasenya.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'user.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -32,6 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+      /*
       // agafar la info del user de firestore
       User? firebaseUser = FirebaseAuth.instance.currentUser;
 
@@ -41,12 +40,14 @@ class _LoginScreenState extends State<LoginScreen> {
       UserProfile userProfile = UserProfile.userFromDocumentSnapshot(userQuery);
 
       // agafar els gossos de l'usuari
-      userProfile.getUserDogs();
+      userProfile.dogs = await UserProfile.getUserDogs(userProfile, firestoreInstance: FirebaseFirestore.instance);
+
+      */
 
       // Es va al la vista del perfil de l'usuari
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => MainPageAsync(user: userProfile,)),
+        MaterialPageRoute(builder: (context) => const UserSession()),
           (route) => false,
       );
     } on FirebaseAuthException catch (error) {

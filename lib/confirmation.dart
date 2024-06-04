@@ -1,4 +1,4 @@
-import 'package:bark_and_meet/user_profile.dart';
+import 'package:bark_and_meet/vista_inici.dart';
 import 'package:flutter/material.dart';
 import "user.dart";
 
@@ -32,7 +32,7 @@ class ProfileCreatedScreen extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => UserProfileScreen(
+                    builder: (context) => VistaInici(
                       user: user
                     ),
                   ),

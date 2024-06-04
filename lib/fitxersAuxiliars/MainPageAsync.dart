@@ -1,12 +1,7 @@
 import 'package:bark_and_meet/Mainpage.dart';
-import 'package:bark_and_meet/NewAccountScreen.dart';
 import 'package:bark_and_meet/user.dart';
-import 'package:bark_and_meet/user_profile.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../dog.dart';
-import '../home.dart';
 
 
 class MainPageAsync extends StatefulWidget {
@@ -26,7 +21,7 @@ class _MainPageAsync extends State<MainPageAsync> {
   
   @override
   Widget build(BuildContext context) {
-    if (!user.dogsToShow.isEmpty){
+    if (user.dogsToShow.isNotEmpty){
       return Mainpage(user: user);
     }
     return Scaffold(

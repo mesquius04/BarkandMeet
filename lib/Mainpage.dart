@@ -1,10 +1,6 @@
 import 'package:bark_and_meet/fitxersAuxiliars/MainPageAsync.dart';
 import 'package:flutter/material.dart';
-import 'dog.dart';
 import 'user.dart';
-import 'mapa.dart';
-import 'HomeScreen.dart';
-import 'user_profile.dart';
 import 'dogProfile.dart';
 import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
 
@@ -337,6 +333,7 @@ class _MainpageState extends State<Mainpage> {
           ),
         ],
       ),
+      /*
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         selectedItemColor: Colors.black,
@@ -388,7 +385,7 @@ class _MainpageState extends State<Mainpage> {
             );
           }
         },
-      ),
+      ),*/
     );
   }
 }

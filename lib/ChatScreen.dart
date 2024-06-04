@@ -32,11 +32,11 @@ class ChatScreen extends StatelessWidget {
                     backgroundImage: Image.asset('assets/images/chat111.png').image,
                   ),
                   const SizedBox(width: 15),
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        children: const [
+                        children: [
                           Text(
                             'August',
                             style: TextStyle(
@@ -56,7 +56,7 @@ class ChatScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const Text(
+                      Text(
                         'Online',
                         style: TextStyle(
                           fontSize: 14,
@@ -212,8 +212,8 @@ class ChatScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30),
                           color: Colors.grey.shade300, // Color of container set to light grey
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextField(
                             decoration: InputDecoration(
                               hintText: 'Type a message...',
@@ -225,7 +225,7 @@ class ChatScreen extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.send,
                         color: Colors.black54, // Icon color set to black with transparency
                       ),

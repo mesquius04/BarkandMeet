@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'dog.dart';
 import 'dart:math';
 import 'park.dart';
@@ -70,11 +69,11 @@ class UserProfile {
   /// Si hi ha algun error, es llença una excepció.
   ///
   /// @param uid String amb el uid de l'usuari a comprobar.
-  static Future<DocumentSnapshot> usuariExisteix(String uid) async {
+  static Future<DocumentSnapshot> usuariExisteix(String uid, {required FirebaseFirestore firestoreInstance}) async {
 
     try {
       // Es comprova si l'usuari amb el uid passat per paràmetre ja existeix a la BDD.
-      final userCollection = FirebaseFirestore.instance.collection('Usuaris');
+      final userCollection = firestoreInstance.collection('Usuaris');
       final userQuery = await userCollection.doc(uid).get();
 
       return userQuery;
@@ -84,42 +83,6 @@ class UserProfile {
       throw Exception("Error al buscar l'usuari: $e");
     }
   }
-
-  /*
-  static Future<UserProfile> getUserWithId(String userId, {required FirebaseFirestore firestoreInstance}) async {
-    // Agafar l'usuari de la base de dades
-    final userCollection = firestoreInstance.collection('Usuaris');
-    final userQuery = await userCollection.doc(userId).get();
-
-    if (!userQuery.exists) {
-      throw Exception("L'usuari no existeix");
-    }
-
-    Map<String, dynamic> data = userQuery.data() as Map<String, dynamic>;
-
-    // Get the dogs array from the data
-    List<dynamic> dogsData = data['dogs'] ?? [];
-
-    // Convert the dynamic array to a List<String>
-    List<String> dogs =
-    dogsData.map((item) => item.toString()).toList();
-
-    UserProfile userProfile = UserProfile(
-        username: data['username'],
-        email: data['email'],
-        name: data['name'],
-        surname: data['surname'],
-        numDogs: data['numDogs'],
-        gossera: data['gossera'],
-        premium: data['premium'],
-        city: data['city'],
-        profilePhotoUrl: data['photoURL'] ?? '',
-        additionalInfo: data['additionalInfo'],
-        dogsIds: dogs);
-
-    return userProfile;
-  }
-  */
 
   /// Aquesta funció retorna un objecte UserProfile amb les dades de l'usuari passat per paràmetre.
   ///
@@ -152,19 +115,16 @@ class UserProfile {
   }
 
   /// Aquesta funció agafa els gossos d'un usuari a partir de la id i els retorna en una llista.
-  Future<void> getUserDogs() async {
-    Future<List<Dog>> futureDogs = Future.value([]);
+  static Future<List<Dog>> getUserDogs(UserProfile userProfile, {required FirebaseFirestore firestoreInstance}) async {
+    List<Dog> dogs = [];
 
-    futureDogs.then((dogs) async {
-      for (String dogId in dogsIds) {
-        Dog dog = await Dog.getDog(dogId, firestoreInstance: FirebaseFirestore.instance);
-        dogs.add(dog);
-      }
-    });
-    dogs = await futureDogs;
+    for (String dogId in userProfile.dogsIds) {
+      Dog dog = await Dog.getDog(dogId, firestoreInstance: firestoreInstance);
+      dogs.add(dog);
+    }
+
+    return dogs;
   }
-
-
 
   Future<List<Dog>> _convertDogs(Future<List<DocumentSnapshot>> dogsDocuments) async{
     List<Dog> dogs = [];
@@ -245,7 +205,7 @@ class UserProfile {
     List<int> scores = [];
     List<Dog> sortedDogs = [];
     bool noDogs;
-    if (this.dogs.isEmpty) {
+    if (dogs.isEmpty) {
       noDogs = true;
     } else {
       noDogs = false;
@@ -260,11 +220,11 @@ class UserProfile {
         }
       } else {
         List<int> scoreOurDogs = [];
-        for (int j = 0; j < this.dogs.length; j++) {
+        for (int j = 0; j < dogs.length; j++) {
           int localScore = 0;
 
           //MIDES
-          switch ((this.dogs[j].size - dogsBdd[i].size).abs()) {
+          switch ((dogs[j].size - dogsBdd[i].size).abs()) {
             case 0:
               localScore += 100;
               break;
@@ -293,7 +253,7 @@ class UserProfile {
           DateTime birthDate = dateFormat.parse(dogsBdd[i].dateOfBirth);
           age1 = currentYear - birthDate.year;
 
-          birthDate = dateFormat.parse(this.dogs[j].dateOfBirth);
+          birthDate = dateFormat.parse(dogs[j].dateOfBirth);
           age2 = currentYear - birthDate.year;
 
           if (age1 <= 1) {
@@ -339,14 +299,14 @@ class UserProfile {
           }
 
           //CIUTAT
-          if (this.city != dogsBdd[i].city) {
+          if (city != dogsBdd[i].city) {
             localScore -= 200;
           }
 
           //GENERE
-          if (this.dogs[j].male && dogsBdd[i].male) {
+          if (dogs[j].male && dogsBdd[i].male) {
             localScore -= 30;
-          } else if (this.dogs[j].male || dogsBdd[i].male) {
+          } else if (dogs[j].male || dogsBdd[i].male) {
             localScore += 0;
           } else {
             localScore -= 40;
@@ -357,7 +317,7 @@ class UserProfile {
             localScore += 20;
           } else if (dogsBdd[i].castrat) {
             localScore += 40;
-          } else if (!dogsBdd[i].castrat && this.dogs[j].castrat) {
+          } else if (!dogsBdd[i].castrat && dogs[j].castrat) {
             localScore += 0;
           } else {
             localScore -= 80;
@@ -366,7 +326,7 @@ class UserProfile {
           //CARACTER
           int charPoints = 0;
           //SOCIABILITAT (1/3)
-          switch ((this.dogs[j].sociability - dogsBdd[i].sociability).abs()) {
+          switch ((dogs[j].sociability - dogsBdd[i].sociability).abs()) {
             case 0:
               charPoints += 100;
               break;
@@ -390,7 +350,7 @@ class UserProfile {
           charPoints = 0;
 
           //RESISTENCIA (2/3)
-          switch ((this.dogs[j].endurance - dogsBdd[i].endurance).abs()) {
+          switch ((dogs[j].endurance - dogsBdd[i].endurance).abs()) {
             case 0:
               charPoints += 100;
               break;
@@ -415,7 +375,7 @@ class UserProfile {
 
           //ACTIVITAT (3/3)
           switch (
-              (this.dogs[j].activityLevel - dogsBdd[i].activityLevel).abs()) {
+              (dogs[j].activityLevel - dogsBdd[i].activityLevel).abs()) {
             case 0:
               charPoints += 100;
               break;
@@ -438,7 +398,7 @@ class UserProfile {
           localScore += (charPoints * 0.80).toInt();
 
           //Check not the same
-          if (this.dogs[j].activityLevel == dogsBdd[i].activityLevel && dogsBdd[i].sociability== this.dogs[j].sociability && dogsBdd[i].name == this.dogs[j].name && dogsBdd[i].size == this.dogs[j].size && dogsBdd[i].endurance == this.dogs[j].endurance && dogsBdd[i].dateOfBirth ==this.dogs[j].dateOfBirth){
+          if (dogs[j].activityLevel == dogsBdd[i].activityLevel && dogsBdd[i].sociability== dogs[j].sociability && dogsBdd[i].name == dogs[j].name && dogsBdd[i].size == dogs[j].size && dogsBdd[i].endurance == dogs[j].endurance && dogsBdd[i].dateOfBirth ==dogs[j].dateOfBirth){
             localScore=-435;
           }
           //FINISHED
@@ -477,6 +437,6 @@ class UserProfile {
     print(
         'Algorisme finalitzat. Temps transcorregut: ${stopwatch.elapsedMilliseconds} ms');
 
-    this.dogsToShow = sortedDogs;
+    dogsToShow = sortedDogs;
   }
 }

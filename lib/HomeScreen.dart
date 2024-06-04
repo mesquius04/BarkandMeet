@@ -1,9 +1,5 @@
-import 'package:bark_and_meet/fitxersAuxiliars/MainPageAsync.dart';
 import 'package:flutter/material.dart';
 import 'ChatScreen.dart';
-import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
-import 'mapa.dart';
-import 'user_profile.dart';
 import 'user.dart';
 
 
@@ -20,9 +16,9 @@ class HomeChatScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 30),
-            Center(
-              child: const Text(
+            const SizedBox(height: 30),
+            const Center(
+              child: Text(
                 'Chat',
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
@@ -32,10 +28,10 @@ class HomeChatScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Container(
+            const SizedBox(height: 8),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: SizedBox(
                 height: 35, // Adjust the height as needed
                 child: TextField(
                   decoration: InputDecoration(
@@ -43,7 +39,7 @@ class HomeChatScreen extends StatelessWidget {
                     hintText: 'Search',
                     hintStyle: TextStyle(color: Colors.black54),
                     filled: true,
-                    fillColor: const Color.fromARGB(255, 239, 239, 239),
+                    fillColor: Color.fromARGB(255, 239, 239, 239),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(30)),
                       borderSide: BorderSide.none,
@@ -53,12 +49,12 @@ class HomeChatScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     'Match',
                     style: TextStyle(
                       color: Colors.black,
@@ -66,7 +62,7 @@ class HomeChatScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Container(
                       height: 1,
@@ -76,7 +72,7 @@ class HomeChatScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: SizedBox(
@@ -91,8 +87,8 @@ class HomeChatScreen extends StatelessWidget {
                           radius: 30,
                           backgroundImage: Image.asset('assets/images/a.png').image,
                         ),
-                        SizedBox(height: 10),
-                        Text(
+                        const SizedBox(height: 10),
+                        const Text(
                           'Marley',
                           style: TextStyle(
                             color: Colors.black,
@@ -101,7 +97,7 @@ class HomeChatScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(width: 25),
+                    const SizedBox(width: 25),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -109,8 +105,8 @@ class HomeChatScreen extends StatelessWidget {
                           radius: 30,
                           backgroundImage: Image.asset('assets/images/b.png').image,
                         ),
-                        SizedBox(height: 10),
-                        Text(
+                        const SizedBox(height: 10),
+                        const Text(
                           'Nina',
                           style: TextStyle(
                             color: Colors.black,
@@ -119,7 +115,7 @@ class HomeChatScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(width: 25),
+                    const SizedBox(width: 25),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -127,8 +123,8 @@ class HomeChatScreen extends StatelessWidget {
                           radius: 30,
                           backgroundImage: Image.asset('assets/images/c.png').image,
                         ),
-                        SizedBox(height: 10),
-                        Text(
+                        const SizedBox(height: 10),
+                        const Text(
                           'Joan',
                           style: TextStyle(
                             color: Colors.black,
@@ -137,7 +133,7 @@ class HomeChatScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(width: 25),
+                    const SizedBox(width: 25),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -145,8 +141,8 @@ class HomeChatScreen extends StatelessWidget {
                           radius: 30,
                           backgroundImage: Image.asset('assets/images/d.png').image,
                         ),
-                        SizedBox(height: 10),
-                        Text(
+                        const SizedBox(height: 10),
+                        const Text(
                           'Toby',
                           style: TextStyle(
                             color: Colors.black,
@@ -155,7 +151,7 @@ class HomeChatScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(width: 25),
+                    const SizedBox(width: 25),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -163,8 +159,8 @@ class HomeChatScreen extends StatelessWidget {
                           radius: 30,
                           backgroundImage: Image.asset('assets/images/e.png').image,
                         ),
-                        SizedBox(height: 10),
-                        Text(
+                        const SizedBox(height: 10),
+                        const Text(
                           'Mel',
                           style: TextStyle(
                             color: Colors.black,
@@ -173,7 +169,7 @@ class HomeChatScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(width: 25),
+                    const SizedBox(width: 25),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -181,8 +177,8 @@ class HomeChatScreen extends StatelessWidget {
                           radius: 30,
                           backgroundImage: Image.asset('assets/images/g.png').image,
                         ),
-                        SizedBox(height: 10),
-                        Text(
+                        const SizedBox(height: 10),
+                        const Text(
                           'Zeus',
                           style: TextStyle(
                             color: Colors.black,
@@ -195,12 +191,12 @@ class HomeChatScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     'Chats',
                     style: TextStyle(
                       color: Colors.black,
@@ -208,7 +204,7 @@ class HomeChatScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Container(
                       height: 1,
@@ -218,11 +214,11 @@ class HomeChatScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Expanded(
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: const BoxDecoration(
                   color: Color.fromARGB(255, 255, 255, 255),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(50),
@@ -249,7 +245,7 @@ class HomeChatScreen extends StatelessWidget {
                                   radius: 30,
                                   backgroundImage: Image.asset('assets/images/chat111.png').image,
                                 ),
-                                SizedBox(width: 10),
+                                const SizedBox(width: 10),
                                 const Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -276,8 +272,8 @@ class HomeChatScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20.0),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 20.0),
                               child: Divider(),
                             ),
                           ],
@@ -296,7 +292,7 @@ class HomeChatScreen extends StatelessWidget {
                                 radius: 30,
                                 backgroundImage: Image.asset('assets/images/chat222.png').image,
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -324,8 +320,8 @@ class HomeChatScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20.0),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 20.0),
                             child: Divider(),
                           ),
                         ],
@@ -342,7 +338,7 @@ class HomeChatScreen extends StatelessWidget {
                                 radius: 30,
                                 backgroundImage: Image.asset('assets/images/chat333.png').image,
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -370,8 +366,8 @@ class HomeChatScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20.0),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 20.0),
                             child: Divider(),
                           ),
                         ],
@@ -388,7 +384,7 @@ class HomeChatScreen extends StatelessWidget {
                                 radius: 30,
                                 backgroundImage: Image.asset('assets/images/chat555.png').image,
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -416,8 +412,8 @@ class HomeChatScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20.0),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 20.0),
                             child: Divider(),
                           ),
                         ],
@@ -430,7 +426,7 @@ class HomeChatScreen extends StatelessWidget {
           ],
         ),
       ),
-
+      /*
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         selectedItemColor: Colors.black,
@@ -505,7 +501,7 @@ class HomeChatScreen extends StatelessWidget {
       );
                 }
         },
-      ),
+      ),*/
 
     );
   }

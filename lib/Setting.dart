@@ -2,17 +2,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Ação ao clicar na flecha para voltar
           },
         ),
-        title: Row(
+        title: const Row(
           children: [
             Spacer(),
             Text('Configuració'),
@@ -25,56 +27,56 @@ class SettingsPage extends StatelessWidget {
         child: ListView(
           children: [
             SwitchListTile(
-              title: Text('Notificacions'),
+              title: const Text('Notificacions'),
               value: true,
               onChanged: (bool value) {},
               activeColor: Colors.purple,
             ),
             SwitchListTile(
-              title: Text('Localització'),
+              title: const Text('Localització'),
               value: true,
               onChanged: (bool value) {},
               activeColor: Colors.purple,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               color: Colors.yellow[100],
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Bark & Meet Gold',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 10),
-                  Text(
+                  const SizedBox(height: 10),
+                  const Text(
                     'Subscrieix-te a Gold i disfruta de totes les avantatges que això comporta:',
                     style: TextStyle(fontSize: 16),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   _buildFeatureRow(Icons.verified, 'Marca de verificat'),
                   _buildFeatureRow(Icons.priority_high, 'Prioritza els teus gossos'),
                   _buildFeatureRow(Icons.photo, 'Publica més fotos dels teus gossos preciosos'),
                   _buildFeatureRow(Icons.location_on, 'Mira on son els teus amics quan passegen el gos'),
                   _buildFeatureRow(Icons.group, 'Ajuda’ns a poder continuar desenvolupant l’app'),
-                  SizedBox(height: 10),
-                  Text(
+                  const SizedBox(height: 10),
+                  const Text(
                     'Passat a Gold per només*: 19,99€/mes',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 5),
-                  Text(
+                  const SizedBox(height: 5),
+                  const Text(
                     '*Després el primer any, després 34.99€/mes',
                     style: TextStyle(fontSize: 12),
                   ),
-                  SizedBox(height: 10),
-                  CountdownTimer(),
+                  const SizedBox(height: 10),
+                  const CountdownTimer(),
                 ],
               ),
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Altres',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -82,22 +84,22 @@ class SettingsPage extends StatelessWidget {
             _buildButton('Suport'),
             _buildButton('Mètodes de pagament'),
             _buildButton('Comunitat'),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {},
-              child: Text('Tancar sessió'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.grey[300], // Mudança para cinza claro
                 foregroundColor: Colors.black,
               ),
+              child: const Text('Tancar sessió'),
             ),
             ElevatedButton(
               onPressed: () {},
-              child: Text('Eliminar perfil'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black, // Mudança para preto
                 foregroundColor: Colors.white,
               ),
+              child: const Text('Eliminar perfil'),
             ),
           ],
         ),
@@ -109,7 +111,7 @@ class SettingsPage extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, color: Colors.black),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Flexible(child: Text(text)),
       ],
     );
@@ -120,24 +122,26 @@ class SettingsPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: ElevatedButton(
         onPressed: () {},
-        child: Text(text),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.grey[300],
           foregroundColor: Colors.black,
-          minimumSize: Size(double.infinity, 50),
+          minimumSize: const Size(double.infinity, 50),
         ),
+        child: Text(text),
       ),
     );
   }
 }
 
 class CountdownTimer extends StatefulWidget {
+  const CountdownTimer({super.key});
+
   @override
   _CountdownTimerState createState() => _CountdownTimerState();
 }
 
 class _CountdownTimerState extends State<CountdownTimer> {
-  late Duration _duration = Duration(hours: 29, minutes: 5, seconds: 13);
+  late Duration _duration = const Duration(hours: 29, minutes: 5, seconds: 13);
   late Timer _timer;
 
   @override
@@ -147,10 +151,10 @@ class _CountdownTimerState extends State<CountdownTimer> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_duration.inSeconds > 0) {
-          _duration -= Duration(seconds: 1);
+          _duration -= const Duration(seconds: 1);
         } else {
           _timer.cancel();
         }
@@ -168,7 +172,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
   Widget build(BuildContext context) {
     return Text(
       'La oferta termina en: ${_duration.inHours.toString().padLeft(2, '0')}h ${(_duration.inMinutes % 60).toString().padLeft(2, '0')}min ${(_duration.inSeconds % 60).toString().padLeft(2, '0')}s',
-      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
     );
   }
 }

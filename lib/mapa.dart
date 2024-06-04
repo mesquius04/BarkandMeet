@@ -1,13 +1,9 @@
-import 'package:bark_and_meet/fitxersAuxiliars/MainPageAsync.dart';
-import 'package:bark_and_meet/home.dart';
 import 'package:flutter/material.dart';
-import 'HomeScreen.dart';
 import 'user.dart';
-import 'user_profile.dart';
-import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
 
 class MapScreen extends StatelessWidget {
   UserProfile user;
+
   MapScreen({super.key, required this.user});
 
   @override
@@ -19,82 +15,81 @@ class MapScreen extends StatelessWidget {
       body: const Center(
         child: Text('Aqui va el mapa'),
       ),
-            bottomNavigationBar: BottomNavigationBar(
-              backgroundColor: Colors.white,
-              selectedItemColor: Colors.black,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(BarkMeet.step, color: Colors.black),
-                  label: 'Inici',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(BarkMeet.message),
-                  label: 'Chat',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(BarkMeet.map),
-                  label: 'Mapa',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(BarkMeet.person),
-                  label: 'Perfil',
-                ),
-              ],
-              type: BottomNavigationBarType.fixed,
-              onTap: (int index) {
-
-                if (index == 0) {
-                  Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => MainPageAsync(
-            user: user
+      /*
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        selectedItemColor: Colors.black,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(BarkMeet.step, color: Colors.black),
+            label: 'Inici',
           ),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-        ),
-      );
-                } else if (index==1){
-                  Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => HomeChatScreen(
-            user: user
+          BottomNavigationBarItem(
+            icon: Icon(BarkMeet.message),
+            label: 'Chat',
           ),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-        ),
-      );
-                }
-                else if (index==2){
-                  //do nothing
-                }
-                else{
-                  Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => UserProfileScreen(
-            user: user
+          BottomNavigationBarItem(
+            icon: Icon(BarkMeet.map),
+            label: 'Mapa',
           ),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
+          BottomNavigationBarItem(
+            icon: Icon(BarkMeet.person),
+            label: 'Perfil',
+          ),
+        ],
+        type: BottomNavigationBarType.fixed,
+        onTap: (int index) {
+          if (index == 0) {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    MainPageAsync(user: user),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+              ),
             );
-          },
-        ),
-      );
-                }
-              },
-            ),
+          } else if (index == 1) {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    HomeChatScreen(user: user),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+              ),
+            );
+          } else if (index == 2) {
+            //do nothing
+          } else {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    UserProfileScreen(user: user),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+              ),
+            );
+          }
+        },
+      ),
+      */
     );
   }
 }

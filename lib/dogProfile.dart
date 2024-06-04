@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
   Dog currentdog;
-  ProfileScreen({required this.currentdog});
+  ProfileScreen({super.key, required this.currentdog});
    CarouselController _carouselController = CarouselController();
 
    @override
@@ -21,7 +21,7 @@ class ProfileScreen extends StatelessWidget {
           automaticallyImplyLeading: false,
           leading: IconButton(
   style: ButtonStyle(
-    shape: MaterialStateProperty.all(
+    shape: WidgetStateProperty.all(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: BorderSide(color: Colors.transparent, width: 1),
@@ -46,7 +46,7 @@ class ProfileScreen extends StatelessWidget {
                   letterSpacing: 0,
                 ),
           ),
-          actions: [],
+          actions: const [],
           centerTitle: true,
           elevation: 2,
         ),
@@ -56,7 +56,7 @@ class ProfileScreen extends StatelessWidget {
             children: [
               Padding(
   padding: EdgeInsetsDirectional.fromSTEB(0, 26, 0, 0),
-  child: Container(
+  child: SizedBox(
     width: double.infinity,
     height: 180,
     child: CarouselSlider(
@@ -104,7 +104,7 @@ class ProfileScreen extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: const [
                   Align(
                     alignment: AlignmentDirectional(0, 0),
                     child: Padding(
@@ -516,7 +516,7 @@ class ProfileScreen extends StatelessWidget {
     padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
     child: Row(
       mainAxisSize: MainAxisSize.max,
-      children: [
+      children: const [
         Flexible(
           child: Padding(
             padding: EdgeInsets.all(8),

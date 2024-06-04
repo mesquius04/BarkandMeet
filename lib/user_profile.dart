@@ -4,12 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'home.dart';
-import 'fitxersAuxiliars/MainPageAsync.dart';
-import 'HomeScreen.dart';
 import 'mapa.dart';
 import 'user.dart';
-import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
-import 'Mainpage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dogprofile.dart'; // Importa la pantalla de perfil del perro
 
@@ -45,12 +41,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Perfil'),
-        backgroundColor: Color(0xFFFFFCFC),
+        title: const Text('Perfil'),
+        backgroundColor: const Color(0xFFFFFCFC),
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.logout,
               size: 24,
             ),
@@ -58,7 +54,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               FirebaseAuth.instance.signOut();
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
                 (route) => false,
               );
             },
@@ -68,7 +64,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         elevation: 0,
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,10 +77,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ? Image.network(user.profilePhotoUrl).image
                         : null,
                     child: user.profilePhotoUrl.isEmpty
-                        ? Icon(Icons.account_circle, size: 50)
+                        ? const Icon(Icons.account_circle, size: 50)
                         : null,
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -99,25 +95,25 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Descripció',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 user.additionalInfo,
-                style: TextStyle(fontSize: 14),
+                style: const TextStyle(fontSize: 14),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 children: [
-                  Text('Els meus gossos',
+                  const Text('Els meus gossos',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   IconButton(
-                    icon: Icon(Icons.add),
+                    icon: const Icon(Icons.add),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -128,9 +124,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Align(
-                alignment: AlignmentDirectional(0, 0),
+                alignment: const AlignmentDirectional(0, 0),
                 child: SizedBox(
                   width: double.infinity,
                   height: 200,
@@ -153,7 +149,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   width: 150,
                                   height: 130,
                                   fit: BoxFit.contain,
-                                  alignment: Alignment(0, 0),
+                                  alignment: const Alignment(0, 0),
                                 ),
                               ),
                             ),
@@ -184,10 +180,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Text(
                                   user.dogs[index].name,
-                                  style: TextStyle(fontSize: 16),
+                                  style: const TextStyle(fontSize: 16),
                                 ),
                               ],
                             );
@@ -208,14 +204,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Parcs preferits',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Align(
-                alignment: AlignmentDirectional(0, 0),
+                alignment: const AlignmentDirectional(0, 0),
                 child: SizedBox(
                   width: double.infinity,
                   height: 127,
@@ -236,7 +232,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             width: 150,
                             height: 130,
                             fit: BoxFit.contain,
-                            alignment: Alignment(0, 0),
+                            alignment: const Alignment(0, 0),
                           ),
                         ),
                       ),
@@ -261,6 +257,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
         ),
       ),
+      /*
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         selectedItemColor: Colors.black,
@@ -333,7 +330,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             //do nothing
           }
         },
-      ),
+      ),*/
     );
   }
 }

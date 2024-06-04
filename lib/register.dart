@@ -80,10 +80,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       // Es va al la vista de crear el perfil
       UserProfile newUser = UserProfile.basic(email: email);
-      Navigator.push(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
             builder: (context) => NewAccountScreen(user: newUser)),
+            (route) => false,
       );
     } on FirebaseAuthException catch (error) {
       // Controlar errors.

@@ -1,6 +1,5 @@
 import 'package:bark_and_meet/dog.dart';
 import 'package:bark_and_meet/user.dart';
-import 'package:bark_and_meet/user_profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -145,7 +144,7 @@ class _DogCreateState extends State<DogCreateScreen> {
 
       // Guardar el gos a Firebase Firestore
 
-      String dogId = "${firebaseUser!.uid}_${user.numDogs}";
+      String dogId = "${firebaseUser.uid}_${user.numDogs}";
 
       await FirebaseFirestore.instance.collection('Gossos').doc(dogId).set({
         'name': dog?.name,
