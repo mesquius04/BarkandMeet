@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dog.dart';
+import 'dart:math';
 import 'park.dart';
 import 'package:intl/intl.dart';
 
@@ -120,18 +121,37 @@ class UserProfile {
     
     return dogs;
   }
-
+  
   Future<List<DocumentSnapshot>> getFirstDogs() async {
     // Obtener la referencia a la colección "Gossos"
     CollectionReference gossosCollection =
         FirebaseFirestore.instance.collection('Gossos');
 
     // Obtener los primeros 10 documentos ordenados por algún campo (por ejemplo, 'name')
+    String randomiser(){
+      Random random = Random();
+      int randomNumber = random.nextInt(6);
+      switch(random){
+        case 1: return 'name';
+        case 2: return 'birthday';
+        case 3: return 'raça';
+        case 4: return 'activityLevel';
+        case 5: return 'sociability';
+        default: return 'endurance';
+      }
+    }
+    String randomField=randomiser();
+    bool a=false;
+    Random random = Random();
+    int randomNumber = random.nextInt(2);
+    if (randomNumber>1){
+      a=true;
+    }
     QuerySnapshot querySnapshot =
-        await gossosCollection.orderBy('name').limit(3).get();
-
+        await gossosCollection.orderBy(randomField, descending: a).limit(30).get();
+    querySnapshot.docs.shuffle();
     // Devolver la lista de documentos
-    return querySnapshot.docs;
+    return querySnapshot.docs.sublist(0, 20);
   }
   
   Future<void> getDogs() async{
@@ -146,6 +166,10 @@ class UserProfile {
     List<Dog> dogsBdd = await _convertDogs(Dogsdoc);
     print("PROVA DE PRINT");
     print(dogsBdd.length);
+    print("PROVA DE NOM");
+    print(dogsBdd[0].name);
+    print("PROVA DE MIDA");
+    print(dogsBdd[0].size);
 
     // Iniciar el cronómetro
    
@@ -158,7 +182,8 @@ class UserProfile {
     } else {
       noDogs = false;
     }
-    print("PROVA DE PRINT");
+    print("User has dogs:");
+    print(this.dogs.length);
     for (int i = 0; i < dogsBdd.length; i++) {
       //init all subscores
       if (noDogs) {
@@ -347,15 +372,20 @@ class UserProfile {
           localScore += (charPoints * 0.80).toInt();
 
           //FINISHED
+          print("LOCAL SCORE");
+          print (localScore);
           scoreOurDogs.add(localScore);
         }
         print(scoreOurDogs.length);
         int max = scoreOurDogs[0];
+        print("first");
+        print(max);
         for (int j = 0; j < scoreOurDogs.length; j++) {
           if (scoreOurDogs[j] > max) {
             max = scoreOurDogs[j];
           }
         }
+        print("MAX");
         print(max);
         scores.add(max);
         print(scores);

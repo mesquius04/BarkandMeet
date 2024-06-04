@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'home.dart';
+import 'fitxersAuxiliars/MainPageAsync.dart';
 import 'HomeScreen.dart';
 import 'mapa.dart';
 import 'user.dart';
@@ -302,7 +303,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => Mainpage(user: user),
+                builder: (context) => MainPageAsync(user: user),
               ),
             );
           } else if (index == 1) {

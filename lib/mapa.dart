@@ -1,5 +1,5 @@
+import 'package:bark_and_meet/fitxersAuxiliars/MainPageAsync.dart';
 import 'package:flutter/material.dart';
-import 'Mainpage.dart';
 import 'HomeScreen.dart';
 import 'user.dart';
 import 'user_profile.dart';
@@ -46,7 +46,7 @@ class MapScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Mainpage(
+                      builder: (context) => MainPageAsync(
                         user: user
                       ),
                     ),
