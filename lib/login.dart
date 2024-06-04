@@ -38,26 +38,10 @@ class _LoginScreenState extends State<LoginScreen> {
       final userCollection = FirebaseFirestore.instance.collection('Usuaris');
       final userQuery = await userCollection.doc(firebaseUser!.uid).get();
 
-      Map<String, dynamic> data = userQuery.data() as Map<String, dynamic>;
+      UserProfile userProfile = UserProfile.userFromDocumentSnapshot(userQuery);
 
-      List<dynamic> dogsData = data['dogs'] ?? [];
-
-      // Convert the dynamic array to a List<String>
-      List<String> dogs =
-      dogsData.map((item) => item.toString()).toList();
-
-      UserProfile userProfile = UserProfile(
-          username: data['username'],
-          email: data['email'],
-          name: data['name'],
-          surname: data['surname'],
-          numDogs: data['numDogs'],
-          gossera: data['gossera'],
-          premium: data['premium'],
-          city: data['city'],
-          profilePhotoUrl: data['photoURL'] ?? '',
-          additionalInfo: data['additionalInfo'],
-          dogsIds: dogs);
+      // agafar els gossos de l'usuari
+      userProfile.getUserDogs();
 
       // Es va al la vista del perfil de l'usuari
       Navigator.pushAndRemoveUntil(

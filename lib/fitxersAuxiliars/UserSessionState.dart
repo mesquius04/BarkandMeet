@@ -19,17 +19,14 @@ class _UserSessionState extends State<UserSession> {
 
   Future<DocumentSnapshot>? _userFuture;
 
-  _UserSessionState();
 
-  Future<DocumentSnapshot> _usuariExisteix(String uid) async {
-    final userCollection = FirebaseFirestore.instance.collection('Usuaris');
-    final userQuery = await userCollection.doc(uid).get();
-
-    // agafar el nom del user i imprimirlo
-    print(userQuery.data()?['name']);
-
-    return userQuery;
+  @override
+  void initState() {
+    super.initState();
+    _userFuture = UserProfile.usuariExisteix(FirebaseAuth.instance.currentUser!.uid);
   }
+
+  _UserSessionState();
 
   @override
   Widget build(BuildContext context) {
@@ -46,62 +43,20 @@ class _UserSessionState extends State<UserSession> {
               builder: (context, userSnapshot) {
                 if (userSnapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
-                    child:
-                        CircularProgressIndicator(), // Muestra un indicador de carga mientras se espera
+                    child: CircularProgressIndicator(),
                   );
-                } else if (userSnapshot.data!.exists && userSnapshot.hasData) {
-                  Map<String, dynamic> data =
-                      userSnapshot.data!.data() as Map<String, dynamic>;
-
-                  // Get the dogs array from the data
-                  List<dynamic> dogsData = data['dogs'] ?? [];
-
-                  // Convert the dynamic array to a List<String>
-                  List<String> dogs =
-                      dogsData.map((item) => item.toString()).toList();
-
-                  UserProfile userProfile = UserProfile(
-                      username: data['username'],
-                      email: data['email'],
-                      name: data['name'],
-                      surname: data['surname'],
-                      numDogs: data['numDogs'],
-                      gossera: data['gossera'],
-                      premium: data['premium'],
-                      city: data['city'],
-                      profilePhotoUrl: data['photoURL'],
-                      additionalInfo: data['additionalInfo'],
-                      dogsIds: dogs);
-
-                  // S'ha d'arreglar tot això, és una aberració.
-                  // S'ha de fer un mètode estàtic per agafar el perfil de l'usuari
-                  // i un altre per agafar el gos de l'usuari.
+                } else if (userSnapshot.hasData && userSnapshot.data!.exists) {
+                  UserProfile userProfile = UserProfile.userFromDocumentSnapshot(userSnapshot.data!);
                   if (userProfile.numDogs > 0) {
-                    return FutureBuilder<Dog?>(
-                      future: userProfile.dogsIds.isNotEmpty ? Dog.getDog(
-                          userProfile.dogsIds[0], firestoreInstance: FirebaseFirestore.instance) : Future.value(null),
-                      builder: (context, dogSnapshot) {
-                        if (dogSnapshot.connectionState ==
-                            ConnectionState.waiting) {
+                    return FutureBuilder<void>(
+                      future: userProfile.getUserDogs() ,
+                      builder: (context, dogsSnapshot) {
+                        if (dogsSnapshot.connectionState == ConnectionState.waiting) {
                           return const Center(
                             child: CircularProgressIndicator(),
                           );
-                        } else if (dogSnapshot.hasData) {
-                          Dog dog = dogSnapshot.data!;
-                          dog.owner = userProfile;
-
-                          userProfile.dogs.add(dog);
-
-                          return UserProfileScreen(user: userProfile);
-                        } else if (dogSnapshot.hasError) {
-                          return Center(
-                            child: Text(
-                                'Failed to get dog: ${dogSnapshot.error}'),
-                          );
                         } else {
-                          return Center(
-                            child: Text('Dog not found'),
-                          );
+                          return UserProfileScreen(user: userProfile);
                         }
                       },
                     );
@@ -110,9 +65,7 @@ class _UserSessionState extends State<UserSession> {
                   }
                 } else {
                   User user = FirebaseAuth.instance.currentUser!;
-                  UserProfile userProfile =
-                      UserProfile.basic(email: user.email!);
-
+                  UserProfile userProfile = UserProfile.basic(email: user.email!);
                   return NewAccountScreen(user: userProfile);
                 }
               },

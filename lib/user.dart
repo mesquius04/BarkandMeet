@@ -85,6 +85,85 @@ class UserProfile {
     }
   }
 
+  /*
+  static Future<UserProfile> getUserWithId(String userId, {required FirebaseFirestore firestoreInstance}) async {
+    // Agafar l'usuari de la base de dades
+    final userCollection = firestoreInstance.collection('Usuaris');
+    final userQuery = await userCollection.doc(userId).get();
+
+    if (!userQuery.exists) {
+      throw Exception("L'usuari no existeix");
+    }
+
+    Map<String, dynamic> data = userQuery.data() as Map<String, dynamic>;
+
+    // Get the dogs array from the data
+    List<dynamic> dogsData = data['dogs'] ?? [];
+
+    // Convert the dynamic array to a List<String>
+    List<String> dogs =
+    dogsData.map((item) => item.toString()).toList();
+
+    UserProfile userProfile = UserProfile(
+        username: data['username'],
+        email: data['email'],
+        name: data['name'],
+        surname: data['surname'],
+        numDogs: data['numDogs'],
+        gossera: data['gossera'],
+        premium: data['premium'],
+        city: data['city'],
+        profilePhotoUrl: data['photoURL'] ?? '',
+        additionalInfo: data['additionalInfo'],
+        dogsIds: dogs);
+
+    return userProfile;
+  }
+  */
+
+  /// Aquesta funció retorna un objecte UserProfile amb les dades de l'usuari passat per paràmetre.
+  ///
+  /// @param userQuery DocumentSnapshot amb les dades de l'usuari.
+  static UserProfile userFromDocumentSnapshot(DocumentSnapshot userQuery) {
+    Map<String, dynamic> data = userQuery.data() as Map<String, dynamic>;
+
+    // Agafar el array de gossos de la data
+    List<dynamic> dogsData = data['dogs'] ?? [];
+
+    // Convertir l'array dinàmic a una List<String>
+    List<String> dogs =
+    dogsData.map((item) => item.toString()).toList();
+
+    // Crear un objecte UserProfile amb les dades de l'usuari
+    UserProfile userProfile = UserProfile(
+        username: data['username'],
+        email: data['email'],
+        name: data['name'],
+        surname: data['surname'],
+        numDogs: data['numDogs'],
+        gossera: data['gossera'],
+        premium: data['premium'],
+        city: data['city'],
+        profilePhotoUrl: data['photoURL'] ?? '',
+        additionalInfo: data['additionalInfo'],
+        dogsIds: dogs);
+
+    return userProfile;
+  }
+
+  /// Aquesta funció agafa els gossos d'un usuari a partir de la id i els retorna en una llista.
+  Future<void> getUserDogs() async {
+    Future<List<Dog>> futureDogs = Future.value([]);
+
+    futureDogs.then((dogs) async {
+      for (String dogId in dogsIds) {
+        Dog dog = await Dog.getDog(dogId, firestoreInstance: FirebaseFirestore.instance);
+        dogs.add(dog);
+      }
+    });
+    dogs = await futureDogs;
+  }
+
 
 
   Future<List<Dog>> _convertDogs(Future<List<DocumentSnapshot>> dogsDocuments) async{
