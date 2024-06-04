@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:flutter/material.dart';
 import 'dog.dart';
 import 'park.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +18,7 @@ class UserProfile {
   List<String> dogsIds;
   List<Dog> dogs;
   List<Park> parks;
+  List<Dog> dogsToShow;
   String city;
   String additionalInfo;
 
@@ -35,9 +36,11 @@ class UserProfile {
     dogsIds = const [],
     dogs = const [],
     parks = const [],
+    dogsToShow = const [],
     required this.additionalInfo,
   })  : dogsIds = List.from(dogsIds),
         dogs = List.from(dogs),
+        dogsToShow = List.from(dogsToShow),
         parks = List.from(parks);
 
   // Constructor que només demana el correu, nom d'usuari i tot el demés per defecte.
@@ -55,13 +58,15 @@ class UserProfile {
         additionalInfo = '',
         profilePhotoUrl = '',
         dogsIds = [],
+        dogsToShow = [],
         profilePhoto = null;
 
-  List<Dog> _convertDogs(Future<List<DocumentSnapshot>> dogsDocuments) {
+  Future<List<Dog>> _convertDogs(Future<List<DocumentSnapshot>> dogsDocuments) async{
     List<Dog> dogs = [];
 
-    dogsDocuments.then((documents) {
-      for (DocumentSnapshot document in documents) {
+    List<DocumentSnapshot> documents = await dogsDocuments;
+
+    for (DocumentSnapshot document in documents) {
         Map<String, dynamic> data = document.data() as Map<String, dynamic>;
 
         List<dynamic> photosData = data['photosUrls'];
@@ -87,7 +92,7 @@ class UserProfile {
             photosUrls: photosUrl,
             dogPhotos: [null, null, null]));
       }
-    });
+    
     return dogs;
   }
 
@@ -103,24 +108,23 @@ class UserProfile {
     // Devolver la lista de documentos
     return querySnapshot.docs;
   }
-
-  List<Dog> getDogs() {
+  
+  Future<void> getDogs() async{
     // Falta Extreure els gossos de la BDD
-
+    print("PROVA DE PRINT");
     //Algorisme martí (secret)
     Stopwatch stopwatch = Stopwatch();
-
-    /*
-    Future<List<DocumentSnapshot>> fetchFirstThreeDocuments() async {
-  final collectionRef = FirebaseFirestore.instance.collection('your_collection');
-  final querySnapshot = await collectionRef.limit(3).getDocuments();
-  return querySnapshot.documents;
-}
-     */
+    stopwatch.start();
+    print("PROVA DE PRINT");
+    Future<List<DocumentSnapshot>> Dogsdoc=  getFirstDogs();
+    print("PROVA DE PRINT");
+    List<Dog> dogsBdd = await _convertDogs(Dogsdoc);
+    print("PROVA DE PRINT");
+    print(dogsBdd.length);
 
     // Iniciar el cronómetro
-    stopwatch.start();
-    List<Dog> dogsBdd = [];
+   
+    
     List<int> scores = [];
     List<Dog> sortedDogs = [];
     bool noDogs;
@@ -129,14 +133,14 @@ class UserProfile {
     } else {
       noDogs = false;
     }
-
+    print("PROVA DE PRINT");
     for (int i = 0; i < dogsBdd.length; i++) {
       //init all subscores
       if (noDogs) {
         if (dogsBdd[i].adopcio) {
-          scores[i] = 100;
+          scores.add(150);
         } else {
-          scores[i] = 0;
+          scores.add(0);
         }
       } else {
         List<int> scoreOurDogs = [];
@@ -320,35 +324,42 @@ class UserProfile {
           //FINISHED
           scoreOurDogs.add(localScore);
         }
+        print(scoreOurDogs.length);
         int max = scoreOurDogs[0];
-        for (int j = 1; j < scoreOurDogs.length; j++) {
+        for (int j = 0; j < scoreOurDogs.length; j++) {
           if (scoreOurDogs[j] > max) {
             max = scoreOurDogs[j];
           }
         }
+        print(max);
         scores.add(max);
+        print(scores);
       }
-      List<int> indexs = List<int>.generate(scores.length, (index) => index);
-      indexs.sort((a, b) => scores[b].compareTo(scores[a]));
-      sortedDogs = indexs.map((index) => dogsBdd[index]).toList();
-      List<int> sortedIndex = indexs.map((index) => scores[index]).toList();
-      while (sortedDogs.length >= 5) {
-        if (sortedIndex[sortedIndex.length - 1] <= 100) {
-          sortedIndex.removeLast();
-          sortedDogs.removeLast();
-        } else {
-          break;
-        }
-      }
-      stopwatch.stop();
-
-      // Imprimir el tiempo transcurrido en milisegundos
-      print(
-          'Algorisme Acabat, temps transcorregut: ${stopwatch.elapsedMilliseconds} milisegundos');
-      print(sortedIndex);
-      return sortedDogs;
+      
     }
+    print("PROVA DE PRINT SCORES");
+    print(scores);
+    List<int> indexs = List<int>.generate(scores.length, (index) => index);
+    indexs.sort((a, b) => scores[b].compareTo(scores[a]));
+    sortedDogs = indexs.map((index) => dogsBdd[index]).toList();
+    List<int> sortedIndex = indexs.map((index) => scores[index]).toList();
+    while (sortedDogs.length >= 5) {
+      if (sortedIndex[sortedIndex.length - 1] <= 100) {
+        sortedIndex.removeLast();
+        sortedDogs.removeLast();
+      } else {
+        break;
+      }
+    }
+    print("PROVA DE PRINT");
+    stopwatch.stop();
 
+    // Imprimir el tiempo transcurrido en milisegundos
+    print(
+        'Algorisme Acabat, temps transcorregut: ${stopwatch.elapsedMilliseconds} milisegundos');
+    print(sortedIndex);
+    this.dogsToShow = sortedDogs;
+    /*
     //RETURN PROVISIONAL
     UserProfile olivia = UserProfile(
         username: 'oliviarodrigo',
@@ -373,8 +384,7 @@ class UserProfile {
         size: 3,
         endurance: 4,
         sociability: 5,
-        friends: []));
-
-    return sortedDogs;
+        friends: []));*/
+    this.dogsToShow=sortedDogs;
   }
 }

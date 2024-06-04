@@ -18,23 +18,24 @@ class Mainpage extends StatefulWidget {
 
 class _MainpageState extends State<Mainpage> {
   final UserProfile user;
-
   _MainpageState({required this.user});
-
   bool _showFilters = false;
-  int N = 20;
-  int pointer = 0;
 
   void _toggleFilters() {
     setState(() {
       _showFilters = !_showFilters;
     });
   }
-
+  
   @override
   Widget build(BuildContext context) {
-    List<Dog> dogs = user.getDogs();
-
+    if (user.dogsToShow.isEmpty || user.dogs.length<=1){
+      print("IS EMPTY LALALA");
+      print("entrem algo");
+      user.getDogs();
+      print("sortim algo");
+      print(user.dogsToShow.length);
+    }
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: _showFilters
@@ -65,9 +66,9 @@ class _MainpageState extends State<Mainpage> {
                   children: [
                     //Text('${widget.myDog.name}', style: TextStyle(fontSize: 30)),
                     //Text('@${widget.myDog.owner.username}', style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7))),
-                    Text(dogs[pointer].name,
+                    Text(user.dogsToShow[0].name,
                         style: const TextStyle(fontSize: 30, color: Colors.white)),
-                    Text(dogs[pointer].owner!.username,
+                    Text(user.dogsToShow[0].owner!.username,
                         style: TextStyle(
                             fontSize: 14,
                             color: Colors.white.withOpacity(0.7))),
@@ -86,9 +87,9 @@ class _MainpageState extends State<Mainpage> {
         children: [
           // Imagen de fondo
           Positioned.fill(
-            child: dogs[pointer].dogPhoto != null
+            child: user.dogsToShow[0].dogPhoto != null
                 ? Image.file(
-                    dogs[pointer].dogPhoto!,
+                    user.dogsToShow[0].dogPhoto!,
                     fit: BoxFit.cover,
                   )
                 : Image.asset(
@@ -109,7 +110,9 @@ class _MainpageState extends State<Mainpage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          user.dogsToShow.removeAt(0);
+                        },
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.zero,
                           backgroundColor: Colors.transparent,
@@ -129,7 +132,9 @@ class _MainpageState extends State<Mainpage> {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          user.dogsToShow.removeAt(0);
+                        },
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.zero,
                           backgroundColor: Colors.transparent,
@@ -176,7 +181,7 @@ class _MainpageState extends State<Mainpage> {
                               Animation<double> animation,
                               Animation<double> secondaryAnimation) {
                             return ProfileScreen(
-                                currentdog: dogs[pointer]); //la pagina del perro
+                                currentdog: user.dogsToShow[0]); //la pagina del perro
                           },
                         ),
                       );
