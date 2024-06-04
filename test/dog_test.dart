@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:bark_and_meet/dog.dart';
 
+
+
 void main() {
   group('Dog', () {
     test('getDog returns a Dog object when dog exists in database', () async {
@@ -26,7 +28,7 @@ void main() {
       Dog.dogCollection = instance.collection('Gossos');
 
       // Act
-      final dog = await Dog.getDog('dog1');
+      final dog = await Dog.getDog('dog1', firestoreInstance: instance);
 
       // Assert
       expect(dog.name, 'Fido');
@@ -45,13 +47,15 @@ void main() {
       expect(dog.photosUrls, ['url1', 'url2', 'url3']);
     });
 
-    test('getDog throws an exception when dog does not exist in database', () async {
+    test('getDog throws an exception when dog does not exist in database',
+        () async {
       // Arrange
       final instance = FakeFirebaseFirestore();
       Dog.dogCollection = instance.collection('Gossos');
 
       // Act & Assert
-      expect(() async => await Dog.getDog('dog1'), throwsA(isInstanceOf<Exception>()));
+      expect(
+          () async => await Dog.getDog('dog1', firestoreInstance: instance), throwsA(isInstanceOf<Exception>()));
     });
   });
 }

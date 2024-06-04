@@ -53,11 +53,15 @@ class Dog {
 
 
   // Agafar un gos de la base de dades
-  static Future<Dog> getDog(String gosId) async {
+  static Future<Dog> getDog(String gosId, {required FirebaseFirestore firestoreInstance}) async {
 
     // Agafar el gos de la base de dades
-    final dogCollection = FirebaseFirestore.instance.collection('Gossos');
+    final dogCollection = firestoreInstance.collection('Gossos');
     final dogQuery = await dogCollection.doc(gosId).get();
+
+    if (!dogQuery.exists) {
+      throw Exception('Dog does not exist');
+    }
 
     Map<String, dynamic> data = dogQuery.data() as Map<String, dynamic>;
 
@@ -67,8 +71,6 @@ class Dog {
     // Convert the dynamic array to a List<String>
     List<String> photosUrl =
     photosData.map((item) => item.toString()).toList();
-    
-    print(data['name']);
 
     // crer el gos
     Dog dog = Dog(
