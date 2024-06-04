@@ -29,7 +29,7 @@ class _MainpageState extends State<Mainpage> {
   
   @override
   Widget build(BuildContext context) {
-    if (user.dogsToShow.isEmpty || user.dogs.length<=1){
+    if (user.dogsToShow.isEmpty || user.dogsToShow.length<=1){
       print("IS EMPTY LALALA");
       print("entrem algo");
       user.getDogs();
