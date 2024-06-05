@@ -167,7 +167,8 @@ overflow: TextOverflow.ellipsis,
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         5, 0, 0, 0),
                                     child: Text(
-overflow: TextOverflow.ellipsis,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
                                       currentdog.raca2,
                                       style: TextStyle(
                                         fontFamily: 'Plus Jakarta Sans',
