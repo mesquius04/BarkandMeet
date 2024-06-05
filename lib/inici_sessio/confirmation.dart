@@ -5,9 +5,7 @@ import "../model/user.dart";
 class ProfileCreatedScreen extends StatelessWidget {
   final UserProfile user;
 
-  const ProfileCreatedScreen({super.key,
-    required this.user
-  });
+  const ProfileCreatedScreen({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +29,26 @@ class ProfileCreatedScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) =>  VistaInici(user: user, index: 3,)),
-                      (route) => false,
+                  MaterialPageRoute(
+                      builder: (context) => VistaInici(user: user, index: 3)),
+                  (route) => false,
                 );
               },
-              child: const Text('Continuar'),
+              style: ElevatedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(16), // Redondear la parte de abajo
+                    top:
+                        Radius.circular(0), // Mantener la parte de arriba recta
+                  ),
+                ),
+              ),
+              child: const Text(
+                'Continuar',
+                style: TextStyle(fontSize: 18), // Texto grande
+              ),
             ),
           ],
         ),
