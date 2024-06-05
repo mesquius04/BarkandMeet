@@ -258,7 +258,6 @@ class UserProfile {
           // Devolver la lista de documentos
           return querySnapshot.docs;
         }else if (this.filters[8]){
-          print("filtrant no en adopció + grans");
           querySnapshot=await gossosCollection.where('adoption',isEqualTo: false).orderBy('size', descending: true).limit(20).get();
           // Devolver la lista de documentos
           return querySnapshot.docs;
@@ -294,9 +293,6 @@ class UserProfile {
     stopwatch.start();
     Future<List<DocumentSnapshot>> Dogsdoc = getFirstDogs();
     List<Dog> dogsBdd = await _convertDogs(Dogsdoc);
-    print("TAMANYS!!");
-    print(dogsBdd[0].size);
-    print(dogsBdd[5].size);
     // Iniciar el cronómetro
     List<int> scores = [];
     List<Dog> sortedDogs = [];
