@@ -15,6 +15,7 @@ class UserProfile {
   int numDogs;
   bool gossera;
   bool premium;
+  List<bool> filters;
   List<String> dogsIds;
   List<Dog> dogs;
   List<Park> parks;
@@ -36,10 +37,12 @@ class UserProfile {
     dogsIds = const [],
     dogs = const [],
     parks = const [],
+    filters= const[true,true,true,true,true,true,true,true,true],
     dogsToShow = const [],
     required this.additionalInfo,
   })  : dogsIds = List.from(dogsIds),
         dogs = List.from(dogs),
+        filters = List.from(filters),
         dogsToShow = List.from(dogsToShow),
         parks = List.from(parks);
 
@@ -50,6 +53,7 @@ class UserProfile {
         name = '',
         surname = '',
         numDogs = 0,
+        filters= [true,true,true,true,true,true,true,true,true],
         gossera = false,
         premium = false,
         city = '',
@@ -187,10 +191,69 @@ class UserProfile {
     if (rnd>0){
       a=true;
     }
-    QuerySnapshot querySnapshot =
-        await gossosCollection.orderBy(randomField, descending: a).limit(20).get();
-    // Devolver la lista de documentos
-    return querySnapshot.docs;
+    QuerySnapshot querySnapshot;
+    if (this.filters[0]){
+      if (this.filters[1]){
+        if (this.filters[6] && this.filters[8]){
+          querySnapshot=await gossosCollection.orderBy(randomField, descending: a).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else if (this.filters[8]){
+          querySnapshot=await gossosCollection.orderBy('size', descending: true).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else{
+          querySnapshot=await gossosCollection.orderBy('size', descending: false).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }
+        
+      }else{
+        if (this.filters[6] && this.filters[8]){
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: true).orderBy(randomField, descending: a).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else if (this.filters[8]){
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: true).orderBy('size', descending: true).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else{
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: true).orderBy('size', descending: false).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }
+      }
+    }else{
+      if (this.filters[1]){
+        if (this.filters[6] && this.filters[8]){
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: false).orderBy(randomField, descending: a).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else if (this.filters[8]){
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: false).orderBy('size', descending: true).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else{
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: false).orderBy('size', descending: false).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }
+      }else{
+        if (this.filters[6] && this.filters[8]){
+          querySnapshot=await gossosCollection.orderBy(randomField, descending: a).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else if (this.filters[8]){
+          querySnapshot=await gossosCollection.orderBy('size', descending: true).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else{
+          querySnapshot=await gossosCollection.orderBy('size', descending: false).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }
+      }
+    }
   }
   
   Future<void> getDogs() async{
