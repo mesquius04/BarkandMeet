@@ -3,10 +3,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import '../inici_sessio/home.dart';
 import '../altres/mapa.dart';
 import '../model/user.dart';
-import 'package:image_picker/image_picker.dart';
 import '../perfil_gos/perfil_gos.dart'; // Importa la pantalla de perfil del perro
 
 class UserProfileScreen extends StatefulWidget {
@@ -21,10 +21,21 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   List<File?> dogs = [];
   UserProfile user;
+  File? _profileImage;
 
   _UserProfileScreenState({required this.user});
 
- CarouselController _carouselController1 = CarouselController();
+  CarouselController _carouselController1 = CarouselController();
+
+  Future<void> _pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +63,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: Padding(
+      body: Container(
+        color: Colors.white,
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
@@ -60,14 +72,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             children: [
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: user.profilePhotoUrl.isNotEmpty
-                        ? Image.network(user.profilePhotoUrl).image
-                        : null,
-                    child: user.profilePhotoUrl.isEmpty
-                        ? const Icon(Icons.account_circle, size: 50)
-                        : null,
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: _profileImage != null
+                          ? FileImage(_profileImage!)
+                          : user.profilePhotoUrl.isNotEmpty
+                              ? Image.network(user.profilePhotoUrl).image
+                              : null,
+                      child:
+                          _profileImage == null && user.profilePhotoUrl.isEmpty
+                              ? const Icon(Icons.account_circle, size: 50)
+                              : null,
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Column(
@@ -90,9 +108,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              Text(
-                user.additionalInfo,
-                style: const TextStyle(fontSize: 14),
+              Container(
+                padding: const EdgeInsets.all(16),
+                color: Colors.grey[200],
+                child: Text(
+                  user.additionalInfo,
+                  style: const TextStyle(fontSize: 14),
+                ),
               ),
               const SizedBox(height: 20),
               Row(
@@ -101,6 +123,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(width: 10),
+                  Transform.rotate(
+                    angle: 0, // Rotar 180 grados para apuntar a la izquierda
+                    child: const Icon(Icons.arrow_forward_ios, size: 16),
+                  ),
+                  const SizedBox(width: 10), // Espaciado
                   IconButton(
                     icon: const Icon(Icons.add),
                     onPressed: () {
@@ -120,82 +147,93 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   width: double.infinity,
                   height: 200,
                   child: CarouselSlider(
-  items: user.dogs.isEmpty
-    ? [
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DogCreateScreen(user: user),
-              ),
-            );
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              "https://cdn0.iconfinder.com/data/icons/circles-2/100/sign-square-dashed-plus-512.png",
-              width: 150,
-              height: 130,
-              fit: BoxFit.contain,
-              alignment: const Alignment(0, 0),
-            ),
-          ),
-        ),
-      ]
-    : List.generate(user.dogs.length, (index) {
-        return Column(
-          children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DogProfileScreen(
-                      currentdog: user.dogs[index],
+                    items: user.dogs.isEmpty
+                        ? [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DogCreateScreen(user: user),
+                                  ),
+                                );
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                  "https://cdn0.iconfinder.com/data/icons/circles-2/100/sign-square-dashed-plus-512.png",
+                                  width: 150,
+                                  height: 130,
+                                  fit: BoxFit.contain,
+                                  alignment: const Alignment(0, 0),
+                                ),
+                              ),
+                            ),
+                          ]
+                        : List.generate(user.dogs.length, (index) {
+                            return Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DogProfileScreen(
+                                          currentdog: user.dogs[index],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.network(
+                                      user.dogs[index].photosUrls.isNotEmpty
+                                          ? user.dogs[index].photosUrls[0]
+                                          : "https://cdn0.iconfinder.com/data/icons/circles-2/100/sign-square-dashed-plus-512.png",
+                                      width: 150,
+                                      height: 130,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  user.dogs[index].name,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            );
+                          }),
+                    carouselController: _carouselController1,
+                    options: CarouselOptions(
+                      initialPage: 1,
+                      viewportFraction: 0.35,
+                      disableCenter: true,
+                      enlargeCenterPage: false,
+                      enlargeFactor: 0,
+                      enableInfiniteScroll: false, // <--- Cambia esto a false
+                      scrollDirection: Axis.horizontal,
+                      autoPlay: false,
+                      onPageChanged: (index, _) =>
+                          print('Page changed to $index'),
                     ),
                   ),
-                );
-              },
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  user.dogs[index].photosUrls.isNotEmpty
-                    ? user.dogs[index].photosUrls[0]
-                    : "https://cdn0.iconfinder.com/data/icons/circles-2/100/sign-square-dashed-plus-512.png",
-                  width: 150,
-                  height: 130,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              user.dogs[index].name,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
-        );
-      }),
-  carouselController: _carouselController1,
-  options: CarouselOptions(
-    initialPage: 1,
-    viewportFraction: 0.35,
-    disableCenter: true,
-    enlargeCenterPage: false,
-    enlargeFactor: 0,
-    enableInfiniteScroll: false, // <--- Cambia esto a false
-    scrollDirection: Axis.horizontal,
-    autoPlay: false,
-    onPageChanged: (index, _) => print('Page changed to $index'),
-  ),
-)
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
-                'Parcs preferits',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  const Text(
+                    'Parcs preferits',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 10),
+                  Transform.rotate(
+                    angle: 0, // Rotar 180 grados para apuntar a la izquierda
+                    child: const Icon(Icons.arrow_forward_ios, size: 16),
+                  ),
+                ],
               ),
               const SizedBox(height: 10),
               Align(
@@ -244,8 +282,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ],
           ),
         ),
-      ),
-      /*
+        /*
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         selectedItemColor: Colors.black,
@@ -319,6 +356,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           }
         },
       ),*/
+      ),
     );
   }
 }
