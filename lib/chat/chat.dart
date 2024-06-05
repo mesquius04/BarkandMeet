@@ -2,33 +2,48 @@ import 'package:flutter/material.dart';
 import 'chat_individual.dart';
 import '../model/user.dart';
 
-
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   final UserProfile user;
 
   const ChatScreen({super.key, required this.user});
 
   @override
+  _ChatScreenState createState() => _ChatScreenState(user: user);
+}
+
+
+class _ChatScreenState extends State<ChatScreen> {
+  final UserProfile user;
+
+  _ChatScreenState({required this.user});
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        title: const Text(
+          'Chat',
+          style: TextStyle(
+            fontFamily: 'Roboto',
+            color: Colors.black,
+            fontSize: 22,
+            letterSpacing: 0,
+          ),
+        ),
+        actions: const [],
+        centerTitle: true,
+        elevation: 0,
+      ),
+
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 30),
-            const Center(
-              child: Text(
-                'Chat',
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Arial',
-                  fontSize: 25,
-                  color: Colors.black,
-                ),
-              ),
-            ),
             const SizedBox(height: 8),
+            // Search bar
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: SizedBox(
@@ -50,6 +65,8 @@ class ChatScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15),
+
+            // Títol de match
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: Row(
@@ -73,6 +90,8 @@ class ChatScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15),
+
+            // Llista de matchs
             Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: SizedBox(
@@ -98,6 +117,7 @@ class ChatScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(width: 25),
+
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -116,6 +136,7 @@ class ChatScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(width: 25),
+
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -134,6 +155,7 @@ class ChatScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(width: 25),
+
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -152,6 +174,7 @@ class ChatScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(width: 25),
+
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -170,6 +193,7 @@ class ChatScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(width: 25),
+
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -426,83 +450,6 @@ class ChatScreen extends StatelessWidget {
           ],
         ),
       ),
-      /*
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.black,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.step, color: Colors.black),
-            label: 'Inici',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.message),
-            label: 'Xat',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.map),
-            label: 'Mapa',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.person),
-            label: 'Perfil',
-          ),
-        ],
-        type: BottomNavigationBarType.fixed,
-        onTap: (int index) {
-          if (index == 0) {
-                  Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => MainPageAsync(
-            user: user
-          ),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-        ),
-      );
-                } else if (index==1){
-                  //do nothing
-                }
-                else if (index==2){
-                  Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => MapScreen(
-            user: user
-          ),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-        ),
-      );
-                }
-                else{
-                  Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => UserProfileScreen(
-                        user: user
-          ),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-        ),
-      );
-                }
-        },
-      ),*/
-
     );
   }
 }

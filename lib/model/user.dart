@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:bark_and_meet/model/match.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dog.dart';
 import 'dart:math';
@@ -16,7 +17,11 @@ class UserProfile {
   int numDogs;
   bool gossera;
   bool premium;
+
   List<String> dogsIds;
+  List<UserProfile> userMatches = [];
+
+
   List<Dog> dogs;
   List<Park> parks;
   List<Dog> dogsToShow;
@@ -117,16 +122,39 @@ class UserProfile {
     return userProfile;
   }
 
+  Future<void> getUserMatches() async {
+    List<String> userMatchesId = await MatchService(firestore: FirebaseFirestore.instance).getUserMatchesIds(userId);
+
+
+    for (String userId in userMatchesId) {
+      DocumentSnapshot userQuery = await UserProfile.usuariExisteix(userId, firestoreInstance: FirebaseFirestore.instance);
+      UserProfile userMatch = UserProfile.userFromDocumentSnapshot(userQuery);
+      userMatches.add(userMatch);
+    }
+  }
+
   /// Aquesta funció agafa els gossos d'un usuari a partir de la id i els retorna en una llista.
   static Future<List<Dog>> getUserDogs(UserProfile userProfile, {required FirebaseFirestore firestoreInstance}) async {
     List<Dog> dogs = [];
 
-    for (String dogId in userProfile.dogsIds) {
-      Dog dog = await Dog.getDog(dogId, firestoreInstance: firestoreInstance);
-      dogs.add(dog);
+    // això no hauria d'anar aquí però no sé on posar-ho
+
+
+
+    userProfile.getUserMatches();
+
+    try {
+      for (String dogId in userProfile.dogsIds) {
+        Dog dog = await Dog.getDog(dogId, firestoreInstance: firestoreInstance);
+        dogs.add(dog);
+      }
+
+      return dogs;
+    } catch (e){
+      print("Error al agafar els gossos de l'usuari: $e");
+      return [];
     }
 
-    return dogs;
   }
 
   Future<List<Dog>> _convertDogs(Future<List<DocumentSnapshot>> dogsDocuments) async{

@@ -44,6 +44,8 @@ class _UserSessionState extends State<UserSession> {
 
                   UserProfile userProfile = UserProfile.userFromDocumentSnapshot(userSnapshot.data!);
 
+
+
                   // S'ha d'arreglar tot això, és una aberració.
                   // S'ha de fer un mètode estàtic per agafar el perfil de l'usuari
                   // i un altre per agafar el gos de l'usuari.

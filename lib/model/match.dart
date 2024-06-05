@@ -64,27 +64,29 @@ class MatchService {
 
   }
 
-  Future<List<Map<String, String>>> getMatches(String userId) async {
-    QuerySnapshot querySnapshot1 = await firestore.collection('Matches')
-        .where('user1Id', isEqualTo: userId)
-        .get();
+  Future<List<String>> getUserMatchesIds(String userId) async {
 
-    QuerySnapshot querySnapshot2 = await firestore.collection('Matches')
-        .where('user2Id', isEqualTo: userId)
-        .get();
+    try {
+      QuerySnapshot querySnapshot1 = await firestore.collection('Matches')
+          .where('user1Id', isEqualTo: userId)
+          .get();
 
-    List<Map<String, String>> matches = [];
-    for (DocumentSnapshot doc in querySnapshot1.docs) {
-      matches.add({
-        'userId': doc['user2Id'],
-      });
+      QuerySnapshot querySnapshot2 = await firestore.collection('Matches')
+          .where('user2Id', isEqualTo: userId)
+          .get();
+
+      List<String> matches = [];
+      for (DocumentSnapshot doc in querySnapshot1.docs) {
+        matches.add(doc['user2Id']);
+      }
+      for (DocumentSnapshot doc in querySnapshot2.docs) {
+        matches.add(doc['user1Id']);
+      }
+
+      return matches;
+    } catch (e) {
+      print(e);
+      return [];
     }
-    for (DocumentSnapshot doc in querySnapshot2.docs) {
-      matches.add({
-        'userId': doc['user1Id'],
-      });
-    }
-
-    return matches;
   }
 }

@@ -110,7 +110,7 @@ class DogProfileScreen extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                       child: Text(
-                        currentdog.ownerUsername,
+                        "@${currentdog.ownerUsername}",
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
                           letterSpacing: 0,

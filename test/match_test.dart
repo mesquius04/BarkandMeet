@@ -33,13 +33,13 @@ void main() {
         'user2Id': 'user4',
       });
 
-      final matches = await matchService.getMatches('user3');
+      final matches = await matchService.getUserMatchesIds('user3');
       expect(matches, isNotEmpty);
-      expect(matches[0]['userId'], 'user4');
+      expect(matches[0], 'user4');
     });
 
     test('getMatches returns empty list when there are no matches for a user', () async {
-      final matches = await matchService.getMatches('user5');
+      final matches = await matchService.getUserMatchesIds('user5');
       expect(matches, isEmpty);
     });
   });

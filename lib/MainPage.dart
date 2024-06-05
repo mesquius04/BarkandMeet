@@ -147,7 +147,7 @@ class _MainPageState extends State<MainPage> {
                             user.dogsToShow.removeAt(0);
                           });
 
-                          if (user.dogsToShow.length <= 1) {
+                          if (user.dogsToShow.isEmpty) {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -367,59 +367,6 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
       ),
-      /*
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.black,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.step, color: Colors.black),
-            label: 'Inici',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.message),
-            label: 'Xat',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.map),
-            label: 'Mapa',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.person),
-            label: 'Perfil',
-          ),
-        ],
-        type: BottomNavigationBarType.fixed,
-        onTap: (int index) {
-          if (index == 0) {
-            //Do nothing
-          } else if (index == 1) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomeChatScreen(user: user),
-              ),
-              (route) => false,
-            );
-          } else if (index == 2) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MapScreen(user: user),
-              ),
-              (route) => false,
-            );
-          } else {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => UserProfileScreen(user: user),
-              ),
-              (route) => false,
-            );
-          }
-        },
-      ),*/
     );
   }
 }
