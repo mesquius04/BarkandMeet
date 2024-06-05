@@ -11,7 +11,6 @@ class ChatScreen extends StatefulWidget {
   _ChatScreenState createState() => _ChatScreenState(user: user);
 }
 
-
 class _ChatScreenState extends State<ChatScreen> {
   final UserProfile user;
 
@@ -37,7 +36,6 @@ class _ChatScreenState extends State<ChatScreen> {
         centerTitle: true,
         elevation: 0,
       ),
-
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +57,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(30)),
                       borderSide: BorderSide.none,
                     ),
-                    contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                   ),
                 ),
               ),
@@ -96,122 +95,39 @@ class _ChatScreenState extends State<ChatScreen> {
               padding: const EdgeInsets.only(left: 16.0),
               child: SizedBox(
                 height: 110,
-                child: ListView(
+                child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage: Image.asset('assets/images/a.png').image,
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Marley',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
+                  itemCount: user.userMatches.length, // Añade una coma aquí
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 40,
+                            backgroundImage: user.userMatches[index]
+                                    .profilePhotoUrl.isNotEmpty
+                                ? Image.network(
+                                        user.userMatches[index].profilePhotoUrl)
+                                    .image
+                                : null,
+                            child:
+                                user.userMatches[index].profilePhotoUrl.isEmpty
+                                    ? const Icon(Icons.account_circle, size: 50)
+                                    : null,
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 25),
-
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage: Image.asset('assets/images/b.png').image,
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Nina',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
+                          const SizedBox(height: 5),
+                          Text(
+                            user.userMatches[index].name,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 25),
-
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage: Image.asset('assets/images/c.png').image,
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Joan',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 25),
-
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage: Image.asset('assets/images/d.png').image,
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Toby',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 25),
-
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage: Image.asset('assets/images/e.png').image,
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Mel',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 25),
-
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage: Image.asset('assets/images/g.png').image,
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Zeus',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
@@ -255,7 +171,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ChatIndividualScreen(user : user)),
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ChatIndividualScreen(user: user)),
                         );
                       },
                       child: Padding(
@@ -267,7 +185,9 @@ class _ChatScreenState extends State<ChatScreen> {
                               children: [
                                 CircleAvatar(
                                   radius: 30,
-                                  backgroundImage: Image.asset('assets/images/chat111.png').image,
+                                  backgroundImage:
+                                      Image.asset('assets/images/chat111.png')
+                                          .image,
                                 ),
                                 const SizedBox(width: 10),
                                 const Column(
@@ -282,7 +202,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             fontFamily: 'Quicksand',
                                             fontSize: 17,
                                           ),
-                                        ),                                        
+                                        ),
                                       ],
                                     ),
                                     SizedBox(height: 5),
@@ -306,15 +226,17 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     // Other chat items with similar structure...
                     Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10, top: 25, right: 10),
+                      padding:
+                          const EdgeInsets.only(left: 10, top: 25, right: 10),
                       child: Column(
                         children: [
                           Row(
                             children: [
                               CircleAvatar(
                                 radius: 30,
-                                backgroundImage: Image.asset('assets/images/chat222.png').image,
+                                backgroundImage:
+                                    Image.asset('assets/images/chat222.png')
+                                        .image,
                               ),
                               const SizedBox(width: 10),
                               const Column(
@@ -330,7 +252,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                           fontSize: 17,
                                         ),
                                       ),
-                                      
                                     ],
                                   ),
                                   SizedBox(height: 5),
@@ -352,15 +273,17 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10, top: 25, right: 10),
+                      padding:
+                          const EdgeInsets.only(left: 10, top: 25, right: 10),
                       child: Column(
                         children: [
                           Row(
                             children: [
                               CircleAvatar(
                                 radius: 30,
-                                backgroundImage: Image.asset('assets/images/chat333.png').image,
+                                backgroundImage:
+                                    Image.asset('assets/images/chat333.png')
+                                        .image,
                               ),
                               const SizedBox(width: 10),
                               const Column(
@@ -376,7 +299,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                           fontSize: 17,
                                         ),
                                       ),
-                                      
                                     ],
                                   ),
                                   SizedBox(height: 5),
@@ -398,15 +320,17 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10, top: 25, right: 10),
+                      padding:
+                          const EdgeInsets.only(left: 10, top: 25, right: 10),
                       child: Column(
                         children: [
                           Row(
                             children: [
                               CircleAvatar(
                                 radius: 30,
-                                backgroundImage: Image.asset('assets/images/chat555.png').image,
+                                backgroundImage:
+                                    Image.asset('assets/images/chat555.png')
+                                        .image,
                               ),
                               const SizedBox(width: 10),
                               const Column(
@@ -422,7 +346,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                           fontSize: 17,
                                         ),
                                       ),
-                                      
                                     ],
                                   ),
                                   SizedBox(height: 5),

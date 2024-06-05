@@ -12,16 +12,17 @@ void main() {
       await instance.collection('Likes').add({
         'fromUserId': 'user2',
         'toUserId': 'user1',
+        'toDogId': 'dog1'
       });
 
-      await matchService.likeDog('user1', 'user2');
+      await matchService.likeDog('user1', 'user2', 'dog1');
 
       final matchSnapshot = await instance.collection('Matches').get();
       expect(matchSnapshot.docs, isNotEmpty);
     });
 
     test('likeDog adds a like when there is no reverse like', () async {
-      await matchService.likeDog('user1', 'user3');
+      await matchService.likeDog('user1', 'user3', 'dog1');
 
       final likeSnapshot = await instance.collection('Likes').get();
       expect(likeSnapshot.docs, isNotEmpty);

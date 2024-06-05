@@ -1,4 +1,5 @@
 import 'package:bark_and_meet/perfil_gos/create_dog.dart';
+import 'package:bark_and_meet/vista_inici.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -264,10 +265,11 @@ overflow: TextOverflow.ellipsis,
                     items: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MapScreen(user: user)),
+                                builder: (context) => VistaInici(user: user, index: 2)),
+                            (route) => false,
                           );
                         },
                         child: ClipRRect(
@@ -301,80 +303,6 @@ overflow: TextOverflow.ellipsis,
             ],
           ),
         ),
-        /*
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.black,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.step, color: Colors.black),
-            label: 'Inici',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.message),
-            label: 'Chat',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.map),
-            label: 'Mapa',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.person),
-            label: 'Perfil',
-          ),
-        ],
-        type: BottomNavigationBarType.fixed,
-        onTap: (int index) {
-          if (index == 0) {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    MainPageAsync(user: user),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: child,
-                  );
-                },
-              ),
-            );
-          } else if (index == 1) {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    HomeChatScreen(user: user),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: child,
-                  );
-                },
-              ),
-            );
-          } else if (index == 2) {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    MapScreen(user: user),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: child,
-                  );
-                },
-              ),
-            );
-          } else {
-            //do nothing
-          }
-        },
-      ),*/
       ),
     );
   }

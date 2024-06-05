@@ -12,7 +12,7 @@ class MatchService {
   /// Si és així, es crea un match i s'eliminen els likes.
   ///
   /// @return Future<bool> retorna true si s'ha fet match, false si no.
-  Future<bool> likeDog(String fromUserId, String toUserId) async {
+  Future<bool> likeDog(String fromUserId, String toUserId, String toDogId) async {
     // Verificar si hi ha un like invers
     try {
       QuerySnapshot querySnapshot = await firestore.collection('Likes')
@@ -25,6 +25,8 @@ class MatchService {
         await firestore.collection('Matches').add({
           'user1Id': fromUserId,
           'user2Id': toUserId,
+          'dog1Id': toDogId,
+          'dog2Id': querySnapshot.docs[0]['toDogId'],
         });
 
         // Eliminar likes
@@ -52,6 +54,7 @@ class MatchService {
           await firestore.collection('Likes').add({
             'fromUserId': fromUserId,
             'toUserId': toUserId,
+            'toDogId': toDogId,
           });
         }
 

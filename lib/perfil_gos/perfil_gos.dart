@@ -6,7 +6,6 @@ import '../model/dog.dart';
 import 'package:flutter/material.dart';
 
 class DogProfileScreen extends StatelessWidget {
-
   final Dog currentdog;
 
   DogProfileScreen({super.key, required this.currentdog});
@@ -39,7 +38,7 @@ class DogProfileScreen extends StatelessWidget {
             },
           ),
           title: Text(
-overflow: TextOverflow.ellipsis,
+            overflow: TextOverflow.ellipsis,
             'Perfil gos',
             style: TextStyle(
               fontFamily: 'Urbanist',
@@ -59,42 +58,44 @@ overflow: TextOverflow.ellipsis,
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 26, 0, 0),
                 child: SizedBox(
-                  width: double.infinity,
-                  height: 180,
-                  child: CarouselSlider(
-  items: currentdog.photosUrls?.isEmpty ?? true
-    ? []
-    : List.generate(currentdog.photosUrls!.length, (index) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.network(
-            currentdog.photosUrls![index],
-            width: 300,
-            height: 200,
-            fit: BoxFit.cover,
-          ),
-        );
-      }),
-  carouselController: _carouselController,
-  options: CarouselOptions(
-    initialPage: 1, // Start from the first photo
-    viewportFraction: 0.5,
-    disableCenter: true,
-    enlargeCenterPage: true,
-    enlargeFactor: 0.25,
-    enableInfiniteScroll: false, // Disable infinite scroll
-    scrollDirection: Axis.horizontal,
-    autoPlay: false,
-    onPageChanged: (index, _) =>
-        _carouselController = index as CarouselController,
-  ),
-)
-                ),
+                    width: double.infinity,
+                    height: 180,
+                    child: CarouselSlider(
+                      items: currentdog.photosUrls?.isEmpty ?? true
+                          ? []
+                          : List.generate(currentdog.photosUrls!.length,
+                              (index) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                  currentdog.photosUrls![index],
+                                  width: 300,
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            }),
+                      carouselController: _carouselController,
+                      options: CarouselOptions(
+                        initialPage: 1,
+                        // Start from the first photo
+                        viewportFraction: 0.5,
+                        disableCenter: true,
+                        enlargeCenterPage: true,
+                        enlargeFactor: 0.25,
+                        enableInfiniteScroll: false,
+                        // Disable infinite scroll
+                        scrollDirection: Axis.horizontal,
+                        autoPlay: false,
+                        onPageChanged: (index, _) =>
+                            _carouselController = index as CarouselController,
+                      ),
+                    )),
               ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 4),
                 child: Text(
-overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.ellipsis,
                   currentdog.name,
                   style: TextStyle(
                     fontFamily: 'Plus Jakarta Sans',
@@ -106,13 +107,13 @@ overflow: TextOverflow.ellipsis,
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children:  [
+                children: [
                   Align(
                     alignment: AlignmentDirectional(0, 0),
                     child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                       child: Text(
-overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis,
                         "@${currentdog.ownerUsername}",
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -126,7 +127,7 @@ overflow: TextOverflow.ellipsis,
                     child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                       child: Text(
-overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis,
                         "Barcelona, Glories",
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -146,7 +147,7 @@ overflow: TextOverflow.ellipsis,
                       child: Align(
                         alignment: AlignmentDirectional(-1, 0),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(45, 0, 0, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
@@ -198,7 +199,7 @@ overflow: TextOverflow.ellipsis,
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           5, 0, 0, 0),
                                       child: Text(
-overflow: TextOverflow.ellipsis,
+                                        overflow: TextOverflow.ellipsis,
                                         currentdog.male ? 'Masculí' : 'Femení',
                                         style: TextStyle(
                                           fontFamily: 'Plus Jakarta Sans',
@@ -241,7 +242,7 @@ overflow: TextOverflow.ellipsis,
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         5, 0, 0, 0),
                                     child: Text(
-overflow: TextOverflow.ellipsis,
+                                      overflow: TextOverflow.ellipsis,
                                       currentdog.dateOfBirth,
                                       style: TextStyle(
                                         fontFamily: 'Plus Jakarta Sans',
@@ -268,8 +269,10 @@ overflow: TextOverflow.ellipsis,
                                       },
                                     ),
                                     Text(
-overflow: TextOverflow.ellipsis,
-                                      currentdog.castrat ? "Está castrat" : "No está castrat",
+                                      overflow: TextOverflow.ellipsis,
+                                      currentdog.castrat
+                                          ? "Está castrat"
+                                          : "No está castrat",
                                       style: TextStyle(
                                         fontFamily: 'Plus Jakarta Sans',
                                         letterSpacing: 0,
@@ -289,7 +292,7 @@ overflow: TextOverflow.ellipsis,
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(35, 15, 35, 0),
                 child: Text(
-overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.ellipsis,
                   currentdog.description,
                   maxLines: 4,
                   style: TextStyle(
@@ -304,7 +307,7 @@ overflow: TextOverflow.ellipsis,
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
                 child: Text(
-overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.ellipsis,
                   'Mida',
                   style: TextStyle(
                     fontFamily: 'Plus Jakarta Sans',
@@ -321,7 +324,7 @@ overflow: TextOverflow.ellipsis,
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(40, 0, 15, 0),
                       child: Text(
-overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis,
                         '0',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -333,7 +336,7 @@ overflow: TextOverflow.ellipsis,
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                         child: LinearPercentIndicator(
-                          percent: currentdog.size/5,
+                          percent: currentdog.size / 5,
                           width: MediaQuery.sizeOf(context).width * 0.67,
                           lineHeight: 15,
                           animation: true,
@@ -348,7 +351,7 @@ overflow: TextOverflow.ellipsis,
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(15, 0, 40, 0),
                       child: Text(
-overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis,
                         '5',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -362,7 +365,7 @@ overflow: TextOverflow.ellipsis,
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
                 child: Text(
-overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.ellipsis,
                   'Resistencia',
                   style: TextStyle(
                     fontFamily: 'Plus Jakarta Sans',
@@ -379,7 +382,7 @@ overflow: TextOverflow.ellipsis,
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(40, 0, 15, 0),
                       child: Text(
-overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis,
                         '0',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -391,7 +394,7 @@ overflow: TextOverflow.ellipsis,
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                         child: LinearPercentIndicator(
-                          percent: currentdog.endurance/5,
+                          percent: currentdog.endurance / 5,
                           width: MediaQuery.sizeOf(context).width * 0.67,
                           lineHeight: 15,
                           animation: true,
@@ -406,7 +409,7 @@ overflow: TextOverflow.ellipsis,
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(15, 0, 40, 0),
                       child: Text(
-overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis,
                         '5',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -420,7 +423,7 @@ overflow: TextOverflow.ellipsis,
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
                 child: Text(
-overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.ellipsis,
                   'Mogudesa',
                   style: TextStyle(
                     fontFamily: 'Plus Jakarta Sans',
@@ -437,7 +440,7 @@ overflow: TextOverflow.ellipsis,
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(40, 0, 15, 0),
                       child: Text(
-overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis,
                         '0',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -449,7 +452,7 @@ overflow: TextOverflow.ellipsis,
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                         child: LinearPercentIndicator(
-                          percent: currentdog.activityLevel/5,
+                          percent: currentdog.activityLevel / 5,
                           width: MediaQuery.sizeOf(context).width * 0.67,
                           lineHeight: 15,
                           animation: true,
@@ -464,7 +467,7 @@ overflow: TextOverflow.ellipsis,
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(15, 0, 40, 0),
                       child: Text(
-overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis,
                         '5',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -478,7 +481,7 @@ overflow: TextOverflow.ellipsis,
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
                 child: Text(
-overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.ellipsis,
                   'Sociabilitat',
                   style: TextStyle(
                     fontFamily: 'Plus Jakarta Sans',
@@ -495,7 +498,7 @@ overflow: TextOverflow.ellipsis,
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(40, 0, 15, 0),
                       child: Text(
-overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis,
                         '0',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -507,7 +510,7 @@ overflow: TextOverflow.ellipsis,
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                         child: LinearPercentIndicator(
-                          percent: currentdog.sociability/5,
+                          percent: currentdog.sociability / 5,
                           width: MediaQuery.sizeOf(context).width * 0.67,
                           lineHeight: 15,
                           animation: true,
@@ -522,7 +525,7 @@ overflow: TextOverflow.ellipsis,
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(15, 0, 40, 0),
                       child: Text(
-overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis,
                         '5',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -542,7 +545,7 @@ overflow: TextOverflow.ellipsis,
                       child: Padding(
                         padding: EdgeInsets.all(8),
                         child: Text(
-overflow: TextOverflow.ellipsis,
+                          overflow: TextOverflow.ellipsis,
                           '',
                           style: TextStyle(
                             fontFamily: 'Plus Jakarta Sans',

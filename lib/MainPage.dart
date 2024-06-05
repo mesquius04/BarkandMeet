@@ -20,8 +20,8 @@ class _MainPageState extends State<MainPage> {
 
   final MatchService _matchService = MatchService(firestore: FirebaseFirestore.instance);
 
-  void _handleLike(String fromUserId, String toUserId) async {
-    bool match = await _matchService.likeDog(fromUserId, toUserId);
+  void _handleLike(String fromUserId, String toUserId, String toDogId) async {
+    bool match = await _matchService.likeDog(fromUserId, toUserId, toDogId);
 
     if (match) {
       // Mostrar pop up informant que s'ha fet match
@@ -176,8 +176,7 @@ class _MainPageState extends State<MainPage> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          _handleLike(user.userId, user.dogsToShow[0].ownerId);
-
+                          _handleLike(user.userId, user.dogsToShow[0].ownerId, user.dogsToShow[0].dogId);
 
 
                           if (user.dogsToShow.length <= 1) {
