@@ -20,11 +20,32 @@ class _MainPageState extends State<MainPage> {
 
   final MatchService _matchService = MatchService(firestore: FirebaseFirestore.instance);
 
-  void _handleLike(String fromDogId, String fromUserId, String toDogId, String toUserId) async {
-    await _matchService.likeDog(fromDogId, fromUserId, toDogId, toUserId);
-    // Actualizar la UI o manejar el resultado aquí
+  void _handleLike(String fromUserId, String toUserId) async {
+    bool match = await _matchService.likeDog(fromUserId, toUserId);
 
-
+    if (match) {
+      // Mostrar pop up informant que s'ha fet match
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Match!'),
+            content: const Text('Has fet match amb aquest gos!'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Tancar'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+    setState(() {
+      user.dogsToShow.removeAt(0);
+    });
   }
 
   _MainPageState({required this.user});
@@ -126,7 +147,7 @@ class _MainPageState extends State<MainPage> {
                             user.dogsToShow.removeAt(0);
                           });
 
-                          if (user.dogsToShow.length <= 1) {
+                          if (user.dogsToShow.isEmpty) {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -155,9 +176,9 @@ class _MainPageState extends State<MainPage> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          setState(() {
-                            user.dogsToShow.removeAt(0);
-                          });
+                          _handleLike(user.userId, user.dogsToShow[0].ownerId);
+
+
 
                           if (user.dogsToShow.length <= 1) {
                             Navigator.pushReplacement(
@@ -197,7 +218,7 @@ class _MainPageState extends State<MainPage> {
                       Navigator.push(
                         context,
                         PageRouteBuilder(
-                          transitionDuration: const Duration(milliseconds: 500),
+                          transitionDuration: const Duration(milliseconds: 300),
                           transitionsBuilder: (BuildContext context,
                               Animation<double> animation,
                               Animation<double> secondaryAnimation,
@@ -276,10 +297,61 @@ class _MainPageState extends State<MainPage> {
                           ],
                         ),
                         // Filtros de "En adopció" y "No en adopció"
-                        const Row(
+                        Row(
                           children: [
-                            FilterOption(label: 'En adopció'),
-                            FilterOption(label: 'No en adopció'),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    user.filters[0] = !user.filters[0];
+                                  });
+                                },
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: user.filters[0],
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          user.filters[0] = value ?? false;
+                                        });
+                                      },
+                                      activeColor: Colors.black,
+                                    ),
+                                    Text(
+                                      'En adopció',
+                                      style: const TextStyle(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    user.filters[1] = !user.filters[1];
+                                  });
+                                },
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: user.filters[1],
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          user.filters[1] = value ?? false;
+                                        });
+                                      },
+                                      activeColor: Colors.black,
+                                    ),
+                                    Text(
+                                      'No en adopció',
+                                      style: const TextStyle(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+
                           ],
                         ),
                         const SizedBox(height: 16),
@@ -289,10 +361,61 @@ class _MainPageState extends State<MainPage> {
                                 TextStyle(color: Colors.black, fontSize: 16)),
                         const SizedBox(height: 8),
                         // Filtros de "Mascle" y "Femella"
-                        const Row(
+                        Row(
                           children: [
-                            FilterOption(label: 'Mascle'),
-                            FilterOption(label: 'Femella'),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    user.filters[2] = !user.filters[2];
+                                  });
+                                },
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: user.filters[2],
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          user.filters[2] = value ?? false;
+                                        });
+                                      },
+                                      activeColor: Colors.black,
+                                    ),
+                                    Text(
+                                      'Male',
+                                      style: const TextStyle(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    user.filters[3] = !user.filters[3];
+                                  });
+                                },
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: user.filters[3],
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          user.filters[3] = value ?? false;
+                                        });
+                                      },
+                                      activeColor: Colors.black,
+                                    ),
+                                    Text(
+                                      'Female',
+                                      style: const TextStyle(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+
                           ],
                         ),
                         const SizedBox(height: 16),
@@ -302,10 +425,61 @@ class _MainPageState extends State<MainPage> {
                                 TextStyle(color: Colors.black, fontSize: 16)),
                         const SizedBox(height: 8),
                         // Filtros de "Fèrtil" y "Infèrtil"
-                        const Row(
+                        Row(
                           children: [
-                            FilterOption(label: 'Fèrtil'),
-                            FilterOption(label: 'Infèrtil'),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    user.filters[4] = !user.filters[4];
+                                  });
+                                },
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: user.filters[4],
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          user.filters[4] = value ?? false;
+                                        });
+                                      },
+                                      activeColor: Colors.black,
+                                    ),
+                                    Text(
+                                      'Castrat',
+                                      style: const TextStyle(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    user.filters[5] = !user.filters[5];
+                                  });
+                                },
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: user.filters[5],
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          user.filters[5] = value ?? false;
+                                        });
+                                      },
+                                      activeColor: Colors.black,
+                                    ),
+                                    Text(
+                                      'No castrat',
+                                      style: const TextStyle(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+
                           ],
                         ),
                         const SizedBox(height: 16),
@@ -315,19 +489,104 @@ class _MainPageState extends State<MainPage> {
                                 TextStyle(color: Colors.black, fontSize: 16)),
                         const SizedBox(height: 8),
                         // Filtros de "Petit", "Mitjà" y "Gran"
-                        const Row(
-                          children: [
-                            FilterOption(label: 'Petit'),
-                            FilterOption(label: 'Mitjà'),
-                            FilterOption(label: 'Gran'),
-                          ],
-                        ),
+                       Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  user.filters[6] = !user.filters[6];
+                                });
+                              },
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                    value: user.filters[6],
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        user.filters[6] = value ?? false;
+                                      });
+                                    },
+                                    activeColor: Colors.black,
+                                  ),
+                                  Text(
+                                    'Petit',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  user.filters[7] = !user.filters[7];
+                                });
+                              },
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                    value: user.filters[7],
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        user.filters[7] = value ?? false;
+                                      });
+                                    },
+                                    activeColor: Colors.black,
+                                  ),
+                                  Text(
+                                    'Mitja',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  user.filters[8] = !user.filters[8];
+                                });
+                              },
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                    value: user.filters[8],
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        user.filters[8] = value ?? false;
+                                      });
+                                    },
+                                    activeColor: Colors.black,
+                                  ),
+                                  Text(
+                                    'Gran',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                         const SizedBox(height: 16),
                         // Botón de aplicar filtros
                         Center(
                           child: ElevatedButton(
                             onPressed: () {
                               // Lógica para aplicar los filtros
+                              user.filters;
+                              while (user.dogsToShow.isNotEmpty) {
+                                user.dogsToShow.removeLast();
+                              }
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => VistaInici(user: user, index: 0),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
@@ -346,63 +605,10 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
       ),
-      /*
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.black,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.step, color: Colors.black),
-            label: 'Inici',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.message),
-            label: 'Xat',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.map),
-            label: 'Mapa',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(BarkMeet.person),
-            label: 'Perfil',
-          ),
-        ],
-        type: BottomNavigationBarType.fixed,
-        onTap: (int index) {
-          if (index == 0) {
-            //Do nothing
-          } else if (index == 1) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomeChatScreen(user: user),
-              ),
-              (route) => false,
-            );
-          } else if (index == 2) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MapScreen(user: user),
-              ),
-              (route) => false,
-            );
-          } else {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => UserProfileScreen(user: user),
-              ),
-              (route) => false,
-            );
-          }
-        },
-      ),*/
     );
   }
 }
-
+/*
 class FilterOption extends StatefulWidget {
   final String label;
 
@@ -417,31 +623,6 @@ class _FilterOptionState extends State<FilterOption> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: InkWell(
-        onTap: () {
-          setState(() {
-            _isSelected = !_isSelected;
-          });
-        },
-        child: Row(
-          children: [
-            Checkbox(
-              value: _isSelected,
-              onChanged: (bool? value) {
-                setState(() {
-                  _isSelected = value ?? false;
-                });
-              },
-              activeColor: Colors.black,
-            ),
-            Text(
-              widget.label,
-              style: const TextStyle(color: Colors.black),
-            ),
-          ],
-        ),
-      ),
-    );
+    return
   }
-}
+}*/

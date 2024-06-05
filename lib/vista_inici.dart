@@ -28,7 +28,7 @@ class _VistaIniciState extends State<VistaInici> {
   @override
   Widget build(BuildContext context) {
     List<Widget> vistes = [
-      (user.dogsToShow.length > 1)
+      (user.dogsToShow.isNotEmpty)
           ? MainPage(user: user) : MainPageAsync(user: user),
       ChatScreen(user: user),
       MapScreen(user: user),

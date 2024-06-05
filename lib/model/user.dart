@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:bark_and_meet/model/match.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dog.dart';
 import 'dart:math';
@@ -9,13 +10,17 @@ class UserProfile {
   File? profilePhoto;
   String profilePhotoUrl = '';
   String username;
+  String userId = '';
   final String email;
   String name;
   String surname;
   int numDogs;
   bool gossera;
   bool premium;
+  List<bool> filters;
   List<String> dogsIds;
+  List<UserProfile> userMatches = [];
+
   List<Dog> dogs;
   List<Park> parks;
   List<Dog> dogsToShow;
@@ -36,10 +41,12 @@ class UserProfile {
     dogsIds = const [],
     dogs = const [],
     parks = const [],
+    filters = const [true, true, true, true, true, true, true, true, true],
     dogsToShow = const [],
     required this.additionalInfo,
   })  : dogsIds = List.from(dogsIds),
         dogs = List.from(dogs),
+        filters = List.from(filters),
         dogsToShow = List.from(dogsToShow),
         parks = List.from(parks);
 
@@ -50,6 +57,7 @@ class UserProfile {
         name = '',
         surname = '',
         numDogs = 0,
+        filters = [true, true, true, true, true, true, true, true, true],
         gossera = false,
         premium = false,
         city = '',
@@ -61,23 +69,20 @@ class UserProfile {
         dogsToShow = [],
         profilePhoto = null;
 
-
-
   /// Aquesta funció comproba si l'usuari amb el uid passat per paràmetre ja existeix a la BDD.
   /// Retorna un DocumentSnapshot amb la informació de l'usuari si existeix, o un DocumentSnapshot
   /// buit si no existeix.
   /// Si hi ha algun error, es llença una excepció.
   ///
   /// @param uid String amb el uid de l'usuari a comprobar.
-  static Future<DocumentSnapshot> usuariExisteix(String uid, {required FirebaseFirestore firestoreInstance}) async {
-
+  static Future<DocumentSnapshot> usuariExisteix(String uid,
+      {required FirebaseFirestore firestoreInstance}) async {
     try {
       // Es comprova si l'usuari amb el uid passat per paràmetre ja existeix a la BDD.
       final userCollection = firestoreInstance.collection('Usuaris');
       final userQuery = await userCollection.doc(uid).get();
 
       return userQuery;
-
     } catch (e) {
       // Si hi ha hagut algun error, es fa una excepció.
       throw Exception("Error al buscar l'usuari: $e");
@@ -94,8 +99,7 @@ class UserProfile {
     List<dynamic> dogsData = data['dogs'] ?? [];
 
     // Convertir l'array dinàmic a una List<String>
-    List<String> dogs =
-    dogsData.map((item) => item.toString()).toList();
+    List<String> dogs = dogsData.map((item) => item.toString()).toList();
 
     // Crear un objecte UserProfile amb les dades de l'usuari
     UserProfile userProfile = UserProfile(
@@ -111,95 +115,131 @@ class UserProfile {
         additionalInfo: data['additionalInfo'],
         dogsIds: dogs);
 
+    userProfile.userId = userQuery.id;
+
     return userProfile;
   }
 
-  /// Aquesta funció agafa els gossos d'un usuari a partir de la id i els retorna en una llista.
-  static Future<List<Dog>> getUserDogs(UserProfile userProfile, {required FirebaseFirestore firestoreInstance}) async {
-    List<Dog> dogs = [];
+  Future<void> getUserMatches() async {
+    List<String> userMatchesId =
+        await MatchService(firestore: FirebaseFirestore.instance)
+            .getUserMatchesIds(userId);
 
-    for (String dogId in userProfile.dogsIds) {
-      Dog dog = await Dog.getDog(dogId, firestoreInstance: firestoreInstance);
-      dogs.add(dog);
+    for (String userId in userMatchesId) {
+      DocumentSnapshot userQuery = await UserProfile.usuariExisteix(userId,
+          firestoreInstance: FirebaseFirestore.instance);
+      UserProfile userMatch = UserProfile.userFromDocumentSnapshot(userQuery);
+      userMatches.add(userMatch);
     }
-
-    return dogs;
   }
 
-  Future<List<Dog>> _convertDogs(Future<List<DocumentSnapshot>> dogsDocuments) async{
+  /// Aquesta funció agafa els gossos d'un usuari a partir de la id i els retorna en una llista.
+  static Future<List<Dog>> getUserDogs(UserProfile userProfile,
+      {required FirebaseFirestore firestoreInstance}) async {
+    List<Dog> dogs = [];
+
+    // això no hauria d'anar aquí però no sé on posar-ho
+
+    userProfile.getUserMatches();
+
+    try {
+      for (String dogId in userProfile.dogsIds) {
+        Dog dog = await Dog.getDog(dogId, firestoreInstance: firestoreInstance);
+        dogs.add(dog);
+      }
+
+      return dogs;
+    } catch (e) {
+      print("Error al agafar els gossos de l'usuari: $e");
+      return [];
+    }
+  }
+
+  Future<List<Dog>> _convertDogs(
+      Future<List<DocumentSnapshot>> dogsDocuments) async {
     List<Dog> dogs = [];
 
     List<DocumentSnapshot> documents = await dogsDocuments;
 
     for (DocumentSnapshot document in documents) {
-        Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+      Map<String, dynamic> data = document.data() as Map<String, dynamic>;
 
-        List<dynamic> photosData = data['photosUrls'];
+      List<dynamic> photosData = data['photosUrls'];
 
-        // Convert the dynamic array to a List<String>
-        List<String> photosUrl =
-            photosData.map((item) => item.toString()).toList();
+      // Convert the dynamic array to a List<String>
+      List<String> photosUrl =
+          photosData.map((item) => item.toString()).toList();
 
-        dogs.add(Dog(
-            name: data['name'],
-            adopcio: data['adoption'],
-            castrat: data['castrat'],
-            description: data['description'],
-            endurance: data['endurance'],
-            activityLevel: data['activityLevel'],
-            size: data['size'],
-            sociability: data['sociability'],
-            raca2: data['raça'],
-            male: data['male'],
-            dateOfBirth: data['birthday'],
-            ownerId: data['ownerId'],
-            ownerUsername: data['ownerUsername'],
-            city: data['city'],
-            photosUrls: photosUrl,
-            dogPhotos: [null, null, null]));
-      }
-    
+      dogs.add(Dog(
+          name: data['name'],
+          adopcio: data['adoption'],
+          castrat: data['castrat'],
+          description: data['description'],
+          endurance: data['endurance'],
+          activityLevel: data['activityLevel'],
+          size: data['size'],
+          sociability: data['sociability'],
+          raca2: data['raça'],
+          male: data['male'],
+          dateOfBirth: data['birthday'],
+          ownerId: data['ownerId'],
+          ownerUsername: data['ownerUsername'],
+          dogId: document.id,
+          city: data['city'],
+          photosUrls: photosUrl,
+          dogPhotos: [null, null, null]));
+    }
+
     return dogs;
   }
-  
+
   Future<List<DocumentSnapshot>> getFirstDogs() async {
     // Obtener la referencia a la colección "Gossos"
     CollectionReference gossosCollection =
         FirebaseFirestore.instance.collection('Gossos');
 
     // Obtener los primeros 10 documentos ordenados por algún campo (por ejemplo, 'name')
-    String randomiser(){
+    String randomiser() {
       Random random = Random();
       int randomNumber = random.nextInt(6);
-      switch(randomNumber){
-        case 1: return 'name';
-        case 2: return 'birthday';
-        case 3: return 'raça';
-        case 4: return 'activityLevel';
-        case 5: return 'sociability';
-        default: return 'endurance';
+      switch (randomNumber) {
+        case 1:
+          return 'name';
+        case 2:
+          return 'birthday';
+        case 3:
+          return 'raça';
+        case 4:
+          return 'activityLevel';
+        case 5:
+          return 'sociability';
+        default:
+          return 'endurance';
       }
     }
-    String randomField=randomiser();
-    bool a=false;
+
+    String randomField = randomiser();
+    bool a = false;
     Random random = Random();
     int rnd = random.nextInt(2);
-    if (rnd>0){
-      a=true;
+    if (rnd > 0) {
+      a = true;
     }
-    QuerySnapshot querySnapshot =
-        await gossosCollection.orderBy(randomField, descending: a).limit(20).get();
+    QuerySnapshot querySnapshot = await gossosCollection
+        .orderBy(randomField, descending: a)
+        .limit(20)
+        .get();
     // Devolver la lista de documentos
     return querySnapshot.docs;
   }
-  
-  Future<void> getDogs() async{
+
+  Future<void> getDogs() async {
     // Falta Extreure els gossos de la BDD
     print("Entrem a l'agorisme");
     //Algorisme martí (secret)
     Stopwatch stopwatch = Stopwatch();
     stopwatch.start();
-    Future<List<DocumentSnapshot>> Dogsdoc=  getFirstDogs();
+    Future<List<DocumentSnapshot>> Dogsdoc = getFirstDogs();
     List<Dog> dogsBdd = await _convertDogs(Dogsdoc);
 
     // Iniciar el cronómetro
@@ -375,8 +415,7 @@ class UserProfile {
           charPoints = 0;
 
           //ACTIVITAT (3/3)
-          switch (
-              (dogs[j].activityLevel - dogsBdd[i].activityLevel).abs()) {
+          switch ((dogs[j].activityLevel - dogsBdd[i].activityLevel).abs()) {
             case 0:
               charPoints += 100;
               break;
@@ -399,8 +438,13 @@ class UserProfile {
           localScore += (charPoints * 0.80).toInt();
 
           //Check not the same
-          if (dogs[j].activityLevel == dogsBdd[i].activityLevel && dogsBdd[i].sociability== dogs[j].sociability && dogsBdd[i].name == dogs[j].name && dogsBdd[i].size == dogs[j].size && dogsBdd[i].endurance == dogs[j].endurance && dogsBdd[i].dateOfBirth ==dogs[j].dateOfBirth){
-            localScore=-435;
+          if (dogs[j].activityLevel == dogsBdd[i].activityLevel &&
+              dogsBdd[i].sociability == dogs[j].sociability &&
+              dogsBdd[i].name == dogs[j].name &&
+              dogsBdd[i].size == dogs[j].size &&
+              dogsBdd[i].endurance == dogs[j].endurance &&
+              dogsBdd[i].dateOfBirth == dogs[j].dateOfBirth) {
+            localScore = -435;
           }
           //FINISHED
           scoreOurDogs.add(localScore);
@@ -411,8 +455,8 @@ class UserProfile {
           if (scoreOurDogs[j] > max) {
             max = scoreOurDogs[j];
           }
-          if (scoreOurDogs[j]==-435){
-            max=-500;
+          if (scoreOurDogs[j] == -435) {
+            max = -500;
             break;
           }
         }
@@ -431,7 +475,7 @@ class UserProfile {
         break;
       }
     }
-    
+
     stopwatch.stop();
 
     // Imprimir el tiempo transcurrido en milisegundos
