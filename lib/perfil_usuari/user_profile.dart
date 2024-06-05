@@ -24,7 +24,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   _UserProfileScreenState({required this.user});
 
-  final CarouselController _carouselController1 = CarouselController();
+ CarouselController _carouselController1 = CarouselController();
 
   @override
   Widget build(BuildContext context) {
@@ -120,77 +120,76 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   width: double.infinity,
                   height: 200,
                   child: CarouselSlider(
-                    items: user.dogs.isEmpty
-                        ? [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          DogCreateScreen(user: user)),
-                                );
-                              },
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                  "https://cdn0.iconfinder.com/data/icons/circles-2/100/sign-square-dashed-plus-512.png",
-                                  width: 150,
-                                  height: 130,
-                                  fit: BoxFit.contain,
-                                  alignment: const Alignment(0, 0),
-                                ),
-                              ),
-                            ),
-                          ]
-                        : List.generate(user.dogs.length, (index) {
-                            return Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DogProfileScreen(
-                                          currentdog: user.dogs[index],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.network(
-                                      user.dogs[index].photosUrls.isNotEmpty
-                                          ? user.dogs[index].photosUrls[0]
-                                          : "https://cdn0.iconfinder.com/data/icons/circles-2/100/sign-square-dashed-plus-512.png",
-                                      width: 150,
-                                      height: 130,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  user.dogs[index].name,
-                                  style: const TextStyle(fontSize: 16),
-                                ),
-                              ],
-                            );
-                          }),
-                    carouselController: _carouselController1,
-                    options: CarouselOptions(
-                      initialPage: 0,
-                      viewportFraction: 0.35,
-                      disableCenter: true,
-                      enlargeCenterPage: false,
-                      enlargeFactor: 0,
-                      enableInfiniteScroll: true,
-                      scrollDirection: Axis.horizontal,
-                      autoPlay: false,
-                      onPageChanged: (index, _) =>
-                          print('Page changed to $index'),
+  items: user.dogs.isEmpty
+    ? [
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DogCreateScreen(user: user),
+              ),
+            );
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.network(
+              "https://cdn0.iconfinder.com/data/icons/circles-2/100/sign-square-dashed-plus-512.png",
+              width: 150,
+              height: 130,
+              fit: BoxFit.contain,
+              alignment: const Alignment(0, 0),
+            ),
+          ),
+        ),
+      ]
+    : List.generate(user.dogs.length, (index) {
+        return Column(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DogProfileScreen(
+                      currentdog: user.dogs[index],
                     ),
                   ),
+                );
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  user.dogs[index].photosUrls.isNotEmpty
+                    ? user.dogs[index].photosUrls[0]
+                    : "https://cdn0.iconfinder.com/data/icons/circles-2/100/sign-square-dashed-plus-512.png",
+                  width: 150,
+                  height: 130,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              user.dogs[index].name,
+              style: const TextStyle(fontSize: 16),
+            ),
+          ],
+        );
+      }),
+  carouselController: _carouselController1,
+  options: CarouselOptions(
+    initialPage: 1,
+    viewportFraction: 0.35,
+    disableCenter: true,
+    enlargeCenterPage: false,
+    enlargeFactor: 0,
+    enableInfiniteScroll: false, // <--- Cambia esto a false
+    scrollDirection: Axis.horizontal,
+    autoPlay: false,
+    onPageChanged: (index, _) => print('Page changed to $index'),
+  ),
+)
                 ),
               ),
               const SizedBox(height: 20),

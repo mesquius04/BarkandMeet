@@ -145,6 +145,7 @@ class _DogCreateState extends State<DogCreateScreen> {
     dog!.endurance = resistenciaSliderValue2;
     dog!.sociability = sociabilitatSliderValue4;
     dog!.activityLevel = mogudesaSliderValue3;
+    dog!.owner = user;
     user.numDogs++;
 
     await _addDogInCloud(context);

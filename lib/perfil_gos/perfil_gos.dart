@@ -61,42 +61,39 @@ class DogProfileScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 180,
                   child: CarouselSlider(
-                    items: currentdog.dogPhotos.map((photo) {
-                      if (photo != null) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.file(
-                            photo,
-                            width: 300,
-                            height: 200,
-                            fit: BoxFit.cover,
-                          ),
-                        );
-                      } else {
-                        return Container(); // or some other default widget
-                      }
-                    }).toList(),
-                    carouselController: _carouselController ??=
-                        CarouselController(),
-                    options: CarouselOptions(
-                      initialPage: 1,
-                      viewportFraction: 0.5,
-                      disableCenter: true,
-                      enlargeCenterPage: true,
-                      enlargeFactor: 0.25,
-                      enableInfiniteScroll: true,
-                      scrollDirection: Axis.horizontal,
-                      autoPlay: false,
-                      onPageChanged: (index, _) =>
-                          _carouselController = index as CarouselController,
-                    ),
-                  ),
+  items: currentdog.photosUrls?.isEmpty ?? true
+    ? []
+    : List.generate(currentdog.photosUrls!.length, (index) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.network(
+            currentdog.photosUrls![index],
+            width: 300,
+            height: 200,
+            fit: BoxFit.cover,
+          ),
+        );
+      }),
+  carouselController: _carouselController,
+  options: CarouselOptions(
+    initialPage: 1, // Start from the first photo
+    viewportFraction: 0.5,
+    disableCenter: true,
+    enlargeCenterPage: true,
+    enlargeFactor: 0.25,
+    enableInfiniteScroll: false, // Disable infinite scroll
+    scrollDirection: Axis.horizontal,
+    autoPlay: false,
+    onPageChanged: (index, _) =>
+        _carouselController = index as CarouselController,
+  ),
+)
                 ),
               ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 4),
                 child: Text(
-                  'Nombre perro',
+                  currentdog.name,
                   style: TextStyle(
                     fontFamily: 'Plus Jakarta Sans',
                     fontSize: 20,
@@ -107,13 +104,13 @@ class DogProfileScreen extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children:  [
                   Align(
                     alignment: AlignmentDirectional(0, 0),
                     child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                       child: Text(
-                        '@user',
+                        currentdog.ownerUsername,
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
                           letterSpacing: 0,
@@ -126,7 +123,7 @@ class DogProfileScreen extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                       child: Text(
-                        'Ubication',
+                        "Barcelona, Glories",
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
                           letterSpacing: 0,
@@ -166,7 +163,7 @@ class DogProfileScreen extends StatelessWidget {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         5, 0, 0, 0),
                                     child: Text(
-                                      'Raça',
+                                      currentdog.raca2,
                                       style: TextStyle(
                                         fontFamily: 'Plus Jakarta Sans',
                                         letterSpacing: 0,
@@ -195,7 +192,7 @@ class DogProfileScreen extends StatelessWidget {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           5, 0, 0, 0),
                                       child: Text(
-                                        'Generé',
+                                        currentdog.male ? 'Masculí' : 'Femení',
                                         style: TextStyle(
                                           fontFamily: 'Plus Jakarta Sans',
                                           letterSpacing: 0,
@@ -237,7 +234,7 @@ class DogProfileScreen extends StatelessWidget {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         5, 0, 0, 0),
                                     child: Text(
-                                      'Aniversari',
+                                      currentdog.dateOfBirth,
                                       style: TextStyle(
                                         fontFamily: 'Plus Jakarta Sans',
                                         letterSpacing: 0,
@@ -263,7 +260,7 @@ class DogProfileScreen extends StatelessWidget {
                                       },
                                     ),
                                     Text(
-                                      'Castedad',
+                                      currentdog.castrat ? "Está castrat" : "No está castrat",
                                       style: TextStyle(
                                         fontFamily: 'Plus Jakarta Sans',
                                         letterSpacing: 0,
@@ -283,7 +280,7 @@ class DogProfileScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(35, 15, 35, 0),
                 child: Text(
-                  'The best of all 3 worlds, Row & Flow offers high intensity rowing and strength intervals followed by athletic based yoga sure to enhance flexible and clear the mind. Yoga mats are provided but bringing your own yoga mat is highly encouraged.',
+                  currentdog.description,
                   maxLines: 4,
                   style: TextStyle(
                     fontFamily: 'Outfit',
@@ -324,7 +321,7 @@ class DogProfileScreen extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                         child: LinearPercentIndicator(
-                          percent: 0.6,
+                          percent: currentdog.size/5,
                           width: MediaQuery.sizeOf(context).width * 0.67,
                           lineHeight: 15,
                           animation: true,
@@ -379,7 +376,7 @@ class DogProfileScreen extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                         child: LinearPercentIndicator(
-                          percent: 0.6,
+                          percent: currentdog.endurance/5,
                           width: MediaQuery.sizeOf(context).width * 0.67,
                           lineHeight: 15,
                           animation: true,
@@ -434,7 +431,7 @@ class DogProfileScreen extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                         child: LinearPercentIndicator(
-                          percent: 0.6,
+                          percent: currentdog.activityLevel/5,
                           width: MediaQuery.sizeOf(context).width * 0.67,
                           lineHeight: 15,
                           animation: true,
@@ -489,7 +486,7 @@ class DogProfileScreen extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                         child: LinearPercentIndicator(
-                          percent: 0.6,
+                          percent: currentdog.sociability/5,
                           width: MediaQuery.sizeOf(context).width * 0.67,
                           lineHeight: 15,
                           animation: true,
