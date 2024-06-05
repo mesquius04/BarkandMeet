@@ -9,6 +9,7 @@ class UserProfile {
   File? profilePhoto;
   String profilePhotoUrl = '';
   String username;
+  String userId = '';
   final String email;
   String name;
   String surname;
@@ -111,6 +112,8 @@ class UserProfile {
         additionalInfo: data['additionalInfo'],
         dogsIds: dogs);
 
+    userProfile.userId = userQuery.id;
+
     return userProfile;
   }
 
@@ -154,6 +157,7 @@ class UserProfile {
             dateOfBirth: data['birthday'],
             ownerId: data['ownerId'],
             ownerUsername: data['ownerUsername'],
+            dogId: document.id,
             city: data['city'],
             photosUrls: photosUrl,
             dogPhotos: [null, null, null]));
