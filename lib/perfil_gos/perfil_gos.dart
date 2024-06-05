@@ -39,6 +39,7 @@ class DogProfileScreen extends StatelessWidget {
             },
           ),
           title: Text(
+overflow: TextOverflow.ellipsis,
             'Perfil gos',
             style: TextStyle(
               fontFamily: 'Urbanist',
@@ -93,6 +94,7 @@ class DogProfileScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 4),
                 child: Text(
+overflow: TextOverflow.ellipsis,
                   currentdog.name,
                   style: TextStyle(
                     fontFamily: 'Plus Jakarta Sans',
@@ -110,6 +112,7 @@ class DogProfileScreen extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                       child: Text(
+overflow: TextOverflow.ellipsis,
                         "@${currentdog.ownerUsername}",
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -123,6 +126,7 @@ class DogProfileScreen extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                       child: Text(
+overflow: TextOverflow.ellipsis,
                         "Barcelona, Glories",
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -163,6 +167,7 @@ class DogProfileScreen extends StatelessWidget {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         5, 0, 0, 0),
                                     child: Text(
+overflow: TextOverflow.ellipsis,
                                       currentdog.raca2,
                                       style: TextStyle(
                                         fontFamily: 'Plus Jakarta Sans',
@@ -192,6 +197,7 @@ class DogProfileScreen extends StatelessWidget {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           5, 0, 0, 0),
                                       child: Text(
+overflow: TextOverflow.ellipsis,
                                         currentdog.male ? 'Masculí' : 'Femení',
                                         style: TextStyle(
                                           fontFamily: 'Plus Jakarta Sans',
@@ -234,6 +240,7 @@ class DogProfileScreen extends StatelessWidget {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         5, 0, 0, 0),
                                     child: Text(
+overflow: TextOverflow.ellipsis,
                                       currentdog.dateOfBirth,
                                       style: TextStyle(
                                         fontFamily: 'Plus Jakarta Sans',
@@ -260,6 +267,7 @@ class DogProfileScreen extends StatelessWidget {
                                       },
                                     ),
                                     Text(
+overflow: TextOverflow.ellipsis,
                                       currentdog.castrat ? "Está castrat" : "No está castrat",
                                       style: TextStyle(
                                         fontFamily: 'Plus Jakarta Sans',
@@ -280,6 +288,7 @@ class DogProfileScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(35, 15, 35, 0),
                 child: Text(
+overflow: TextOverflow.ellipsis,
                   currentdog.description,
                   maxLines: 4,
                   style: TextStyle(
@@ -294,6 +303,7 @@ class DogProfileScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
                 child: Text(
+overflow: TextOverflow.ellipsis,
                   'Mida',
                   style: TextStyle(
                     fontFamily: 'Plus Jakarta Sans',
@@ -310,6 +320,7 @@ class DogProfileScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(40, 0, 15, 0),
                       child: Text(
+overflow: TextOverflow.ellipsis,
                         '0',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -336,6 +347,7 @@ class DogProfileScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(15, 0, 40, 0),
                       child: Text(
+overflow: TextOverflow.ellipsis,
                         '5',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -349,6 +361,7 @@ class DogProfileScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
                 child: Text(
+overflow: TextOverflow.ellipsis,
                   'Resistencia',
                   style: TextStyle(
                     fontFamily: 'Plus Jakarta Sans',
@@ -365,6 +378,7 @@ class DogProfileScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(40, 0, 15, 0),
                       child: Text(
+overflow: TextOverflow.ellipsis,
                         '0',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -391,6 +405,7 @@ class DogProfileScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(15, 0, 40, 0),
                       child: Text(
+overflow: TextOverflow.ellipsis,
                         '5',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -404,6 +419,7 @@ class DogProfileScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
                 child: Text(
+overflow: TextOverflow.ellipsis,
                   'Mogudesa',
                   style: TextStyle(
                     fontFamily: 'Plus Jakarta Sans',
@@ -420,6 +436,7 @@ class DogProfileScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(40, 0, 15, 0),
                       child: Text(
+overflow: TextOverflow.ellipsis,
                         '0',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -446,6 +463,7 @@ class DogProfileScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(15, 0, 40, 0),
                       child: Text(
+overflow: TextOverflow.ellipsis,
                         '5',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -459,6 +477,7 @@ class DogProfileScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
                 child: Text(
+overflow: TextOverflow.ellipsis,
                   'Sociabilitat',
                   style: TextStyle(
                     fontFamily: 'Plus Jakarta Sans',
@@ -475,6 +494,7 @@ class DogProfileScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(40, 0, 15, 0),
                       child: Text(
+overflow: TextOverflow.ellipsis,
                         '0',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -501,6 +521,7 @@ class DogProfileScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(15, 0, 40, 0),
                       child: Text(
+overflow: TextOverflow.ellipsis,
                         '5',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
@@ -520,6 +541,7 @@ class DogProfileScreen extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.all(8),
                         child: Text(
+overflow: TextOverflow.ellipsis,
                           '',
                           style: TextStyle(
                             fontFamily: 'Plus Jakarta Sans',

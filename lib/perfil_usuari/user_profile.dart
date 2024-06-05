@@ -41,7 +41,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Perfil'),
+        title: const Text( 
+overflow: TextOverflow.ellipsis,'Perfil'),
         backgroundColor: const Color(0xFFFFFCFC),
         automaticallyImplyLeading: false,
         actions: [
@@ -91,9 +92,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("${user.name} ${user.surname}",
+                      Text( 
+overflow: TextOverflow.ellipsis,
+"${user.name} ${user.surname}",
                           style: Theme.of(context).textTheme.headlineSmall),
-                      Text("@${user.username} · ${user.city}",
+                      Text( 
+overflow: TextOverflow.ellipsis,
+"@${user.username} · ${user.city}",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall
@@ -103,7 +108,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ],
               ),
               const SizedBox(height: 20),
-              const Text(
+              const Text( 
+overflow: TextOverflow.ellipsis,
                 'Descripció',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
@@ -111,7 +117,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 color: Colors.grey[200],
-                child: Text(
+                child: Text( 
+overflow: TextOverflow.ellipsis,
+                  
                   user.additionalInfo,
                   style: const TextStyle(fontSize: 14),
                 ),
@@ -119,7 +127,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               const SizedBox(height: 20),
               Row(
                 children: [
-                  const Text('Els meus gossos',
+                  const Text( 
+overflow: TextOverflow.ellipsis,'Els meus gossos',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(width: 10),
@@ -204,7 +213,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 ),
                               ),
                               const SizedBox(height: 8),
-                              Text(
+                              Text( 
+overflow: TextOverflow.ellipsis,
                                 user.dogs[index].name,
                                 style: const TextStyle(fontSize: 16),
                               ),
@@ -215,11 +225,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     },
                     carouselController: _carouselController1,
                     options: CarouselOptions(
-                      initialPage: 0,
+                      initialPage: 1,
                       viewportFraction: 0.34,
                       disableCenter: true,
                       enlargeCenterPage: false,
-                      enlargeFactor: 0,
+                      enlargeFactor: 0.25,
                       enableInfiniteScroll: false,
                       scrollDirection: Axis.horizontal,
                       autoPlay: false,
@@ -232,7 +242,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               const SizedBox(height: 20),
               Row(
                 children: [
-                  const Text(
+                  const Text( 
+overflow: TextOverflow.ellipsis,
                     'Parcs preferits',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
@@ -273,12 +284,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ],
                     carouselController: _carouselController1,
                     options: CarouselOptions(
-                      initialPage: 0,
+                      initialPage: 1,
                       viewportFraction: 0.35,
                       disableCenter: true,
                       enlargeCenterPage: false,
                       enlargeFactor: 0.25,
-                      enableInfiniteScroll: true,
+                      enableInfiniteScroll: false,
                       scrollDirection: Axis.horizontal,
                       autoPlay: false,
                       onPageChanged: (index, _) =>
