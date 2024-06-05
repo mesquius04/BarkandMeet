@@ -20,11 +20,32 @@ class _MainPageState extends State<MainPage> {
 
   final MatchService _matchService = MatchService(firestore: FirebaseFirestore.instance);
 
-  void _handleLike(String fromDogId, String fromUserId, String toDogId, String toUserId) async {
-    await _matchService.likeDog(fromDogId, fromUserId, toDogId, toUserId);
-    // Actualizar la UI o manejar el resultado aquí
+  void _handleLike(String fromUserId, String toUserId) async {
+    bool match = await _matchService.likeDog(fromUserId, toUserId);
 
-
+    if (match) {
+      // Mostrar pop up informant que s'ha fet match
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Match!'),
+            content: const Text('Has fet match amb aquest gos!'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Tancar'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+    setState(() {
+      user.dogsToShow.removeAt(0);
+    });
   }
 
   _MainPageState({required this.user});
@@ -155,9 +176,9 @@ class _MainPageState extends State<MainPage> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          setState(() {
-                            user.dogsToShow.removeAt(0);
-                          });
+                          _handleLike(user.userId, user.dogsToShow[0].ownerId);
+
+
 
                           if (user.dogsToShow.length <= 1) {
                             Navigator.pushReplacement(
@@ -330,7 +351,7 @@ class _MainPageState extends State<MainPage> {
                                 ),
                               ),
                             ),
-                            
+
                           ],
                         ),
                         const SizedBox(height: 16),
@@ -394,7 +415,7 @@ class _MainPageState extends State<MainPage> {
                                 ),
                               ),
                             ),
-                            
+
                           ],
                         ),
                         const SizedBox(height: 16),
@@ -458,7 +479,7 @@ class _MainPageState extends State<MainPage> {
                                 ),
                               ),
                             ),
-                            
+
                           ],
                         ),
                         const SizedBox(height: 16),
@@ -602,6 +623,6 @@ class _FilterOptionState extends State<FilterOption> {
 
   @override
   Widget build(BuildContext context) {
-    return 
+    return
   }
 }*/

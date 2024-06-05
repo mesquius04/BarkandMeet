@@ -76,7 +76,7 @@ class DogProfileScreen extends StatelessWidget {
       }),
   carouselController: _carouselController,
   options: CarouselOptions(
-    initialPage: 0, // Start from the first photo
+    initialPage: 1, // Start from the first photo
     viewportFraction: 0.5,
     disableCenter: true,
     enlargeCenterPage: true,
