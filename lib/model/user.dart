@@ -199,38 +199,90 @@ class UserProfile {
         FirebaseFirestore.instance.collection('Gossos');
 
     // Obtener los primeros 10 documentos ordenados por algún campo (por ejemplo, 'name')
-    String randomiser() {
+    String randomiser(){
       Random random = Random();
       int randomNumber = random.nextInt(6);
-      switch (randomNumber) {
-        case 1:
-          return 'name';
-        case 2:
-          return 'birthday';
-        case 3:
-          return 'raça';
-        case 4:
-          return 'activityLevel';
-        case 5:
-          return 'sociability';
-        default:
-          return 'endurance';
+      switch(randomNumber){
+        case 1: return 'name';
+        case 2: return 'birthday';
+        case 3: return 'raça';
+        case 4: return 'activityLevel';
+        case 5: return 'sociability';
+        default: return 'endurance';
       }
     }
-
-    String randomField = randomiser();
-    bool a = false;
+    String randomField=randomiser();
+    bool a=false;
     Random random = Random();
     int rnd = random.nextInt(2);
-    if (rnd > 0) {
-      a = true;
+    if (rnd>0){
+      a=true;
     }
-    QuerySnapshot querySnapshot = await gossosCollection
-        .orderBy(randomField, descending: a)
-        .limit(20)
-        .get();
-    // Devolver la lista de documentos
-    return querySnapshot.docs;
+    QuerySnapshot querySnapshot;
+    if (this.filters[0]){
+      if (this.filters[1]){
+        if (this.filters[6] && this.filters[8]){
+          querySnapshot=await gossosCollection.orderBy(randomField, descending: a).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else if (this.filters[8]){
+          querySnapshot=await gossosCollection.orderBy('size', descending: true).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else{
+          querySnapshot=await gossosCollection.orderBy('size', descending: false).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }
+        
+      }else{
+        if (this.filters[6] && this.filters[8]){
+          
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: true).orderBy(randomField, descending: a).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else if (this.filters[8]){
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: true).orderBy('size', descending: true).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else{
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: true).orderBy('size', descending: false).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }
+      }
+    }else{
+      if (this.filters[1]){
+        if (this.filters[6] && this.filters[8]){
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: false).orderBy(randomField, descending: a).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else if (this.filters[8]){
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: false).orderBy('size', descending: true).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else{
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: false).orderBy('size', descending: false).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }
+      }else{
+        if (this.filters[6] && this.filters[8]){
+          
+          querySnapshot=await gossosCollection.orderBy(randomField, descending: a).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else if (this.filters[8]){
+          querySnapshot=await gossosCollection.orderBy('size', descending: true).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }else{
+          querySnapshot=await gossosCollection.orderBy('size', descending: false).limit(20).get();
+          // Devolver la lista de documentos
+          return querySnapshot.docs;
+        }
+      }
+    }
   }
 
   Future<void> getDogs() async {
@@ -241,7 +293,6 @@ class UserProfile {
     stopwatch.start();
     Future<List<DocumentSnapshot>> Dogsdoc = getFirstDogs();
     List<Dog> dogsBdd = await _convertDogs(Dogsdoc);
-
     // Iniciar el cronómetro
     List<int> scores = [];
     List<Dog> sortedDogs = [];
