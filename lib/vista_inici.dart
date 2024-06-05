@@ -5,7 +5,7 @@ import 'package:bark_and_meet/model/user.dart';
 import 'package:bark_and_meet/perfil_usuari/user_profile.dart';
 import 'package:flutter/material.dart';
 
-import 'Mainpage.dart';
+import 'MainPage.dart';
 import 'fitxersAuxiliars/fonts/bark_meet_icons.dart';
 
 class VistaInici extends StatefulWidget {

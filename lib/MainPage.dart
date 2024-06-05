@@ -26,19 +26,6 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  /*
-
-
-
-
-  S'ha de revisar la navigation bar i el canvi de vistes de MainPage i tot això.
-  S'ha de fer diferent
-
-
-
-
-   */
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,15 +108,12 @@ class _MainPageState extends State<MainPage> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          user.dogsToShow.removeAt(0);
-                          if (user.dogsToShow.length > 1) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => VistaInici(user: user)),
-                              (route) => false,
-                            );
-                          } else {
+
+                          setState(() {
+                            user.dogsToShow.removeAt(0);
+                          });
+
+                          if (user.dogsToShow.length <= 1) {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -158,15 +142,11 @@ class _MainPageState extends State<MainPage> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          user.dogsToShow.removeAt(0);
-                          if (user.dogsToShow.length > 1) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => VistaInici(user: user)),
-                              (route) => false,
-                            );
-                          } else {
+                          setState(() {
+                            user.dogsToShow.removeAt(0);
+                          });
+
+                          if (user.dogsToShow.length <= 1) {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(

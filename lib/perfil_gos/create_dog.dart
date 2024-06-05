@@ -21,6 +21,8 @@ class _DogCreateState extends State<DogCreateScreen> {
   UserProfile user;
   Dog? dog;
 
+  bool isSaving = false;
+
   _DogCreateState({required this.user});
 
   final dateController = TextEditingController();
@@ -83,7 +85,21 @@ class _DogCreateState extends State<DogCreateScreen> {
   }
 
   bool _validateForm() {
+
+    // fer un ptint de cada valor per veure si es guarda correctament
+    print(dateController.text);
+    print(racaTextController.text);
+    print(nomTextController2.text);
+    print(maleDropDownValue1);
+    print(castratDropDownValue3);
+    print(midaSliderValue1);
+    print(descripcioTextController3.text);
+    print((images[0] == null) ? "null" : "not null");
+
+
     if (dateController.text.isEmpty) return false;
+
+
 
     if (racaTextController.text.isEmpty) return false;
 
@@ -110,37 +126,43 @@ class _DogCreateState extends State<DogCreateScreen> {
   Future<void> _saveDog() async {
 
     // Guardar les noves dades de dog
+
+    setState(() {
+      isSaving = true;
+    });
+
+    // Guardar les noves dades de dog
     dog!.name = nomTextController2.text.trim();
     dog!.dateOfBirth = dateController.text.trim();
     dog!.raca2 = racaTextController.text.trim();
     dog!.description = descripcioTextController3.text.trim();
-
     dog!.adopcio = user.gossera;
     dog!.castrat = castratDropDownValue3!;
     dog!.male = maleDropDownValue1!;
-
     dog!.size = midaSliderValue1;
     dog!.endurance = resistenciaSliderValue2;
     dog!.sociability = sociabilitatSliderValue4;
     dog!.activityLevel = mogudesaSliderValue3;
-
     user.numDogs++;
 
-    List<String> photosUrl = await _savePhotosInCloud();
+    await _addDogInCloud(context);
 
-    dog!.photosUrls = photosUrl;
+    setState(() {
+      isSaving = false;
+    });
 
-    await _addDogInCloud(context, photosUrl);
-
-
-    //user.dogs.add(dog!);
+    Navigator.of(context).pop();
   }
 
-  Future<void> _addDogInCloud(BuildContext context, List<String> photosUrl) async {
+  Future<bool> _addDogInCloud(BuildContext context) async {
     try {
       User? firebaseUser = FirebaseAuth.instance.currentUser;
 
+      List<String> photosUrl = await _savePhotosInCloud();
+
       dog!.ownerId = firebaseUser!.uid;
+
+      dog!.photosUrls = photosUrl;
 
       // Guardar el gos a Firebase Firestore
 
@@ -169,6 +191,8 @@ class _DogCreateState extends State<DogCreateScreen> {
         'numDogs': user.numDogs,
       });
 
+      return true;
+
     } catch (e) {
       // Si hi ha un error, mostra un missatge d'error
       showDialog(
@@ -189,6 +213,8 @@ class _DogCreateState extends State<DogCreateScreen> {
           );
         },
       );
+
+      return false;
     }
   }
 
@@ -264,12 +290,27 @@ class _DogCreateState extends State<DogCreateScreen> {
                 size: 24,
               ),
               onPressed: () async {
-                if (_validateForm())  {
+                if (_validateForm()) {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return const AlertDialog(
+                        title: Text('Guardant...'),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 20),
+                            Text('Si us plau, espera a que es guardi el gos.'),
+                          ],
+                        ),
+                      );
+                    },
+                  );
                   await _saveDog();
                   Navigator.of(context).pop();
-
                 } else {
-                  // Mostrar un diàleg d'error
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {

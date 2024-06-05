@@ -1,4 +1,4 @@
-import 'package:bark_and_meet/Mainpage.dart';
+import 'package:bark_and_meet/MainPage.dart';
 import 'package:bark_and_meet/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
