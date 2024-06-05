@@ -8,60 +8,50 @@ class MatchService {
 
   MatchService({required this.firestore});
 
-  /// La funció fa un like a un gos i comprova si aquest gos ja ha fet like al gos que fa el like.
-  /// Si és així, es crea un match i s'eliminen els likes.
-  ///
-  /// @return Future<bool> retorna true si s'ha fet match, false si no.
-  Future<bool> likeDog(String fromUserId, String toUserId) async {
-    // Verificar si hi ha un like invers
-    try {
-      QuerySnapshot querySnapshot = await firestore.collection('Likes')
-          .where('fromUserId', isEqualTo: toUserId)
-          .where('toUserId', isEqualTo: fromUserId)
-          .get();
+  Future<void> likeDog(String fromDogId, String fromUserId, String toDogId, String toUserId) async {
+    // Verificar si existe un like inverso
+    QuerySnapshot querySnapshot = await firestore.collection('Likes')
+        .where('fromDogId', isEqualTo: toDogId)
+        .where('toDogId', isEqualTo: fromDogId)
+        .get();
 
-      if (querySnapshot.docs.isNotEmpty) {
-        // Crear match
-        await firestore.collection('Matches').add({
-          'user1Id': fromUserId,
-          'user2Id': toUserId,
-        });
+    if (querySnapshot.docs.isNotEmpty) {
+      // Crear match
+      await firestore.collection('Matches').add({
+        'user1Id': fromUserId,
+        'user2Id': toUserId,
+        'dog1Id': fromDogId,
+        'dog2Id': toDogId,
+      });
 
-        // Eliminar likes
-        await firestore.collection('Likes')
-            .where('fromUserId', isEqualTo: toUserId)
-            .where('toUserId', isEqualTo: fromUserId)
-            .get()
-            .then((snapshot) {
-          for (DocumentSnapshot doc in snapshot.docs) {
-            doc.reference.delete();
-          }
-        });
-
-        return true;
-
-      } else {
-        // Comprobar si ja s'havia fet like a aquest mateix gos
-        QuerySnapshot queryLikeSnapshot = await firestore.collection('Likes')
-            .where('fromUserId', isEqualTo: fromUserId)
-            .where('toUserId', isEqualTo: toUserId)
-            .get();
-
-        // fer like
-        if (queryLikeSnapshot.docs.isEmpty) {
-          await firestore.collection('Likes').add({
-            'fromUserId': fromUserId,
-            'toUserId': toUserId,
-          });
+      // Eliminar likes
+      await firestore.collection('Likes')
+          .where('fromDogId', isEqualTo: toDogId)
+          .where('toDogId', isEqualTo: fromDogId)
+          .get()
+          .then((snapshot) {
+        for (DocumentSnapshot doc in snapshot.docs) {
+          doc.reference.delete();
         }
+      });
 
-        return false;
-      }
-    } catch (e) {
-      print(e);
-      return false;
+      await firestore.collection('Likes')
+          .where('fromDogId', isEqualTo: fromDogId)
+          .where('toDogId', isEqualTo: toDogId)
+          .get()
+          .then((snapshot) {
+        for (DocumentSnapshot doc in snapshot.docs) {
+          doc.reference.delete();
+        }
+      });
+
+    } else {
+      // Agregar like
+      await firestore.collection('Likes').add({
+        'fromDogId': fromDogId,
+        'toDogId': toDogId,
+      });
     }
-
   }
 
   Future<List<Map<String, String>>> getMatches(String userId) async {
@@ -77,11 +67,13 @@ class MatchService {
     for (DocumentSnapshot doc in querySnapshot1.docs) {
       matches.add({
         'userId': doc['user2Id'],
+        'dogId': doc['dog2Id'],
       });
     }
     for (DocumentSnapshot doc in querySnapshot2.docs) {
       matches.add({
         'userId': doc['user1Id'],
+        'dogId': doc['dog1Id'],
       });
     }
 
