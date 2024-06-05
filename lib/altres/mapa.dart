@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'user.dart';
+import '../model/user.dart';
 
 class MapScreen extends StatelessWidget {
-  UserProfile user;
+  final UserProfile user;
 
-  MapScreen({super.key, required this.user});
+  const MapScreen({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {

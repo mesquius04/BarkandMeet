@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:bark_and_meet/dog.dart';
+import 'package:bark_and_meet/model/dog.dart';
 
 
 

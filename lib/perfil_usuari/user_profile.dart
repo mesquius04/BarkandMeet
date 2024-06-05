@@ -1,13 +1,13 @@
-import 'package:bark_and_meet/create_dog.dart';
+import 'package:bark_and_meet/perfil_gos/create_dog.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'home.dart';
-import 'mapa.dart';
-import 'user.dart';
+import '../inici_sessio/home.dart';
+import '../altres/mapa.dart';
+import '../model/user.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dogprofile.dart'; // Importa la pantalla de perfil del perro
+import '../perfil_gos/perfil_gos.dart'; // Importa la pantalla de perfil del perro
 
 class UserProfileScreen extends StatefulWidget {
   UserProfile user;
@@ -25,17 +25,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   _UserProfileScreenState({required this.user});
 
   final CarouselController _carouselController1 = CarouselController();
-
-  void _addDog() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        dogs.add(File(pickedFile.path));
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +151,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => ProfileScreen(
+                                        builder: (context) => DogProfileScreen(
                                           currentdog: user.dogs[index],
                                         ),
                                       ),

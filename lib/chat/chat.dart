@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'ChatScreen.dart';
-import 'user.dart';
+import 'chat_individual.dart';
+import '../model/user.dart';
 
 
-class HomeChatScreen extends StatelessWidget {
+class ChatScreen extends StatelessWidget {
   final UserProfile user;
 
-  const HomeChatScreen({super.key, required this.user});
+  const ChatScreen({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +231,7 @@ class HomeChatScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ChatScreen(user : user)),
+                          MaterialPageRoute(builder: (context) => ChatIndividualScreen(user : user)),
                         );
                       },
                       child: Padding(

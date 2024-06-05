@@ -1,11 +1,11 @@
-import 'package:bark_and_meet/NewAccountScreen.dart';
-import 'package:bark_and_meet/user.dart';
+import 'package:bark_and_meet/perfil_usuari/new_account.dart';
+import 'package:bark_and_meet/model/user.dart';
 import 'package:bark_and_meet/vista_inici.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../dog.dart';
-import '../home.dart';
+import '../model/dog.dart';
+import '../inici_sessio/home.dart';
 
 
 class UserSession extends StatefulWidget {

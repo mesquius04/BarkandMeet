@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dog.dart';
 import 'dart:math';
-import 'park.dart';
+import '../altres/park.dart';
 import 'package:intl/intl.dart';
 
 class UserProfile {

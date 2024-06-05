@@ -1,5 +1,5 @@
 import 'package:bark_and_meet/fitxersAuxiliars/UserSessionState.dart';
-import 'package:bark_and_meet/recuperar_contrasenya.dart';
+import 'package:bark_and_meet/inici_sessio/recuperar_contrasenya.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

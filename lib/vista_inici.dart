@@ -1,12 +1,12 @@
-import 'package:bark_and_meet/HomeScreen.dart';
+import 'package:bark_and_meet/chat/chat.dart';
 import 'package:bark_and_meet/fitxersAuxiliars/MainPageAsync.dart';
-import 'package:bark_and_meet/mapa.dart';
-import 'package:bark_and_meet/user.dart';
-import 'package:bark_and_meet/user_profile.dart';
+import 'package:bark_and_meet/altres/mapa.dart';
+import 'package:bark_and_meet/model/user.dart';
+import 'package:bark_and_meet/perfil_usuari/user_profile.dart';
 import 'package:flutter/material.dart';
 
 import 'Mainpage.dart';
-import 'fonts/bark_meet_icons.dart';
+import 'fitxersAuxiliars/fonts/bark_meet_icons.dart';
 
 class VistaInici extends StatefulWidget {
   UserProfile user;
@@ -18,7 +18,7 @@ class VistaInici extends StatefulWidget {
 }
 
 class _VistaIniciState extends State<VistaInici> {
-  final UserProfile user;
+   UserProfile user;
 
   _VistaIniciState({required this.user});
 
@@ -28,8 +28,8 @@ class _VistaIniciState extends State<VistaInici> {
   Widget build(BuildContext context) {
     List<Widget> vistes = [
       (user.dogsToShow.length > 1)
-          ? Mainpage(user: user) : MainPageAsync(user: user),
-      HomeChatScreen(user: user),
+          ? MainPage(user: user) : MainPageAsync(user: user),
+      ChatScreen(user: user),
       MapScreen(user: user),
       UserProfileScreen(user: user),
     ];

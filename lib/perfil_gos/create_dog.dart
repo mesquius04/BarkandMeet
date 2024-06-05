@@ -1,5 +1,5 @@
-import 'package:bark_and_meet/dog.dart';
-import 'package:bark_and_meet/user.dart';
+import 'package:bark_and_meet/model/dog.dart';
+import 'package:bark_and_meet/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';

@@ -1,11 +1,11 @@
 import 'package:bark_and_meet/vista_inici.dart';
 import 'package:flutter/material.dart';
-import "user.dart";
+import "../model/user.dart";
 
 class ProfileCreatedScreen extends StatelessWidget {
-  UserProfile user;
+  final UserProfile user;
 
-  ProfileCreatedScreen({super.key, 
+  const ProfileCreatedScreen({super.key,
     required this.user
   });
 
@@ -29,13 +29,10 @@ class ProfileCreatedScreen extends StatelessWidget {
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => VistaInici(
-                      user: user
-                    ),
-                  ),
+                  MaterialPageRoute(builder: (context) =>  VistaInici(user: user)),
+                      (route) => false,
                 );
               },
               child: const Text('Continuar'),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'user.dart';
+import '../model/user.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatIndividualScreen extends StatelessWidget {
   final UserProfile user;
 
-  const ChatScreen({super.key, required this.user});
+  const ChatIndividualScreen({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {

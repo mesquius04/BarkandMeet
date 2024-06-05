@@ -1,23 +1,23 @@
-import 'package:bark_and_meet/fitxersAuxiliars/MainPageAsync.dart';
 import 'package:bark_and_meet/vista_inici.dart';
 import 'package:flutter/material.dart';
-import 'user.dart';
-import 'dogProfile.dart';
-import 'package:bark_and_meet/fonts/bark_meet_icons.dart';
+import 'model/user.dart';
+import 'perfil_gos/perfil_gos.dart';
+import 'package:bark_and_meet/fitxersAuxiliars/fonts/bark_meet_icons.dart';
 
-class Mainpage extends StatefulWidget {
+class MainPage extends StatefulWidget {
   final UserProfile user;
-  
 
-  const Mainpage({super.key, required this.user});
+  const MainPage({super.key, required this.user});
 
   @override
-  _MainpageState createState() => _MainpageState(user: user);
+  _MainPageState createState() => _MainPageState(user: user);
 }
 
-class _MainpageState extends State<Mainpage> {
+class _MainPageState extends State<MainPage> {
   final UserProfile user;
-  _MainpageState({required this.user});
+
+  _MainPageState({required this.user});
+
   bool _showFilters = false;
 
   void _toggleFilters() {
@@ -38,8 +38,6 @@ class _MainpageState extends State<Mainpage> {
 
 
    */
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +71,12 @@ class _MainpageState extends State<Mainpage> {
                   children: [
                     //Text('${widget.myDog.name}', style: TextStyle(fontSize: 30)),
                     //Text('@${widget.myDog.owner.username}', style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7))),
-                    Text((user.dogsToShow.isNotEmpty) ? user.dogsToShow[0].name : "No hi ha gossos",
-                        style: const TextStyle(fontSize: 30, color: Colors.white)),
+                    Text(
+                        (user.dogsToShow.isNotEmpty)
+                            ? user.dogsToShow[0].name
+                            : "No hi ha gossos",
+                        style:
+                            const TextStyle(fontSize: 30, color: Colors.white)),
 
                     Text("Unknown user",
                         style: TextStyle(
@@ -97,7 +99,6 @@ class _MainpageState extends State<Mainpage> {
           Positioned.fill(
             child: user.dogsToShow[0].photosUrls[0].isEmpty
                 ? Image.asset(
-
                     'assets/fondo.png',
                     // Asegúrate de tener la imagen en tu carpeta assets
                     fit: BoxFit.cover,
@@ -106,7 +107,6 @@ class _MainpageState extends State<Mainpage> {
                     user.dogsToShow[0].photosUrls[0],
                     fit: BoxFit.cover,
                   ),
-                
           ),
           // Contenido principal
           SafeArea(
@@ -122,18 +122,19 @@ class _MainpageState extends State<Mainpage> {
                       ElevatedButton(
                         onPressed: () {
                           user.dogsToShow.removeAt(0);
-                          if (user.dogsToShow.length>1){
+                          if (user.dogsToShow.length > 1) {
                             Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => VistaInici(user:user)),
-                            (route) => false,
-                          );
-                          }else{
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => VistaInici(user: user)),
+                              (route) => false,
+                            );
+                          } else {
                             Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => VistaInici(user: user),
-                            ),
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => VistaInici(user: user),
+                              ),
                             );
                           }
                         },
@@ -158,19 +159,20 @@ class _MainpageState extends State<Mainpage> {
                       ElevatedButton(
                         onPressed: () {
                           user.dogsToShow.removeAt(0);
-                          if (user.dogsToShow.length>1){
+                          if (user.dogsToShow.length > 1) {
                             Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => VistaInici(user:user)),
-                            (route) => false,
-                          );
-                          }else{
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => VistaInici(user: user)),
+                              (route) => false,
+                            );
+                          } else {
                             Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => VistaInici(user: user),
-                            ),
-                          );
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => VistaInici(user: user),
+                              ),
+                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -218,8 +220,9 @@ class _MainpageState extends State<Mainpage> {
                           pageBuilder: (BuildContext context,
                               Animation<double> animation,
                               Animation<double> secondaryAnimation) {
-                            return ProfileScreen(
-                                currentdog: user.dogsToShow[0]); //la pagina del perro
+                            return DogProfileScreen(
+                                currentdog:
+                                    user.dogsToShow[0]); //la pagina del perro
                           },
                         ),
                       );
@@ -273,7 +276,8 @@ class _MainpageState extends State<Mainpage> {
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 16)),
                             IconButton(
-                              icon: const Icon(Icons.close, color: Colors.black),
+                              icon:
+                                  const Icon(Icons.close, color: Colors.black),
                               onPressed: _toggleFilters,
                             ),
                           ],

@@ -4,8 +4,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'user.dart';
-import 'confirmation.dart'; // Cambiado el nombre del archivo importado
+import '../model/user.dart';
+import '../inici_sessio/confirmation.dart'; // Cambiado el nombre del archivo importado
 
 
 class NewAccountScreen extends StatefulWidget {

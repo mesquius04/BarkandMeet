@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'login.dart';
-
 class RecuperarContrasenyaScreen extends StatefulWidget {
   const RecuperarContrasenyaScreen({super.key});
 
@@ -36,12 +34,7 @@ class RecuperarContrasenyaState extends State<RecuperarContrasenyaScreen> {
             TextButton(
               onPressed: () {
                 // Es va al la vista del perfil de l'usuari
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
-                  ),
-                );
+                Navigator.pop(context);
               },
               child: const Text('D\'acord'),
             )

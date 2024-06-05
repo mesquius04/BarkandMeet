@@ -1,5 +1,5 @@
 import 'package:bark_and_meet/Mainpage.dart';
-import 'package:bark_and_meet/user.dart';
+import 'package:bark_and_meet/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +22,7 @@ class _MainPageAsync extends State<MainPageAsync> {
   @override
   Widget build(BuildContext context) {
     if (user.dogsToShow.isNotEmpty){
-      return Mainpage(user: user);
+      return MainPage(user: user);
     }
     return Scaffold(
       body: FutureBuilder<void>(
@@ -33,7 +33,7 @@ class _MainPageAsync extends State<MainPageAsync> {
               child: CircularProgressIndicator(),
             );
           } else {
-            return Mainpage(user: user);
+            return MainPage(user: user);
           }
         },
       ),

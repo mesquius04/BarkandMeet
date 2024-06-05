@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'user.dart';
-import 'NewAccountScreen.dart';
+import '../model/user.dart';
+import '../perfil_usuari/new_account.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
