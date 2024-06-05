@@ -1,5 +1,7 @@
 import 'package:bark_and_meet/vista_inici.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'model/match.dart';
 import 'model/user.dart';
 import 'perfil_gos/perfil_gos.dart';
 import 'package:bark_and_meet/fitxersAuxiliars/fonts/bark_meet_icons.dart';
@@ -15,6 +17,15 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final UserProfile user;
+
+  final MatchService _matchService = MatchService(firestore: FirebaseFirestore.instance);
+
+  void _handleLike(String fromDogId, String fromUserId, String toDogId, String toUserId) async {
+    await _matchService.likeDog(fromDogId, fromUserId, toDogId, toUserId);
+    // Actualizar la UI o manejar el resultado aquí
+
+
+  }
 
   _MainPageState({required this.user});
 
@@ -65,7 +76,9 @@ class _MainPageState extends State<MainPage> {
                         style:
                             const TextStyle(fontSize: 30, color: Colors.white)),
 
-                    Text("Unknown user",
+                    Text((user.dogsToShow.isNotEmpty)
+                        ? user.dogsToShow[0].ownerUsername
+                        : "Unknown user",
                         style: TextStyle(
                             fontSize: 14,
                             color: Colors.white.withOpacity(0.7))),

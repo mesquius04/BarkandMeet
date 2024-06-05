@@ -5,6 +5,7 @@ import 'dart:io';
 
 class Dog {
   String ownerId = '';
+  String ownerUsername = '';
   List<String> photosUrls = [];
   String city = '';
 
@@ -42,6 +43,7 @@ class Dog {
     this.raca2 = '',
     this.owner,
     this.ownerId = '',
+    this.ownerUsername = '',
     this.city = '',
     this.photosUrls = const [],
     List<Dog> friends = const [],
@@ -72,7 +74,7 @@ class Dog {
     List<String> photosUrl =
     photosData.map((item) => item.toString()).toList();
 
-    // crer el gos
+    // cear el gos
     Dog dog = Dog(
         name: data['name'],
         adopcio: data['adoption'],
@@ -86,6 +88,7 @@ class Dog {
         male: data['male'],
         dateOfBirth: data['birthday'],
         ownerId: data['ownerId'],
+        ownerUsername: data['ownerUsername'],
         city: data['city'],
         photosUrls: photosUrl,
         dogPhotos: [null, null, null]

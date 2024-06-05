@@ -153,6 +153,7 @@ class UserProfile {
             male: data['male'],
             dateOfBirth: data['birthday'],
             ownerId: data['ownerId'],
+            ownerUsername: data['ownerUsername'],
             city: data['city'],
             photosUrls: photosUrl,
             dogPhotos: [null, null, null]));
