@@ -117,7 +117,7 @@ class _MainPageState extends State<MainPage> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => VistaInici(user: user),
+                                builder: (context) => VistaInici(user: user, index: 0,),
                               ),
                             );
                           }
@@ -150,7 +150,7 @@ class _MainPageState extends State<MainPage> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => VistaInici(user: user),
+                                builder: (context) => VistaInici(user: user, index: 0,),
                               ),
                             );
                           }

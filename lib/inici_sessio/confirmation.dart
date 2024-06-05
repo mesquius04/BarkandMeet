@@ -31,7 +31,7 @@ class ProfileCreatedScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) =>  VistaInici(user: user)),
+                  MaterialPageRoute(builder: (context) =>  VistaInici(user: user, index: 3,)),
                       (route) => false,
                 );
               },

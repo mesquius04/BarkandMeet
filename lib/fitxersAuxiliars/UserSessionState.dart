@@ -59,12 +59,12 @@ class _UserSessionState extends State<UserSession> {
 
                           userProfile.dogs = dogsSnapshot.data!;
 
-                          return VistaInici(user: userProfile);
+                          return VistaInici(user: userProfile, index: 0);
                         }
                       },
                     );
                   } else {
-                    return VistaInici(user: userProfile);
+                    return VistaInici(user: userProfile, index: 3);
                   }
                 } else {
                   User user = FirebaseAuth.instance.currentUser!;

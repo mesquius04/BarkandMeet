@@ -10,19 +10,20 @@ import 'fitxersAuxiliars/fonts/bark_meet_icons.dart';
 
 class VistaInici extends StatefulWidget {
   UserProfile user;
+  int index;
 
-  VistaInici({super.key, required this.user});
+  VistaInici({super.key, required this.user, required this.index});
 
   @override
-  _VistaIniciState createState() => _VistaIniciState(user: user);
+  _VistaIniciState createState() => _VistaIniciState(user: user, index: index);
 }
 
 class _VistaIniciState extends State<VistaInici> {
    UserProfile user;
+   int index;
 
-  _VistaIniciState({required this.user});
 
-  int index = 0;
+  _VistaIniciState({required this.user, required this.index});
 
   @override
   Widget build(BuildContext context) {

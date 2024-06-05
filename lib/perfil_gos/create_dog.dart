@@ -8,6 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 
+import '../vista_inici.dart';
+
 class DogCreateScreen extends StatefulWidget {
   final UserProfile user;
 
@@ -150,6 +152,9 @@ class _DogCreateState extends State<DogCreateScreen> {
     setState(() {
       isSaving = false;
     });
+    
+    user.dogs.add(dog!);
+    user.numDogs++;
 
     Navigator.of(context).pop();
   }
@@ -309,7 +314,11 @@ class _DogCreateState extends State<DogCreateScreen> {
                     },
                   );
                   await _saveDog();
-                  Navigator.of(context).pop();
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  VistaInici(user: user, index: 3,)),
+                        (route) => false,
+                  );
                 } else {
                   showDialog(
                     context: context,
