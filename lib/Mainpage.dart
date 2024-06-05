@@ -1,4 +1,5 @@
 import 'package:bark_and_meet/fitxersAuxiliars/MainPageAsync.dart';
+import 'package:bark_and_meet/vista_inici.dart';
 import 'package:flutter/material.dart';
 import 'user.dart';
 import 'dogProfile.dart';
@@ -24,7 +25,22 @@ class _MainpageState extends State<Mainpage> {
       _showFilters = !_showFilters;
     });
   }
-  
+
+  /*
+
+
+
+
+  S'ha de revisar la navigation bar i el canvi de vistes de MainPage i tot això.
+  S'ha de fer diferent
+
+
+
+
+   */
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,14 +125,14 @@ class _MainpageState extends State<Mainpage> {
                           if (user.dogsToShow.length>1){
                             Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (context) => Mainpage(user:user)),
+                            MaterialPageRoute(builder: (context) => VistaInici(user:user)),
                             (route) => false,
                           );
                           }else{
                             Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MainPageAsync(user: user),
+                              builder: (context) => VistaInici(user: user),
                             ),
                             );
                           }
@@ -145,14 +161,14 @@ class _MainpageState extends State<Mainpage> {
                           if (user.dogsToShow.length>1){
                             Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (context) => Mainpage(user:user)),
+                            MaterialPageRoute(builder: (context) => VistaInici(user:user)),
                             (route) => false,
                           );
                           }else{
                             Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MainPageAsync(user: user),
+                              builder: (context) => VistaInici(user: user),
                             ),
                           );
                           }

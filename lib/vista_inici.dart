@@ -5,6 +5,7 @@ import 'package:bark_and_meet/user.dart';
 import 'package:bark_and_meet/user_profile.dart';
 import 'package:flutter/material.dart';
 
+import 'Mainpage.dart';
 import 'fonts/bark_meet_icons.dart';
 
 class VistaInici extends StatefulWidget {
@@ -17,17 +18,17 @@ class VistaInici extends StatefulWidget {
 }
 
 class _VistaIniciState extends State<VistaInici> {
-
   final UserProfile user;
+
   _VistaIniciState({required this.user});
 
-  int index = 3;
+  int index = 0;
 
   @override
   Widget build(BuildContext context) {
-
     List<Widget> vistes = [
-      MainPageAsync(user: user),
+      (user.dogsToShow.length > 1)
+          ? Mainpage(user: user) : MainPageAsync(user: user),
       HomeChatScreen(user: user),
       MapScreen(user: user),
       UserProfileScreen(user: user),
@@ -41,7 +42,6 @@ class _VistaIniciState extends State<VistaInici> {
             this.index = index;
           });
         },
-
         selectedIndex: index,
         destinations: const <NavigationDestination>[
           NavigationDestination(
