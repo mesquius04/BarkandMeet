@@ -213,6 +213,7 @@ class UserProfile {
     }
     String randomField=randomiser();
     bool a=false;
+    int N=8; //triem quants escollim. Com menys més es nota el filtre.
     Random random = Random();
     int rnd = random.nextInt(2);
     if (rnd>0){
@@ -222,15 +223,15 @@ class UserProfile {
     if (this.filters[0]){
       if (this.filters[1]){
         if (this.filters[6] && this.filters[8]){
-          querySnapshot=await gossosCollection.orderBy(randomField, descending: a).limit(20).get();
+          querySnapshot=await gossosCollection.orderBy(randomField, descending: a).limit(N).get();
           // Devolver la lista de documentos
           return querySnapshot.docs;
         }else if (this.filters[8]){
-          querySnapshot=await gossosCollection.orderBy('size', descending: true).limit(20).get();
+          querySnapshot=await gossosCollection.orderBy('size', descending: true).limit(N).get();
           // Devolver la lista de documentos
           return querySnapshot.docs;
         }else{
-          querySnapshot=await gossosCollection.orderBy('size', descending: false).limit(20).get();
+          querySnapshot=await gossosCollection.orderBy('size', descending: false).limit(N).get();
           // Devolver la lista de documentos
           return querySnapshot.docs;
         }
@@ -238,15 +239,15 @@ class UserProfile {
       }else{
         if (this.filters[6] && this.filters[8]){
           
-          querySnapshot=await gossosCollection.where('adoption',isEqualTo: true).orderBy(randomField, descending: a).limit(20).get();
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: true).orderBy(randomField, descending: a).limit(N).get();
           // Devolver la lista de documentos
           return querySnapshot.docs;
         }else if (this.filters[8]){
-          querySnapshot=await gossosCollection.where('adoption',isEqualTo: true).orderBy('size', descending: true).limit(20).get();
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: true).orderBy('size', descending: true).limit(N).get();
           // Devolver la lista de documentos
           return querySnapshot.docs;
         }else{
-          querySnapshot=await gossosCollection.where('adoption',isEqualTo: true).orderBy('size', descending: false).limit(20).get();
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: true).orderBy('size', descending: false).limit(N).get();
           // Devolver la lista de documentos
           return querySnapshot.docs;
         }
@@ -254,30 +255,30 @@ class UserProfile {
     }else{
       if (this.filters[1]){
         if (this.filters[6] && this.filters[8]){
-          querySnapshot=await gossosCollection.where('adoption',isEqualTo: false).orderBy(randomField, descending: a).limit(20).get();
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: false).orderBy(randomField, descending: a).limit(N).get();
           // Devolver la lista de documentos
           return querySnapshot.docs;
         }else if (this.filters[8]){
-          querySnapshot=await gossosCollection.where('adoption',isEqualTo: false).orderBy('size', descending: true).limit(20).get();
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: false).orderBy('size', descending: true).limit(N).get();
           // Devolver la lista de documentos
           return querySnapshot.docs;
         }else{
-          querySnapshot=await gossosCollection.where('adoption',isEqualTo: false).orderBy('size', descending: false).limit(20).get();
+          querySnapshot=await gossosCollection.where('adoption',isEqualTo: false).orderBy('size', descending: false).limit(N).get();
           // Devolver la lista de documentos
           return querySnapshot.docs;
         }
       }else{
         if (this.filters[6] && this.filters[8]){
           
-          querySnapshot=await gossosCollection.orderBy(randomField, descending: a).limit(20).get();
+          querySnapshot=await gossosCollection.orderBy(randomField, descending: a).limit(N).get();
           // Devolver la lista de documentos
           return querySnapshot.docs;
         }else if (this.filters[8]){
-          querySnapshot=await gossosCollection.orderBy('size', descending: true).limit(20).get();
+          querySnapshot=await gossosCollection.orderBy('size', descending: true).limit(N).get();
           // Devolver la lista de documentos
           return querySnapshot.docs;
         }else{
-          querySnapshot=await gossosCollection.orderBy('size', descending: false).limit(20).get();
+          querySnapshot=await gossosCollection.orderBy('size', descending: false).limit(N).get();
           // Devolver la lista de documentos
           return querySnapshot.docs;
         }
