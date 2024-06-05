@@ -8,7 +8,6 @@ class Dog {
   String ownerUsername = '';
   List<String> photosUrls = [];
   String city = '';
-  String dogId = '';
 
   File? dogPhoto;
   List<File?> dogPhotos;
@@ -45,7 +44,6 @@ class Dog {
     this.owner,
     this.ownerId = '',
     this.ownerUsername = '',
-    this.dogId = '',
     this.city = '',
     this.photosUrls = const [],
     List<Dog> friends = const [],
@@ -91,7 +89,6 @@ class Dog {
         dateOfBirth: data['birthday'],
         ownerId: data['ownerId'],
         ownerUsername: data['ownerUsername'],
-        dogId: gosId,
         city: data['city'],
         photosUrls: photosUrl,
         dogPhotos: [null, null, null]

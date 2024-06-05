@@ -121,8 +121,6 @@ class _NewAccountScreenState extends State<NewAccountScreen> {
         'additionalInfo': user.additionalInfo,
         'photoURL': photoUrl,
       });
-
-      user.userId = firebaseUser.uid;
     } catch (e) {
       // Si hi ha un error, mostra un missatge d'error
       showDialog(
