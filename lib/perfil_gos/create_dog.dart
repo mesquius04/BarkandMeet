@@ -176,6 +176,7 @@ class _DogCreateState extends State<DogCreateScreen> {
       await FirebaseFirestore.instance.collection('Gossos').doc(dogId).set({
         'name': dog?.name,
         'ownerId': firebaseUser.uid,
+        'ownerUsername': user.username,
         'birthday': dog?.dateOfBirth,
         'adoption': dog?.adopcio,
         'castrat': dog?.castrat,
