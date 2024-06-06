@@ -62,7 +62,7 @@ class ChatService extends ChangeNotifier {
         .doc(chatRoomId)
         .collection('Missatges');
 
-    Query query = messages.orderBy('timestamp', descending: false).limit(limit);
+    Query query = messages.orderBy('timestamp', descending: true).limit(limit);
 
     if (lastDocument != null) {
       query = query.startAfterDocument(lastDocument);
