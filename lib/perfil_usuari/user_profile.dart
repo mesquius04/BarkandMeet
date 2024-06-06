@@ -1,3 +1,4 @@
+import 'package:bark_and_meet/altres/Setting.dart';
 import 'package:bark_and_meet/perfil_gos/create_dog.dart';
 import 'package:bark_and_meet/vista_inici.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -42,6 +43,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton( //TICK
+          icon: Icon(Icons.settings,size: 24,),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) =>  SettingsPage(),
+              ),
+            );
+          },
+        ),
         title: const Text(overflow: TextOverflow.ellipsis, 'Perfil'),
         backgroundColor: const Color(0xFFFFFCFC),
         automaticallyImplyLeading: false,

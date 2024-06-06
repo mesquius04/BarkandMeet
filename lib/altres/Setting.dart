@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,8 +10,8 @@ class SettingsPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // Ação ao clicar na flecha para voltar
-          },
+                              Navigator.of(context).pop();
+                            },
         ),
         title: const Row(
           children: [
