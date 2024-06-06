@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'chat_individual.dart';
 import '../model/user.dart';
+import 'chat_individual_2.dart';
 
 class ChatScreen extends StatefulWidget {
   final UserProfile user;
@@ -99,32 +100,44 @@ class _ChatScreenState extends State<ChatScreen> {
                   scrollDirection: Axis.horizontal,
                   itemCount: user.userMatches.length, // Añade una coma aquí
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 10.0),
-                      child: Column(
-                        children: [
-                          CircleAvatar(
-                            radius: 40,
-                            backgroundImage: user.userMatches[index]
-                                    .profilePhotoUrl.isNotEmpty
-                                ? Image.network(
-                                        user.userMatches[index].profilePhotoUrl)
-                                    .image
-                                : null,
-                            child:
-                                user.userMatches[index].profilePhotoUrl.isEmpty
-                                    ? const Icon(Icons.account_circle, size: 50)
-                                    : null,
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            user.userMatches[index].name,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChatIndividual2(
+                                    user: user,
+                                    reciver: user.userMatches[index],
+                                  )),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: Column(
+                          children: [
+                            CircleAvatar(
+                              radius: 40,
+                              backgroundImage: user.userMatches[index]
+                                      .profilePhotoUrl.isNotEmpty
+                                  ? Image.network(user
+                                          .userMatches[index].profilePhotoUrl)
+                                      .image
+                                  : null,
+                              child: user.userMatches[index].profilePhotoUrl
+                                      .isEmpty
+                                  ? const Icon(Icons.account_circle, size: 50)
+                                  : null,
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 5),
+                            Text(
+                              user.userMatches[index].name,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -376,3 +389,80 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
+
+
+/*
+FutureBuilder<List<Chat>>(
+  future: _chatService.getStartedChats(user.userId), // Reemplaza esto con tu función para obtener los chats iniciados
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (snapshot.hasError) {
+      return const Center(child: Text('Error al cargar los chats'));
+    }
+
+    List<Chat> chats = snapshot.data ?? [];
+
+    return ListView.builder(
+      itemCount: chats.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatIndividual2(
+                  user: user,
+                  reciver: chats[index].reciver,
+                ),
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10.0, top: 15, right: 10),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(chats[index].reciver.profilePhotoUrl),
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          chats[index].reciver.name,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Quicksand',
+                            fontSize: 17,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          chats[index].lastMessage, // Asume que cada chat tiene un campo 'lastMessage'
+                          style: TextStyle(
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 20.0),
+                  child: Divider(),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  },
+)
+ */

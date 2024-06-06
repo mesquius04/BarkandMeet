@@ -42,8 +42,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text( 
-overflow: TextOverflow.ellipsis,'Perfil'),
+        title: const Text(overflow: TextOverflow.ellipsis, 'Perfil'),
         backgroundColor: const Color(0xFFFFFCFC),
         automaticallyImplyLeading: false,
         actions: [
@@ -93,13 +92,13 @@ overflow: TextOverflow.ellipsis,'Perfil'),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text( 
-overflow: TextOverflow.ellipsis,
-"${user.name} ${user.surname}",
+                      Text(
+                          overflow: TextOverflow.ellipsis,
+                          "${user.name} ${user.surname}",
                           style: Theme.of(context).textTheme.headlineSmall),
-                      Text( 
-overflow: TextOverflow.ellipsis,
-"@${user.username} · ${user.city}",
+                      Text(
+                          overflow: TextOverflow.ellipsis,
+                          "@${user.username} · ${user.city}",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall
@@ -109,8 +108,8 @@ overflow: TextOverflow.ellipsis,
                 ],
               ),
               const SizedBox(height: 20),
-              const Text( 
-overflow: TextOverflow.ellipsis,
+              const Text(
+                overflow: TextOverflow.ellipsis,
                 'Descripció',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
@@ -118,9 +117,8 @@ overflow: TextOverflow.ellipsis,
               Container(
                 padding: const EdgeInsets.all(16),
                 color: Colors.grey[200],
-                child: Text( 
-overflow: TextOverflow.ellipsis,
-                  
+                child: Text(
+                  overflow: TextOverflow.ellipsis,
                   user.additionalInfo,
                   style: const TextStyle(fontSize: 14),
                 ),
@@ -128,8 +126,9 @@ overflow: TextOverflow.ellipsis,
               const SizedBox(height: 20),
               Row(
                 children: [
-                  const Text( 
-overflow: TextOverflow.ellipsis,'Els meus gossos',
+                  const Text(
+                      overflow: TextOverflow.ellipsis,
+                      'Els meus gossos',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(width: 10),
@@ -214,8 +213,8 @@ overflow: TextOverflow.ellipsis,'Els meus gossos',
                                 ),
                               ),
                               const SizedBox(height: 8),
-                              Text( 
-overflow: TextOverflow.ellipsis,
+                              Text(
+                                overflow: TextOverflow.ellipsis,
                                 user.dogs[index].name,
                                 style: const TextStyle(fontSize: 16),
                               ),
@@ -243,8 +242,8 @@ overflow: TextOverflow.ellipsis,
               const SizedBox(height: 20),
               Row(
                 children: [
-                  const Text( 
-overflow: TextOverflow.ellipsis,
+                  const Text(
+                    overflow: TextOverflow.ellipsis,
                     'Parcs preferits',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
@@ -268,7 +267,8 @@ overflow: TextOverflow.ellipsis,
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => VistaInici(user: user, index: 2)),
+                                builder: (context) =>
+                                    VistaInici(user: user, index: 2)),
                             (route) => false,
                           );
                         },
