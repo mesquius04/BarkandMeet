@@ -1,3 +1,5 @@
+import 'package:bark_and_meet/model/match.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'chat_individual.dart';
 import '../model/user.dart';
@@ -96,55 +98,71 @@ class _ChatScreenState extends State<ChatScreen> {
               padding: const EdgeInsets.only(left: 16.0),
               child: SizedBox(
                 height: 110,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: user.userMatches.length, // Añade una coma aquí
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ChatIndividual2(
-                                    user: user,
-                                    reciver: user.userMatches[index],
-                                  )),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: Column(
-                          children: [
-                            CircleAvatar(
-                              radius: 40,
-                              backgroundImage: user.userMatches[index]
-                                      .profilePhotoUrl.isNotEmpty
-                                  ? Image.network(user
-                                          .userMatches[index].profilePhotoUrl)
-                                      .image
-                                  : null,
-                              child: user.userMatches[index].profilePhotoUrl
-                                      .isEmpty
-                                  ? const Icon(Icons.account_circle, size: 50)
-                                  : null,
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              user.userMatches[index].name,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
+                child: (user.userMatches.isNotEmpty)
+                    ? ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount:
+                            user.userMatches.length, // Añade una coma aquí
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              MatchService(
+                                      firestore: FirebaseFirestore.instance)
+                                  .updateChatStarted(user.userId,
+                                      user.userMatches[index].userId);
+
+                              UserProfile reciver = user.userMatches[index];
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ChatIndividual2(
+                                          user: user,
+                                          reciver: user.userMatches[index],
+                                        )),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: Column(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 40,
+                                    backgroundImage: user.userMatches[index]
+                                            .profilePhotoUrl.isNotEmpty
+                                        ? Image.network(user.userMatches[index]
+                                                .profilePhotoUrl)
+                                            .image
+                                        : null,
+                                    child: user.userMatches[index]
+                                            .profilePhotoUrl.isEmpty
+                                        ? const Icon(Icons.account_circle,
+                                            size: 50)
+                                        : null,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    user.userMatches[index].name,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
+                          );
+                        },
+                      )
+                    : const Center(
+                        child: Text('No hi ha cap match'),
                       ),
-                    );
-                  },
-                ),
               ),
             ),
+
             const SizedBox(height: 20),
+
+            // Títol de chats
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: Row(
@@ -168,6 +186,8 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
             const SizedBox(height: 20),
+
+            // Llista de chats
             Expanded(
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -178,209 +198,29 @@ class _ChatScreenState extends State<ChatScreen> {
                     topRight: Radius.circular(50),
                   ),
                 ),
-                child: ListView(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ChatIndividualScreen(user: user)),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 10.0, top: 15, right: 10),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage:
-                                      Image.asset('assets/images/chat111.png')
-                                          .image,
-                                ),
-                                const SizedBox(width: 10),
-                                const Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'August',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: 'Quicksand',
-                                            fontSize: 17,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 5),
-                                    Text(
-                                      'Not yet but i have been meaning...',
-                                      style: TextStyle(
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 20.0),
-                              child: Divider(),
-                            ),
-                          ],
-                        ),
+                child: (user.userChats.isNotEmpty)
+                    ? ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: user.userChats.length, // Añade una coma aquí
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ChatIndividual2(
+                                          user: user,
+                                          reciver: user.userChats[index],
+                                        )),
+                              );
+                            },
+                            child: _ChatCell(user.userChats[index]),
+                          );
+                        },
+                      )
+                    : const Center(
+                        child: Text('No hi ha cap chat'),
                       ),
-                    ),
-                    // Other chat items with similar structure...
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 10, top: 25, right: 10),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundImage:
-                                    Image.asset('assets/images/chat222.png')
-                                        .image,
-                              ),
-                              const SizedBox(width: 10),
-                              const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'Max',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontFamily: 'Quicksand',
-                                          fontSize: 17,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    'Sounds great the dogs will love...',
-                                    style: TextStyle(
-                                      color: Colors.black54,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 20.0),
-                            child: Divider(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 10, top: 25, right: 10),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundImage:
-                                    Image.asset('assets/images/chat333.png')
-                                        .image,
-                              ),
-                              const SizedBox(width: 10),
-                              const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'Luna',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontFamily: 'Quicksand',
-                                          fontSize: 17,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    'Thanks! I got it from a local pet...',
-                                    style: TextStyle(
-                                      color: Colors.black54,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 20.0),
-                            child: Divider(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 10, top: 25, right: 10),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundImage:
-                                    Image.asset('assets/images/chat555.png')
-                                        .image,
-                              ),
-                              const SizedBox(width: 10),
-                              const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'Daisy',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontFamily: 'Quicksand',
-                                          fontSize: 17,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    "Good morning!Just wanted to let...",
-                                    style: TextStyle(
-                                      color: Colors.black54,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 20.0),
-                            child: Divider(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ),
           ],
@@ -388,81 +228,50 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-}
 
-
-/*
-FutureBuilder<List<Chat>>(
-  future: _chatService.getStartedChats(user.userId), // Reemplaza esto con tu función para obtener los chats iniciados
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (snapshot.hasError) {
-      return const Center(child: Text('Error al cargar los chats'));
-    }
-
-    List<Chat> chats = snapshot.data ?? [];
-
-    return ListView.builder(
-      itemCount: chats.length,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ChatIndividual2(
-                  user: user,
-                  reciver: chats[index].reciver,
-                ),
-              ),
-            );
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10.0, top: 15, right: 10),
-            child: Column(
+  // Fer la view d'un chat
+  Widget _ChatCell(UserProfile reciver) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            CircleAvatar(
+              radius: 30,
+              backgroundImage: NetworkImage(reciver.profilePhotoUrl),
+            ),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
-                      radius: 30,
-                      backgroundImage: NetworkImage(chats[index].reciver.profilePhotoUrl),
-                    ),
-                    const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          chats[index].reciver.name,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'Quicksand',
-                            fontSize: 17,
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          chats[index].lastMessage, // Asume que cada chat tiene un campo 'lastMessage'
-                          style: TextStyle(
-                            color: Colors.black54,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      reciver.name,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Quicksand',
+                        fontSize: 17,
+                      ),
                     ),
                   ],
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 20.0),
-                  child: Divider(),
+                SizedBox(height: 5),
+                Text(
+                  "@${reciver.username}",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: Colors.grey),
                 ),
               ],
             ),
-          ),
-        );
-      },
+          ],
+        ),
+        const Padding(
+          padding: EdgeInsets.only(left: 20.0),
+          child: Divider(),
+        ),
+      ],
     );
-  },
-)
- */
+  }
+}

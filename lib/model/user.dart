@@ -19,7 +19,9 @@ class UserProfile {
   bool premium;
   List<bool> filters;
   List<String> dogsIds;
+
   List<UserProfile> userMatches = [];
+  List<UserProfile> userChats = [];
 
   List<Dog> dogs;
   List<Park> parks;
@@ -121,15 +123,24 @@ class UserProfile {
   }
 
   Future<void> getUserMatches() async {
-    List<String> userMatchesId =
-        await MatchService(firestore: FirebaseFirestore.instance)
-            .getUserMatchesIds(userId);
+    List<Map<String, dynamic>> userMatchesData =
+    await MatchService(firestore: FirebaseFirestore.instance)
+        .getUserMatchesIds(userId);
 
-    for (String userId in userMatchesId) {
-      DocumentSnapshot userQuery = await UserProfile.usuariExisteix(userId,
+
+    for (Map<String, dynamic> matchData in userMatchesData) {
+      String matchUserId = matchData['userId'];
+      bool chatStarted = matchData['chatComençat'];
+
+      DocumentSnapshot userQuery = await UserProfile.usuariExisteix(matchUserId,
           firestoreInstance: FirebaseFirestore.instance);
       UserProfile userMatch = UserProfile.userFromDocumentSnapshot(userQuery);
-      userMatches.add(userMatch);
+
+      if (chatStarted) {
+        userChats.add(userMatch);
+      } else {
+        userMatches.add(userMatch);
+      }
     }
   }
 
@@ -140,7 +151,12 @@ class UserProfile {
 
     // això no hauria d'anar aquí però no sé on posar-ho
 
-    userProfile.getUserMatches();
+    try{
+      userProfile.getUserMatches();
+    } catch (e) {
+      print("Error al agafar els matches de l'usuari: $e");
+    }
+
 
     try {
       for (String dogId in userProfile.dogsIds) {

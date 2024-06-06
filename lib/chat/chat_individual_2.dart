@@ -17,19 +17,69 @@ class ChatIndividual2 extends StatefulWidget {
 class _ChatIndividual2State extends State<ChatIndividual2> {
   final TextEditingController _messageController = TextEditingController();
   final UserProfile user;
-
-  _ChatIndividual2State({required this.user});
-
   final ChatService _chatService =
       ChatService(firestoreInstance: FirebaseFirestore.instance);
+  final ScrollController _scrollController = ScrollController();
+  DocumentSnapshot? _lastDocument;
+  bool _loadingMore = false;
+  List<DocumentSnapshot> _messages = [];
+
+  _ChatIndividual2State({required this.user});
 
   @override
   void initState() {
     super.initState();
     _chatService.senderUser = user;
+    _fetchInitialMessages();
+    _scrollController.addListener(_scrollListener);
   }
 
-  // enviar missatge
+  void _scrollListener() {
+    if (_scrollController.position.atEdge) {
+      if (_scrollController.position.pixels == 0) {
+        // At the top
+      } else {
+        // At the bottom
+        _fetchMoreMessages();
+      }
+    }
+  }
+
+  Future<void> _fetchInitialMessages() async {
+    QuerySnapshot snapshot = await _chatService.getMessagesWithPagination(
+      user.userId,
+      widget.reciver.userId,
+    );
+    setState(() {
+      _messages = snapshot.docs;
+      if (snapshot.docs.isNotEmpty) {
+        _lastDocument = snapshot.docs.last;
+      }
+    });
+  }
+
+  Future<void> _fetchMoreMessages() async {
+    if (_loadingMore) return;
+
+    setState(() {
+      _loadingMore = true;
+    });
+
+    QuerySnapshot snapshot = await _chatService.getMessagesWithPagination(
+      user.userId,
+      widget.reciver.userId,
+      lastDocument: _lastDocument,
+    );
+
+    setState(() {
+      _messages.addAll(snapshot.docs);
+      if (snapshot.docs.isNotEmpty) {
+        _lastDocument = snapshot.docs.last;
+      }
+      _loadingMore = false;
+    });
+  }
+
   void sendMessage() async {
     if (_messageController.text.isNotEmpty) {
       await _chatService.sendMessage(
@@ -74,55 +124,43 @@ class _ChatIndividual2State extends State<ChatIndividual2> {
     );
   }
 
-  // Message list
   Widget _buildMessageList() {
-    return StreamBuilder(
-      stream: _chatService.getMessages(user.userId, widget.reciver.userId),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const Center(
-            child: Text('Error al carregar els missatges'),
-          );
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        return ListView(
-          children: snapshot.data!.docs
-              .map((document) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    // Add padding here
-                    child: _buildMessageItem(document),
-                  ))
-              .toList(),
+    return ListView.builder(
+      controller: _scrollController,
+      reverse: true,
+      itemCount: _messages.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: _buildMessageItem(_messages[index]),
         );
       },
     );
   }
 
-  // Message item
   Widget _buildMessageItem(DocumentSnapshot snapshot) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
-    // alinear els meus missatges a la dreta i els del receptor a l'esquerra
     var alignment = data['senderUserId'] == user.userId
         ? Alignment.centerRight
         : Alignment.centerLeft;
+
+    var color = data['senderUserId'] == user.userId
+        ? const Color.fromRGBO(28, 115, 255, 0.90)
+        : const Color.fromRGBO(228, 227, 230, 0.90);
+
+    var textColor =
+        data['senderUserId'] == user.userId ? Colors.white : Colors.black;
 
     return Align(
       alignment: alignment,
       child: Container(
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width *
-              0.8, // Limit the width to 80% of screen width
+          maxWidth: MediaQuery.of(context).size.width * 0.8,
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Colors.grey.shade400, // Color of sent message balloons
+          color: color,
         ),
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -131,11 +169,15 @@ class _ChatIndividual2State extends State<ChatIndividual2> {
                 ? CrossAxisAlignment.end
                 : CrossAxisAlignment.start,
             children: [
-              Text(data['message']),
               Text(
-                DateFormat('dd/MM/yyyy HH:mm').format(
-                    data['timestamp'].toDate()), // Timestamp of the message
-                style: const TextStyle(fontSize: 10),
+                data['message'],
+                style: TextStyle(
+                    color: textColor, fontFamily: 'Roboto', fontSize: 15),
+              ),
+              Text(
+                DateFormat('dd/MM/yyyy HH:mm')
+                    .format(data['timestamp'].toDate()),
+                style: TextStyle(fontSize: 10, color: textColor),
               ),
             ],
           ),
@@ -144,35 +186,34 @@ class _ChatIndividual2State extends State<ChatIndividual2> {
     );
   }
 
-  // Message input
   Widget _buildMessageInput() {
     return Padding(
-        padding: EdgeInsets.all(20),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _messageController,
-                decoration: const InputDecoration(
-                  hintText: 'Type a message...',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                  ),
-                  contentPadding: EdgeInsets.fromLTRB(15, 5, 5, 0),
+      padding: EdgeInsets.all(20),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _messageController,
+              decoration: const InputDecoration(
+                hintText: 'Type a message...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
                 ),
+                contentPadding: EdgeInsets.fromLTRB(15, 5, 5, 0),
               ),
             ),
-            Padding(padding: EdgeInsets.only(right: 5)),
-            CircleAvatar(
-              backgroundColor: Colors.blue,
-              radius: 20,
-              child: IconButton(
-                onPressed: sendMessage,
-                icon:
-                    const Icon(Icons.arrow_upward_rounded, color: Colors.white),
-              ),
+          ),
+          Padding(padding: EdgeInsets.only(right: 5)),
+          CircleAvatar(
+            backgroundColor: Colors.blue,
+            radius: 20,
+            child: IconButton(
+              onPressed: sendMessage,
+              icon: const Icon(Icons.arrow_upward_rounded, color: Colors.white),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

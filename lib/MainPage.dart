@@ -98,7 +98,7 @@ class _MainPageState extends State<MainPage> {
                             const TextStyle(fontSize: 30, color: Colors.white)),
 
                     Text((user.dogsToShow.isNotEmpty)
-                        ? user.dogsToShow[0].ownerUsername
+                        ? "@${user.dogsToShow[0].ownerUsername}"
                         : "Unknown user",
                         style: TextStyle(
                             fontSize: 14,

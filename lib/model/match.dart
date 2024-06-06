@@ -27,6 +27,7 @@ class MatchService {
           'user2Id': toUserId,
           'dog1Id': toDogId,
           'dog2Id': querySnapshot.docs[0]['toDogId'],
+          'chatComençat': false,
         });
 
         // Eliminar likes
@@ -67,7 +68,7 @@ class MatchService {
 
   }
 
-  Future<List<String>> getUserMatchesIds(String userId) async {
+  Future<List<Map<String, dynamic>>> getUserMatchesIds(String userId) async {
 
     try {
       QuerySnapshot querySnapshot1 = await firestore.collection('Matches')
@@ -78,18 +79,52 @@ class MatchService {
           .where('user2Id', isEqualTo: userId)
           .get();
 
-      List<String> matches = [];
+      List<Map<String, dynamic>> matches = [];
       for (DocumentSnapshot doc in querySnapshot1.docs) {
-        matches.add(doc['user2Id']);
+        matches.add({
+          'userId': doc['user2Id'],
+          'chatComençat': doc['chatComençat'],
+        });
       }
       for (DocumentSnapshot doc in querySnapshot2.docs) {
-        matches.add(doc['user1Id']);
+        matches.add({
+          'userId': doc['user1Id'],
+          'chatComençat': doc['chatComençat'],
+        });
       }
 
       return matches;
     } catch (e) {
       print(e);
       return [];
+    }
+  }
+
+  // funció per quan s'inicïi el chat s'ha d'actualitzar el camp chatComençat a true
+  Future<void> updateChatStarted(String userId, String matchUserId) async {
+    try {
+      QuerySnapshot querySnapshot1 = await firestore.collection('Matches')
+          .where('user1Id', isEqualTo: userId)
+          .where('user2Id', isEqualTo: matchUserId)
+          .get();
+
+      QuerySnapshot querySnapshot2 = await firestore.collection('Matches')
+          .where('user1Id', isEqualTo: matchUserId)
+          .where('user2Id', isEqualTo: userId)
+          .get();
+
+      if (querySnapshot1.docs.isNotEmpty) {
+        await querySnapshot1.docs[0].reference.update({
+          'chatComençat': true,
+        });
+      } else if (querySnapshot2.docs.isNotEmpty) {
+        await querySnapshot2.docs[0].reference.update({
+          'chatComençat': true,
+        });
+      }
+
+    } catch (e) {
+      print(e);
     }
   }
 }

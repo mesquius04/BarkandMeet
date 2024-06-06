@@ -48,4 +48,26 @@ class ChatService extends ChangeNotifier {
         .orderBy('timestamp', descending: false)
         .snapshots();
   }
+
+  // Mètode per obtenir els missatges amb paginació
+  Future<QuerySnapshot> getMessagesWithPagination(
+      String senderId, String receiverId,
+      {DocumentSnapshot? lastDocument, int limit = 20}) async {
+    List<String> users = [senderId, receiverId];
+    users.sort();
+    String chatRoomId = '${users[0]}_${users[1]}';
+
+    CollectionReference messages = firestoreInstance
+        .collection('Chat')
+        .doc(chatRoomId)
+        .collection('Missatges');
+
+    Query query = messages.orderBy('timestamp', descending: false).limit(limit);
+
+    if (lastDocument != null) {
+      query = query.startAfterDocument(lastDocument);
+    }
+
+    return query.get();
+  }
 }
