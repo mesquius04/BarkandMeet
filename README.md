@@ -1,20 +1,11 @@
-<<<<<<< HEAD
-# bark_and_meet
+# Bark and Meet
 
-A new Flutter project.
+**Bark and Meet** is an app that helps dog owners connect with other dog owners in their area. Designed as a social network for dog lovers, it allows users to find nearby dogs and their owners. The app includes a main "match" screen to connect compatible dogs, a chat feature, and user profiles. It was built entirely with **Flutter**, using a **Firebase NoSQL database**. This project was developed as part of a university group project with 7 members, and it received the highest grade in the entire course. My role was Scrum Master.
 
-## Getting Started
+### Key Contributions:
 
-This project is a starting point for a Flutter application.
+- **Recommendation Algorithm**: Developed an algorithm that prioritizes nearby dogs but also incorporates additional factors, such as penalizing matches between dogs of opposite genders that could reproduce. The algorithm involves database queries and some manual parameter tuning to optimize the results.
 
-A few resources to get you started if this is your first Flutter project:
+- **Frontend OOP**: Worked closely with a teammate to design most of the classes used in the frontend, including the `User` and `Dog` classes, along with their associated methods.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# Bark-Meet
->>>>>>> 72995ead9e1914903a1588baa81739088e9ee2f9
+- **Organizing the Team**: We followed Scrum methodology to ensure smooth development. With only 2 weeks of development time, a lot of effort went into defining the requirements, keeping everyone in sync, and distributing the workload efficiently.
